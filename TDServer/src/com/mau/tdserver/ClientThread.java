@@ -6,29 +6,37 @@ import java.io.InputStreamReader;
 import java.io.PrintWriter;
 import java.net.Socket;
 
-public class ClientThread extends Thread{
+import javax.swing.SwingWorker;
+
+public class ClientThread extends SwingWorker<Void, Integer>{
 	private Socket socket;
 	private PrintWriter pw;
 	private BufferedReader br;
-	
-	public ClientThread(Socket socket){
+	private String username;
+	private ServerMain main;
+	public ClientThread(Socket socket, ServerMain main){
 		this.socket = socket;
+		this.main = main;
 	}
-	public void run(){
+	@Override
+	protected Void doInBackground() throws Exception {
 		try {
 			pw = new PrintWriter(socket.getOutputStream(), true);
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
-			
+			username = br.readLine();
+			main.print(username+" has connected.");
+
 			String str;
 			while((str=br.readLine())!=null){
-				System.out.println(str);
+				main.print(username+": "+str);
 				if(str.equals("bye")){
 					break;
 				}
-				pw.println(str+" from server");
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
 	}
 }
+//separate threads for sending and receiving

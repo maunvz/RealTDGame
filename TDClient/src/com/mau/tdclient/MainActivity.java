@@ -17,6 +17,7 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
@@ -31,7 +32,10 @@ public class MainActivity extends Activity {
 	TextView txt_num;
 	TextView txt_server;
 	MediaPlayer player;
+	
 	EditText ip_input;
+	EditText username_input;
+	
 	String response;
 	
 	@Override
@@ -105,14 +109,22 @@ public class MainActivity extends Activity {
 	}
 	public void askToConnect(){
 		ip_input = new EditText(this);
+		username_input = new EditText(this);
+		
+		LinearLayout layout = new LinearLayout(this);
+		layout.setOrientation(LinearLayout.VERTICAL);
+		layout.addView(ip_input);
+		layout.addView(username_input);
+
 		new AlertDialog.Builder(this)
 	    .setTitle("Connect to server")
 	    .setMessage("Please input the address of the server")
-	    .setView(ip_input)
+	    .setView(layout)
 	    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int whichButton) {
-	            String value = ip_input.getEditableText().toString();
-	            new NetworkConnection(value, MainActivity.this).start();
+	            String ip = ip_input.getEditableText().toString();
+	            String username = username_input.getEditableText().toString();
+	            new NetworkConnection(ip, username, MainActivity.this).execute();
 	        }
 	    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
 	        public void onClick(DialogInterface dialog, int whichButton) {

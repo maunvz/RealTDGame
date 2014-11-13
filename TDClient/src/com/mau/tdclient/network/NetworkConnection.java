@@ -8,23 +8,27 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 
+import android.os.AsyncTask;
 import android.util.Log;
 
 import com.mau.tdclient.MainActivity;
 
-public class NetworkConnection extends Thread{
+public class NetworkConnection extends AsyncTask<Void, String, Void>{
 	private Socket socket;
 	private String host;
+	private String username;
 	private PrintWriter pw;
 	private BufferedReader br;
 	private MainActivity ma;
 	
-	public NetworkConnection(String host, MainActivity ma){
+	public NetworkConnection(String host, String username, MainActivity ma){
 		super();
 		this.host = host;
 		this.ma=ma;
+		this.username = username;
 	}
-	public void run(){
+	@Override
+	protected Void doInBackground(Void... params) {
 		try {
 			socket = new Socket();
 			SocketAddress address = new InetSocketAddress(host, 1726);
@@ -35,12 +39,12 @@ public class NetworkConnection extends Thread{
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
 			pw = new PrintWriter(socket.getOutputStream(), true);
 			
-			pw.println("Hello I am mauricio.");
+			pw.println(username);
 
 			String str;
 			while((str=br.readLine())!=null){
 				Log.d("Server Response", str);
-				ma.updateServer(str);
+				this.publishProgress(str);
 				if(str.equals("bye")){
 					break;
 				}
@@ -49,5 +53,10 @@ public class NetworkConnection extends Thread{
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		return null;
+	}
+	protected void onProgressUpdate(String... params){
+		ma.updateServer(params[0]);
 	}
 }
+//separate threads for sending and receiving
