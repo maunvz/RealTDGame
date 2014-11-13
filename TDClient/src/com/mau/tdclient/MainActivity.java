@@ -3,7 +3,9 @@ package com.mau.tdclient;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -11,9 +13,15 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.view.View;
+import android.view.View.OnClickListener;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+
+import com.mau.tdclient.network.NetworkConnection;
 
 public class MainActivity extends Activity {
 	private SensorManager mSensorManager;
@@ -21,7 +29,10 @@ public class MainActivity extends Activity {
 	SensorEventListener listener;
 	ShakeMeter meter;
 	TextView txt_num;
+	TextView txt_server;
 	MediaPlayer player;
+	EditText ip_input;
+	String response;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -36,17 +47,36 @@ public class MainActivity extends Activity {
 		listener = new ShakeListener();
 	}
 	public void createUI(RelativeLayout layout){
+		Button btn_connect = new Button(this);
+		btn_connect.setOnClickListener(new OnClickListener(){
+			@Override
+			public void onClick(View v) {
+				askToConnect();
+			}	
+		});
+		btn_connect.setText("Connect");
+		btn_connect.setId(3);
+		LayoutParams btn_params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);		
+		
 		txt_num = new TextView(this);
 		txt_num.setId(1);
-		RelativeLayout.LayoutParams txt_params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		LayoutParams txt_params = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		txt_params.addRule(RelativeLayout.BELOW, btn_connect.getId());
 		
 		meter = new ShakeMeter(this);
 		meter.setId(2);
-		RelativeLayout.LayoutParams meter_params = new RelativeLayout.LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-		txt_params.addRule(RelativeLayout.BELOW, txt_num.getId());
-		
-		layout.addView(meter, meter_params);
+		LayoutParams meter_params = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		meter_params.addRule(RelativeLayout.BELOW, txt_num.getId());
+
+		txt_server = new TextView(this);
+		txt_server.setId(4);
+		LayoutParams txt_server_params = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
+		txt_server_params.addRule(RelativeLayout.BELOW, meter.getId());
+
+		layout.addView(btn_connect, btn_params);
 		layout.addView(txt_num, txt_params);
+		layout.addView(meter, meter_params);
+		layout.addView(txt_server, txt_server_params);
 	}
 	public void prepareAudio(){
 	    try {
@@ -72,6 +102,23 @@ public class MainActivity extends Activity {
 	public void onDestroy(){
 		super.onDestroy();
 		player.release();
+	}
+	public void askToConnect(){
+		ip_input = new EditText(this);
+		new AlertDialog.Builder(this)
+	    .setTitle("Connect to server")
+	    .setMessage("Please input the address of the server")
+	    .setView(ip_input)
+	    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int whichButton) {
+	            String value = ip_input.getEditableText().toString();
+	            new NetworkConnection(value, MainActivity.this).start();
+	        }
+	    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int whichButton) {
+	            // Do nothing.
+	        }
+	    }).show();
 	}
 	private class ShakeListener implements SensorEventListener{
 		float x,y,z;
@@ -100,9 +147,16 @@ public class MainActivity extends Activity {
 			    last_y = y;
 			    last_z = z;
 			    meter.updateValue(speed, SHAKE_THRESHOLD);
+			    txt_num.setText("Movement: "+speed);
 			}
 		}
 		@Override
 		public void onAccuracyChanged(Sensor sensor, int accuracy) {}
+	}
+	public void updateServer(String str){
+		txt_server.setText("Server Response\n"+str);
+	}
+	public String getUserInput(){
+		return "userInput: "+Math.random();
 	}
 }
