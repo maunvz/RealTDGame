@@ -1688,6 +1688,7 @@ containing a value of this type.
         public static final int tabMode=0x7f050003;
         public static final int title=0x7f050029;
         public static final int top=0x7f050015;
+        public static final int txt_change_amount=0x7f050041;
         public static final int up=0x7f050018;
         public static final int useLogo=0x7f050005;
         public static final int withText=0x7f05000e;

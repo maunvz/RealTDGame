@@ -393,6 +393,7 @@ int id submit_area 0x7f05003e
 int id tabMode 0x7f050003
 int id title 0x7f050029
 int id top 0x7f050015
+int id txt_change_amount 0x7f050041
 int id up 0x7f050018
 int id useLogo 0x7f050005
 int id withText 0x7f05000e
