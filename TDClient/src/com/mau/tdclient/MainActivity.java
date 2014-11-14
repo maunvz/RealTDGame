@@ -25,9 +25,11 @@ import android.widget.TextView;
 import com.mau.tdclient.network.NetworkConnection;
 
 public class MainActivity extends Activity {
+	//Sensor Stuff
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
 	SensorEventListener listener;
+
 	ShakeMeter meter;
 	TextView txt_num;
 	TextView txt_server;

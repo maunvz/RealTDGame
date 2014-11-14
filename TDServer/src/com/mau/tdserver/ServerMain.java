@@ -52,6 +52,7 @@ public class ServerMain {
 				System.out.println("listening");
 			}
 		});
+		
 		panel.add(start_button);
 		panel.add(textArea);
 		frame.setContentPane(panel);
