@@ -42,6 +42,12 @@ public class Player {
 	public String getName(){
 		return name;
 	}
+	public int getTeam(){
+		return team;
+	}
+	public int getSensitivity(){
+		return sensitivity;
+	}
 	public JSONObject toJSON() throws JSONException{
 		JSONObject obj = new JSONObject();
 		obj.put("name", name);
@@ -55,5 +61,17 @@ public class Player {
 		obj.put("kills", kills);	
 		obj.put("sensitivity", sensitivity);
 		return obj;
+	}
+	public static Player fromJSON(JSONObject obj) throws JSONException{		
+		Player player = new Player(obj.getString("name"),obj.getInt("team"));
+		player.alive = obj.getBoolean("alive");
+		player.hasFlag = obj.getBoolean("hasFlag");
+		player.score = obj.getInt("score");
+		player.effect = obj.getInt("effect");
+		player.effectValue = obj.getInt("effectValue");
+		player.deaths = obj.getInt("deaths");
+		player.kills = obj.getInt("kills");
+		player.sensitivity = obj.getInt("sensitivity");
+		return player;
 	}
 }

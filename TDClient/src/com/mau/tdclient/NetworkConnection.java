@@ -8,17 +8,23 @@ import java.net.InetSocketAddress;
 import java.net.Socket;
 import java.net.SocketAddress;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import android.os.AsyncTask;
-import android.util.Log;
+
+import com.mau.tdgame.models.Player;
 
 public class NetworkConnection extends AsyncTask<Void, String, Void>{
 	private Socket socket;
 	private String host;
 	private String username;
+	private int teamNo;
+
 	private PrintWriter pw;
 	private BufferedReader br;
 	private MainActivity ma;
-	private int teamNo;
+	
 	public NetworkConnection(String host, String username, int teamNo, MainActivity ma){
 		super();
 		this.host = host;
@@ -39,14 +45,18 @@ public class NetworkConnection extends AsyncTask<Void, String, Void>{
 			pw.println(username);
 			pw.println(teamNo);
 			
+			try{
+				JSONObject playerJSON = new JSONObject(br.readLine());
+				ma.startGame(Player.fromJSON(playerJSON));				
+			} catch (JSONException e){
+				e.printStackTrace();
+			}
+			
 			String str;
 			while((str=br.readLine())!=null){
-				Log.d("Server Response", str);
 				this.publishProgress(str);
-				if(str.equals("bye")){
-					break;
-				}
-				pw.println(ma.getUserInput());
+				//create json object and update game state based on server's response
+				//either here, or on another thread, send local events to server
 			}
 		} catch (IOException e) {
 			e.printStackTrace();

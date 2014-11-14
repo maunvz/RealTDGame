@@ -4,6 +4,7 @@ import android.content.Context;
 import android.graphics.Canvas;
 import android.graphics.Color;
 import android.graphics.Paint;
+import android.util.AttributeSet;
 import android.view.View;
 
 public class ShakeMeter extends View{
@@ -11,8 +12,8 @@ public class ShakeMeter extends View{
 	float value;
 	float max;
 	float margins = 15;
-	public ShakeMeter(Context context) {
-		super(context);
+	public ShakeMeter(Context context, AttributeSet attrs) {
+		super(context, attrs);
 		paint = new Paint();
 	}
 	public void updateValue(float value, float max){
@@ -31,8 +32,5 @@ public class ShakeMeter extends View{
 		//Draw bar
 		paint.setColor(Color.RED);
 		canvas.drawRect(margins, margins+((max-value)/max)*getHeight(), getWidth()-margins, getHeight()-margins, paint);
-	}
-	protected void onMeasure(int widthMeasureSpec, int heightMeasureSpec) {
-		setMeasuredDimension(400, 1000);
 	}
 }
