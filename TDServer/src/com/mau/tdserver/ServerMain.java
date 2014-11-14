@@ -49,7 +49,7 @@ public class ServerMain {
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				startListening();
-				System.out.println("listening");
+				print("Waiting for players to connect.");
 			}
 		});
 		

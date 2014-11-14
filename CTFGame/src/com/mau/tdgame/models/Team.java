@@ -1,4 +1,4 @@
-package com.mau.tdserver.models;
+package com.mau.tdgame.models;
 
 import java.util.ArrayList;
 

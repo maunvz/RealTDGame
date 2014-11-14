@@ -2,10 +2,7 @@ package com.mau.tdclient;
 
 import java.io.IOException;
 
-import android.app.Activity;
-import android.app.AlertDialog;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -13,18 +10,15 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.support.v7.app.ActionBarActivity;
 import android.view.View;
-import android.view.View.OnClickListener;
-import android.widget.Button;
 import android.widget.EditText;
-import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
 
-import com.mau.tdclient.network.NetworkConnection;
-
-public class MainActivity extends Activity {
+public class MainActivity extends ActionBarActivity {
 	//Sensor Stuff
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
@@ -34,10 +28,7 @@ public class MainActivity extends Activity {
 	TextView txt_num;
 	TextView txt_server;
 	MediaPlayer player;
-	
-	EditText ip_input;
-	EditText username_input;
-	
+		
 	String response;
 	
 	@Override
@@ -46,28 +37,16 @@ public class MainActivity extends Activity {
 		RelativeLayout layout = new RelativeLayout(this);
 		createUI(layout);
 		prepareAudio();
-		setContentView(layout);
+		setContentView(R.layout.activity_main);
 		
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		listener = new ShakeListener();
 	}
 	public void createUI(RelativeLayout layout){
-		Button btn_connect = new Button(this);
-		btn_connect.setOnClickListener(new OnClickListener(){
-			@Override
-			public void onClick(View v) {
-				askToConnect();
-			}	
-		});
-		btn_connect.setText("Connect");
-		btn_connect.setId(3);
-		LayoutParams btn_params = new LayoutParams(LayoutParams.WRAP_CONTENT, LayoutParams.WRAP_CONTENT);		
-		
 		txt_num = new TextView(this);
 		txt_num.setId(1);
 		LayoutParams txt_params = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
-		txt_params.addRule(RelativeLayout.BELOW, btn_connect.getId());
 		
 		meter = new ShakeMeter(this);
 		meter.setId(2);
@@ -79,7 +58,6 @@ public class MainActivity extends Activity {
 		LayoutParams txt_server_params = new LayoutParams(LayoutParams.WRAP_CONTENT,LayoutParams.WRAP_CONTENT);
 		txt_server_params.addRule(RelativeLayout.BELOW, meter.getId());
 
-		layout.addView(btn_connect, btn_params);
 		layout.addView(txt_num, txt_params);
 		layout.addView(meter, meter_params);
 		layout.addView(txt_server, txt_server_params);
@@ -109,30 +87,12 @@ public class MainActivity extends Activity {
 		super.onDestroy();
 		player.release();
 	}
-	public void askToConnect(){
-		ip_input = new EditText(this);
-		username_input = new EditText(this);
-		
-		LinearLayout layout = new LinearLayout(this);
-		layout.setOrientation(LinearLayout.VERTICAL);
-		layout.addView(ip_input);
-		layout.addView(username_input);
-
-		new AlertDialog.Builder(this)
-	    .setTitle("Connect to server")
-	    .setMessage("Please input the address of the server")
-	    .setView(layout)
-	    .setPositiveButton("Ok", new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int whichButton) {
-	            String ip = ip_input.getEditableText().toString();
-	            String username = username_input.getEditableText().toString();
-	            new NetworkConnection(ip, username, MainActivity.this).execute();
-	        }
-	    }).setNegativeButton("Cancel", new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int whichButton) {
-	            // Do nothing.
-	        }
-	    }).show();
+	public void onConnectClicked(View view){
+        String ip = ((EditText)findViewById(R.id.ip_edit_text)).getEditableText().toString();
+        String username = ((EditText)findViewById(R.id.username_edit_text)).getEditableText().toString();
+        int selectedId = ((RadioGroup)findViewById(R.id.team_radio_group)).getCheckedRadioButtonId();
+        int teamNo = selectedId==R.id.team1_button?1:2;
+        new NetworkConnection(ip, username, teamNo, MainActivity.this).execute();
 	}
 	private class ShakeListener implements SensorEventListener{
 		float x,y,z;
