@@ -5,6 +5,7 @@ import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.util.ArrayList;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -12,13 +13,19 @@ import javax.swing.JFrame;
 import javax.swing.JPanel;
 import javax.swing.JTextArea;
 
+import com.mau.tdgame.models.Event;
+import com.mau.tdgame.models.GameState;
+
 public class ServerMain {
 	ServerSocket socket;
 	int port;
 	JTextArea textArea;
+	GameState gameState;
+	ArrayList<ClientThread> clients;
 	public ServerMain(){
 		port = 1726;
 		createUI().setVisible(true);
+		clients = new ArrayList<ClientThread>();
 	}
 	public void startListening(){
 		Thread listenThread = new Thread(){
@@ -29,6 +36,7 @@ public class ServerMain {
 						Socket client = socket.accept();
 						ClientThread thread = new ClientThread(client, ServerMain.this);
 						thread.execute();
+						clients.add(thread);
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -62,6 +70,16 @@ public class ServerMain {
 	}
 	public void print(String str){
 		textArea.append(str+"\n");
+	}
+	public void updateGameState(Event event){
+		//UPDATE GAME STATE
+		
+		broadcastGameState();
+	}
+	public void broadcastGameState(){
+		for(ClientThread client:clients){
+			client.sendGameState();
+		}
 	}
 	public static void main(String[] args) {
 		new ServerMain();

@@ -21,8 +21,8 @@ public class Team {
 		score = 0;
 		players = new ArrayList<String>();
 	}
-	public void addPlayer(Player player){ 
-		players.add(player.getName());
+	public void addPlayer(String playerName){ 
+		players.add(playerName);
 	}
 	public int getScore(){
 		return score;
@@ -42,5 +42,15 @@ public class Team {
 		obj.put("score", score);
 		obj.put("players", playersArray);
 		return obj;
+	}
+	public static Team fromJSON(JSONObject obj) throws JSONException{
+		Team team = new Team(obj.getInt("teamNo"));
+		team.flagAtBase = obj.getBoolean("flagAtBase");
+		team.score = obj.getInt("score");
+		JSONArray players = obj.getJSONArray("players");
+		for(int i=0; i<players.length(); i++){
+			team.addPlayer(players.getString(i));
+		}
+		return team;
 	}
 }

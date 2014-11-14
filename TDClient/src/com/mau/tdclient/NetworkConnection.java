@@ -13,6 +13,8 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 
+import com.mau.tdgame.models.Event;
+import com.mau.tdgame.models.GameState;
 import com.mau.tdgame.models.Player;
 
 public class NetworkConnection extends AsyncTask<Void, String, Void>{
@@ -54,9 +56,12 @@ public class NetworkConnection extends AsyncTask<Void, String, Void>{
 			
 			String str;
 			while((str=br.readLine())!=null){
-				this.publishProgress(str);
-				//create json object and update game state based on server's response
-				//either here, or on another thread, send local events to server
+				try {
+					GameState state = GameState.fromJSON(new JSONObject(str));
+					ma.updateGameState(state);
+				} catch (JSONException e) {
+					e.printStackTrace();
+				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
@@ -65,5 +70,12 @@ public class NetworkConnection extends AsyncTask<Void, String, Void>{
 	}
 	protected void onProgressUpdate(String... params){
 		ma.updateServer(params[0]);
+	}
+	public void sendEvent(Event event){
+		try {
+			pw.println(event.toJSON().toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 }

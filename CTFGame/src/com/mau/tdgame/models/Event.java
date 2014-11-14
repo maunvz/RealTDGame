@@ -30,4 +30,31 @@ public class Event {
 		obj.put("value1", value1);
 		return obj;
 	}
+	public String toString(){
+		String str = player1 + " ";
+		switch(type){
+		case DIED:
+			str += "died.";
+			break;
+		case RESPAWNED:
+			str += "respawned.";
+			break;
+		case CAPTURED_FLAG:
+			str += "now has the flag.";
+			break;
+		case SCORED:
+			str += "scored!";
+			break;
+		case KILLED:
+			str += "killed "+player2;
+			break;
+		case GOT_EFFECT:
+			str += "get effect "+value1;
+			break;				
+		}
+		return str;
+	}
+	public static Event fromJSON(JSONObject obj) throws JSONException{
+		return new Event(obj.getInt("type"), obj.getString("player1"), obj.getString("player2"), obj.getInt("value1"));
+	}
 }

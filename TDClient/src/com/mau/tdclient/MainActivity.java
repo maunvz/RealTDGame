@@ -17,6 +17,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.mau.tdgame.models.GameState;
 import com.mau.tdgame.models.Player;
 import com.mau.tdgame.models.Team;
 
@@ -26,10 +27,12 @@ public class MainActivity extends ActionBarActivity {
 	private Sensor mSensor;
 	private SensorEventListener listener;
 
-	private MediaPlayer mplayer;	
+	private MediaPlayer mplayer;
 	private boolean gameStarted;
 	
 	private Player player;
+	private GameState gameState;
+	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -89,5 +92,9 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void updateServer(String str){
 		((TextView)findViewById(R.id.server_state_text)).setText("Server Response\n"+str);
+	}
+	public void updateGameState(GameState newGameState){
+		this.gameState = newGameState;
+		//update display here
 	}
 }

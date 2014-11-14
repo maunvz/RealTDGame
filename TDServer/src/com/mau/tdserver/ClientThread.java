@@ -8,6 +8,10 @@ import java.net.Socket;
 
 import javax.swing.SwingWorker;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import com.mau.tdgame.models.Event;
 import com.mau.tdgame.models.Player;
 
 public class ClientThread extends SwingWorker<Void, Integer>{
@@ -38,7 +42,9 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 			//Listen for events
 			String str;
 			while((str=br.readLine())!=null){
-				main.print(username+": "+str);
+				Event event = Event.fromJSON(new JSONObject(str));
+				main.updateGameState(event);
+				main.print(event.toString());
 				if(str.equals("bye")){
 					break;
 				}
@@ -47,6 +53,13 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 			e.printStackTrace();
 		}
 		return null;
+	}
+	public void sendGameState(){
+		try {
+			pw.println(main.gameState.toJSON().toString());
+		} catch (JSONException e) {
+			e.printStackTrace();
+		}
 	}
 }
 //separate threads for sending and receiving
