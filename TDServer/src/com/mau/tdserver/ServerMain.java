@@ -47,15 +47,20 @@ public class ServerMain {
 		};
 		listenThread.start();
 	}
+	public void startGame(){
+		gameState.startGame();
+		broadcastGameState();
+	}
 	public JFrame createUI(){
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		textArea = new JTextArea(20,40);
 		textArea.setEditable(false);
-		
-		JButton start_button = new JButton("Start Listening");
-		start_button.addActionListener(new ActionListener(){
+
+		JPanel button_panel = new JPanel();
+		JButton start_listening_button = new JButton("Start Listening");
+		start_listening_button.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				startListening();
@@ -63,7 +68,19 @@ public class ServerMain {
 			}
 		});
 		
-		panel.add(start_button);
+		JButton start_game_button = new JButton("Start Game");
+		start_game_button.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				startGame();
+				print("Starting Game.");
+			}
+		});
+		
+		button_panel.add(start_listening_button);	
+		button_panel.add(start_game_button);
+		panel.add(button_panel);
+		
 		panel.add(textArea);
 		frame.setContentPane(panel);
 		frame.pack();

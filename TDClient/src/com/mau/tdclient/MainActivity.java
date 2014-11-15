@@ -80,6 +80,7 @@ public class MainActivity extends ActionBarActivity {
 		listener = new ShakeListener(this, player.getSensitivity());
 		mSensorManager.registerListener(listener, mSensor, SensorManager.SENSOR_DELAY_GAME);
 		gameStarted=true;
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new GameFragment(this)).commit();
 	}
 	public void youDie(){
 		mplayer.start();
@@ -105,8 +106,11 @@ public class MainActivity extends ActionBarActivity {
 		this.gameState = newGameState;
 		if(!gameState.gameStarted()){
 			updateWaitRoom();
-		} else {
-			//update other stuff
+			return;
+		}
+		if(!gameStarted){
+			startGame();
+			return;
 		}
 	}
 	public void updateWaitRoom(){

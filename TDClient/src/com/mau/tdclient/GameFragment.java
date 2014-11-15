@@ -7,6 +7,11 @@ import android.view.View;
 import android.view.ViewGroup;
 
 public class GameFragment extends Fragment{
+	MainActivity ma;
+	public GameFragment(MainActivity ma){
+		super();
+		this.ma=ma;
+	}
 	public void onPause(){
 		super.onPause();
 	}

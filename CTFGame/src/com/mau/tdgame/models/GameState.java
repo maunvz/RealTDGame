@@ -46,6 +46,9 @@ public class GameState {
 	public boolean gameStarted(){
 		return gameStarted;
 	}
+	public void startGame(){
+		gameStarted=true;
+	}
 	public void addPlayer(Player player){
 		players.add(player);
 		if(player.getTeam()==Team.TEAM_1)team1.addPlayer(player.getName());
