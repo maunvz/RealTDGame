@@ -34,10 +34,19 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 			String username = br.readLine();
 			int team = Integer.parseInt(br.readLine());
 			player = new Player(username, team);
+			
+			//Add player to game state
 			main.print(player.getName()+" has joined team "+player.getTeam());
-
+			main.addPlayer(player);
+			main.print("added player");
 			//Send the player to the client
 			pw.println(player.toJSON().toString());
+			main.print("sent player");
+			pw.println(main.gameState.toJSON().toString());
+			main.print("sent gamestate");
+			//Tell everyone that player joined game
+			main.broadcastGameState();
+			main.print("broadcasted game state, waiting for events.");
 			
 			//Listen for events
 			String str;
@@ -62,4 +71,3 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 		}
 	}
 }
-//separate threads for sending and receiving

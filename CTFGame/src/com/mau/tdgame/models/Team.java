@@ -24,6 +24,13 @@ public class Team {
 	public void addPlayer(String playerName){ 
 		players.add(playerName);
 	}
+	public String[] listOfPlayers(){
+		String[] playerList = new String[players.size()];
+		for(int i=0; i<players.size(); i++){
+			playerList[i] = players.get(i);
+		}
+		return playerList;
+	}
 	public int getScore(){
 		return score;
 	}

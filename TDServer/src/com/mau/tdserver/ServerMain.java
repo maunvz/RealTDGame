@@ -15,6 +15,7 @@ import javax.swing.JTextArea;
 
 import com.mau.tdgame.models.Event;
 import com.mau.tdgame.models.GameState;
+import com.mau.tdgame.models.Player;
 
 public class ServerMain {
 	ServerSocket socket;
@@ -28,6 +29,7 @@ public class ServerMain {
 		clients = new ArrayList<ClientThread>();
 	}
 	public void startListening(){
+		gameState = new GameState();
 		Thread listenThread = new Thread(){
 			public void run(){
 				try {
@@ -68,18 +70,22 @@ public class ServerMain {
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		return frame;
 	}
-	public void print(String str){
+	public synchronized void print(String str){
 		textArea.append(str+"\n");
 	}
-	public void updateGameState(Event event){
+	
+	public synchronized void updateGameState(Event event){
 		//UPDATE GAME STATE
 		
 		broadcastGameState();
 	}
-	public void broadcastGameState(){
+	public synchronized void broadcastGameState(){
 		for(ClientThread client:clients){
 			client.sendGameState();
 		}
+	}
+	public synchronized void addPlayer(Player player){
+		gameState.addPlayer(player);
 	}
 	public static void main(String[] args) {
 		new ServerMain();

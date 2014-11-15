@@ -41,6 +41,20 @@ public class GameState {
 		for(int i=0; i<players.length(); i++){
 			state.players.add(Player.fromJSON(players.getJSONObject(i)));
 		}
-		return null;
+		return state;
+	}
+	public boolean gameStarted(){
+		return gameStarted;
+	}
+	public void addPlayer(Player player){
+		players.add(player);
+		if(player.getTeam()==Team.TEAM_1)team1.addPlayer(player.getName());
+		if(player.getTeam()==Team.TEAM_2)team2.addPlayer(player.getName());
+	}
+	public String[][] listPlayers(){
+		String[][] playerList = new String[2][];
+		playerList[0] = team1.listOfPlayers();
+		playerList[1] = team2.listOfPlayers();
+		return playerList;
 	}
 }

@@ -22,6 +22,10 @@ import com.mau.tdgame.models.Player;
 import com.mau.tdgame.models.Team;
 
 public class MainActivity extends ActionBarActivity {
+	public static final int JOIN_SCREEN=0;
+	public static final int WAIT_SCREEN=1;
+	public static final int GAME_SCREEN=2;
+	
 	//Sensor Stuff
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
@@ -32,15 +36,16 @@ public class MainActivity extends ActionBarActivity {
 	
 	private Player player;
 	private GameState gameState;
+	public int screenNo;
 	
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		setContentView(R.layout.activity_main);
-		
+		setContentView(R.layout.activity_main);		
 		JoinGameFragment jgFrag = new JoinGameFragment();
 		getFragmentManager().beginTransaction().add(R.id.fragment_holder, jgFrag).commit();
 		gameStarted=false;
+		screenNo=JOIN_SCREEN;
 	}
 	public void onConnectClicked(View view){
 		//Hide keyboard
@@ -52,7 +57,6 @@ public class MainActivity extends ActionBarActivity {
         int selectedId = ((RadioGroup)findViewById(R.id.team_radio_group)).getCheckedRadioButtonId();
         int teamNo = selectedId==R.id.team1_button?Team.TEAM_1:Team.TEAM_2;
         new NetworkConnection(ip, username, teamNo, MainActivity.this).execute();
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new GameFragment()).commit();
 	}
 	public void prepareAudio(){
 	    try {
@@ -64,12 +68,16 @@ public class MainActivity extends ActionBarActivity {
 			e.printStackTrace();
 		}
 	}
-	public void startGame(Player player){
+	public void joinGame(Player player, GameState gameState){
 		this.player = player;
+		this.gameState = gameState;
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new WaitingRoomFragment(this)).commit();
+	}
+	public void startGame(){
 		prepareAudio();
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		listener = new ShakeListener(this, this.player.getSensitivity());
+		listener = new ShakeListener(this, player.getSensitivity());
 		mSensorManager.registerListener(listener, mSensor, SensorManager.SENSOR_DELAY_GAME);
 		gameStarted=true;
 	}
@@ -95,6 +103,24 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void updateGameState(GameState newGameState){
 		this.gameState = newGameState;
-		//update display here
+		if(!gameState.gameStarted()){
+			updateWaitRoom();
+		} else {
+			//update other stuff
+		}
+	}
+	public void updateWaitRoom(){
+		if(screenNo!=WAIT_SCREEN)return;
+		String team1="";
+		String team2="";
+		String[][] playerList = gameState.listPlayers();
+		for(int i=0; i<playerList[0].length; i++){
+			team1+=(i+1)+". "+playerList[0][i]+"\n";
+		}
+		for(int i=0; i<playerList[1].length; i++){
+			team2+=(i+1)+". "+playerList[1][i]+"\n";
+		}
+		((TextView)findViewById(R.id.team1_list)).setText(team1);
+		((TextView)findViewById(R.id.team2_list)).setText(team2);
 	}
 }

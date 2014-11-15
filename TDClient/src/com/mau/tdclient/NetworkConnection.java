@@ -17,7 +17,7 @@ import com.mau.tdgame.models.Event;
 import com.mau.tdgame.models.GameState;
 import com.mau.tdgame.models.Player;
 
-public class NetworkConnection extends AsyncTask<Void, String, Void>{
+public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 	private Socket socket;
 	private String host;
 	private String username;
@@ -49,7 +49,8 @@ public class NetworkConnection extends AsyncTask<Void, String, Void>{
 			
 			try{
 				JSONObject playerJSON = new JSONObject(br.readLine());
-				ma.startGame(Player.fromJSON(playerJSON));				
+				JSONObject gameStateJSON = new JSONObject(br.readLine());
+				ma.joinGame(Player.fromJSON(playerJSON), GameState.fromJSON(gameStateJSON));
 			} catch (JSONException e){
 				e.printStackTrace();
 			}
@@ -58,7 +59,7 @@ public class NetworkConnection extends AsyncTask<Void, String, Void>{
 			while((str=br.readLine())!=null){
 				try {
 					GameState state = GameState.fromJSON(new JSONObject(str));
-					ma.updateGameState(state);
+					publishProgress(state);
 				} catch (JSONException e) {
 					e.printStackTrace();
 				}
@@ -68,8 +69,8 @@ public class NetworkConnection extends AsyncTask<Void, String, Void>{
 		}
 		return null;
 	}
-	protected void onProgressUpdate(String... params){
-		ma.updateServer(params[0]);
+	protected void onProgressUpdate(GameState... params){
+		ma.updateGameState(params[0]);
 	}
 	public void sendEvent(Event event){
 		try {
