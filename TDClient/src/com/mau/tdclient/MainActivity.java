@@ -110,7 +110,7 @@ public class MainActivity extends ActionBarActivity {
 			alertUser("Error","That username is taken for this server.");
 			return;
 		}
-		this.gameState = newGameState;
+		gameState = newGameState;
 		if(!gameState.gameStarted()){
 			updateWaitRoom();
 			return;
@@ -118,6 +118,9 @@ public class MainActivity extends ActionBarActivity {
 		if(!gameStarted){
 			startGame();
 			return;
+		}
+		if(screenNo==GAME_SCREEN){
+			((TextView)findViewById(R.id.server_message_textview)).append(gameState.getMessage()+"\n");
 		}
 	}
 	public void updateWaitRoom(){
@@ -138,15 +141,8 @@ public class MainActivity extends ActionBarActivity {
 		new AlertDialog.Builder(this)
 	    .setTitle(title)
 	    .setMessage(message)
-	    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // continue with delete
-	        }
-	     })
-	    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int which) { 
-	            // do nothing
-	        }
+	    .setPositiveButton(android.R.string.ok, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) {}
 	     })
 	    .setIcon(android.R.drawable.ic_dialog_alert)
 	     .show();

@@ -12,12 +12,14 @@ public class GameState {
 	private Team team1;
 	private Team team2;
 	private ArrayList<Player> players;
+	private String message;
 	
 	public GameState(){
 		team1 = new Team(Team.TEAM_1);
 		team2 = new Team(Team.TEAM_2);
 		players = new ArrayList<Player>();
 		gameStarted = false;
+		message="";
 	}
 	public JSONObject toJSON() throws JSONException{
 		JSONArray playerArray = new JSONArray();
@@ -30,6 +32,7 @@ public class GameState {
 		obj.put("team1", team1.toJSON());
 		obj.put("team2", team2.toJSON());
 		obj.put("players", playerArray);
+		obj.put("message", message);
 		return obj;
 	}
 	public static GameState fromJSON(JSONObject obj) throws JSONException{
@@ -41,6 +44,7 @@ public class GameState {
 		for(int i=0; i<players.length(); i++){
 			state.players.add(Player.fromJSON(players.getJSONObject(i)));
 		}
+		state.message=obj.getString("message");
 		return state;
 	}
 	public boolean gameStarted(){
@@ -52,7 +56,8 @@ public class GameState {
 	public void processEvent(Event event){
 		switch(event.getType()){
 		case Event.DIED:
-			
+			getPlayerByName(event.player1).die();
+			message = event.player1 + " died.";
 			break;
 		}
 	}
@@ -73,5 +78,8 @@ public class GameState {
 			if(p1.getName().equals(name))player=p1;
 		}
 		return player;
+	}
+	public String getMessage(){
+		return message;
 	}
 }

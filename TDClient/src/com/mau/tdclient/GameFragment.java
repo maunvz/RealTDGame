@@ -17,6 +17,7 @@ public class GameFragment extends Fragment{
 	}
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		ma.screenNo = MainActivity.GAME_SCREEN;
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         return inflater.inflate(R.layout.game_fragment, container, false);

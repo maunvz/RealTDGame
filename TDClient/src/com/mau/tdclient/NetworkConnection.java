@@ -12,6 +12,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.os.AsyncTask;
+import android.util.Log;
 
 import com.mau.tdgame.models.Event;
 import com.mau.tdgame.models.GameState;
@@ -80,6 +81,7 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 	public void sendEvent(Event event){
 		try {
 			pw.println(event.toJSON().toString());
+			Log.d("Sent", event.toString());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}

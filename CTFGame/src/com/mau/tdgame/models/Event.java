@@ -57,7 +57,7 @@ public class Event {
 		}
 		return str;
 	}
-	public static Event fromJSON(JSONObject obj) throws JSONException{
-		return new Event(obj.getInt("type"), obj.getString("player1"), obj.getString("player2"), obj.getInt("value1"));
+	public static Event fromJSON(JSONObject obj) {
+		return new Event(obj.optInt("type"), obj.optString("player1"), obj.optString("player2"), obj.optInt("value1"));
 	}
 }
