@@ -29,19 +29,70 @@ public class MainActivity extends ActionBarActivity {
 	public static final int WAIT_SCREEN=1;
 	public static final int GAME_SCREEN=2;
 	
-	//Sensor Stuff
+	//Technical stuff
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
 	private SensorEventListener listener;
-
 	private MediaPlayer mplayer;
-	private boolean gameStarted;
-	
-	private Player player;
-	private GameState gameState;
 	private NetworkConnection nc;
 	public int screenNo;
 	
+	//Game state variables
+	private boolean gameStarted;
+	private Player player;
+	private GameState gameState;
+	
+	//Called when the phone shakes too much
+	public void youDie(){
+		mplayer.start();
+		nc.sendEvent(new Event(Event.DIED, player.getName(), null, 0));
+	}
+	public void scannedQR(/*some parameter*/){	
+		//send the QR data to the server, who will respond telling you if you killed someone
+		//or captured a flag or came back to life, or got a power up, etc.
+	}
+	//Called when the server sends an updated GameState
+	public void updateGameState(GameState newGameState){
+		//Before game starts GameState management
+		if(newGameState==null){
+			alertUser("Error","That username is taken for this server.");return;
+		}
+		gameState = newGameState;
+		if(!gameState.gameStarted()){
+			updateWaitRoom();return;
+		}
+		if(!gameStarted){
+			startGame();return;
+		}
+		//During game GameState management
+		if(screenNo==GAME_SCREEN){
+			((TextView)findViewById(R.id.server_message_textview)).append(gameState.getMessage()+"\n");
+			//TODO - update UI based on server's response
+		}
+	}
+	//called when a new player joins the waiting room adds all the names of the players in gameState to their respective lists
+	public void updateWaitRoom(){
+		if(screenNo!=WAIT_SCREEN)return;
+		String team1="";
+		String team2="";
+		String[][] playerList = gameState.listPlayers();
+		for(int i=0; i<playerList[0].length; i++){
+			team1+=(i+1)+". "+playerList[0][i]+"\n";
+		}
+		for(int i=0; i<playerList[1].length; i++){
+			team2+=(i+1)+". "+playerList[1][i]+"\n";
+		}
+		((TextView)findViewById(R.id.team1_list)).setText(team1);
+		((TextView)findViewById(R.id.team2_list)).setText(team2);
+	}
+	//Called when server adds player to game, move to waiting room
+	public void joinGame(Player player, GameState gameState){
+		this.player = player;
+		this.gameState = gameState;
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new WaitingRoomFragment(this)).commit();
+	}
+	//Technical stuff below here, manages UI, sensors, sound, networking, etc.
+	//------------------------------------------------------------------------
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -63,34 +114,6 @@ public class MainActivity extends ActionBarActivity {
         nc = new NetworkConnection(ip, username, teamNo, MainActivity.this);
         nc.execute();
 	}
-	public void prepareAudio(){
-	    try {
-			AssetFileDescriptor afd = getAssets().openFd("buzz.mp3");
-			mplayer = new MediaPlayer();
-			mplayer.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
-			mplayer.prepare();
-		} catch (IOException e) {
-			e.printStackTrace();
-		}
-	}
-	public void joinGame(Player player, GameState gameState){
-		this.player = player;
-		this.gameState = gameState;
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new WaitingRoomFragment(this)).commit();
-	}
-	public void startGame(){
-		prepareAudio();
-		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
-		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		listener = new ShakeListener(this, player.getSensitivity());
-		mSensorManager.registerListener(listener, mSensor, SensorManager.SENSOR_DELAY_GAME);
-		gameStarted=true;
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new GameFragment(this)).commit();
-	}
-	public void youDie(){
-		mplayer.start();
-		nc.sendEvent(new Event(Event.DIED, player.getName(), null, 0));
-	}
 	public void onPause(){
 		super.onPause();
 		if(gameStarted)
@@ -105,38 +128,26 @@ public class MainActivity extends ActionBarActivity {
 		super.onDestroy();
 		if(gameStarted)mplayer.release();
 	}
-	public void updateGameState(GameState newGameState){
-		if(newGameState==null){
-			alertUser("Error","That username is taken for this server.");
-			return;
-		}
-		gameState = newGameState;
-		if(!gameState.gameStarted()){
-			updateWaitRoom();
-			return;
-		}
-		if(!gameStarted){
-			startGame();
-			return;
-		}
-		if(screenNo==GAME_SCREEN){
-			((TextView)findViewById(R.id.server_message_textview)).append(gameState.getMessage()+"\n");
+	public void prepareAudio(){
+	    try {
+			AssetFileDescriptor afd = getAssets().openFd("buzz.mp3");
+			mplayer = new MediaPlayer();
+			mplayer.setDataSource(afd.getFileDescriptor(),afd.getStartOffset(),afd.getLength());
+			mplayer.prepare();
+		} catch (IOException e) {
+			e.printStackTrace();
 		}
 	}
-	public void updateWaitRoom(){
-		if(screenNo!=WAIT_SCREEN)return;
-		String team1="";
-		String team2="";
-		String[][] playerList = gameState.listPlayers();
-		for(int i=0; i<playerList[0].length; i++){
-			team1+=(i+1)+". "+playerList[0][i]+"\n";
-		}
-		for(int i=0; i<playerList[1].length; i++){
-			team2+=(i+1)+". "+playerList[1][i]+"\n";
-		}
-		((TextView)findViewById(R.id.team1_list)).setText(team1);
-		((TextView)findViewById(R.id.team2_list)).setText(team2);
+	public void startGame(){
+		prepareAudio();
+		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
+		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+		listener = new ShakeListener(this, player.getSensitivity());
+		mSensorManager.registerListener(listener, mSensor, SensorManager.SENSOR_DELAY_GAME);
+		gameStarted=true;
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new GameFragment(this)).commit();
 	}
+	//creates a popup dialog box that tells the player message
 	public void alertUser(String title, String message){
 		new AlertDialog.Builder(this)
 	    .setTitle(title)
