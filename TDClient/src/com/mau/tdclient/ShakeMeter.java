@@ -11,7 +11,7 @@ public class ShakeMeter extends View{
 	Paint paint;
 	float value;
 	float max;
-	float margins = 15;
+	float margins = 0;
 	public ShakeMeter(Context context, AttributeSet attrs) {
 		super(context, attrs);
 		paint = new Paint();

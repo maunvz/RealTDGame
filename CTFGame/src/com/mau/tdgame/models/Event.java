@@ -30,6 +30,9 @@ public class Event {
 		obj.put("value1", value1);
 		return obj;
 	}
+	public int getType(){
+		return type;
+	}
 	public String toString(){
 		String str = player1 + " ";
 		switch(type){

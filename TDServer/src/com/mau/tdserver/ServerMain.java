@@ -15,14 +15,13 @@ import javax.swing.JTextArea;
 
 import com.mau.tdgame.models.Event;
 import com.mau.tdgame.models.GameState;
-import com.mau.tdgame.models.Player;
 
 public class ServerMain {
-	ServerSocket socket;
-	int port;
-	JTextArea textArea;
-	GameState gameState;
-	ArrayList<ClientThread> clients;
+	private ServerSocket socket;
+	private int port;
+	private JTextArea textArea;
+	private GameState gameState;
+	private ArrayList<ClientThread> clients;
 	public ServerMain(){
 		port = 1726;
 		createUI().setVisible(true);
@@ -92,8 +91,7 @@ public class ServerMain {
 	}
 	
 	public synchronized void updateGameState(Event event){
-		//UPDATE GAME STATE
-		
+		gameState.processEvent(event);
 		broadcastGameState();
 	}
 	public synchronized void broadcastGameState(){
@@ -101,8 +99,8 @@ public class ServerMain {
 			client.sendGameState();
 		}
 	}
-	public synchronized void addPlayer(Player player){
-		gameState.addPlayer(player);
+	public synchronized GameState getGameState(){
+		return gameState;
 	}
 	public static void main(String[] args) {
 		new ServerMain();

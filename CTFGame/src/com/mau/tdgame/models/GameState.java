@@ -49,6 +49,13 @@ public class GameState {
 	public void startGame(){
 		gameStarted=true;
 	}
+	public void processEvent(Event event){
+		switch(event.getType()){
+		case Event.DIED:
+			
+			break;
+		}
+	}
 	public void addPlayer(Player player){
 		players.add(player);
 		if(player.getTeam()==Team.TEAM_1)team1.addPlayer(player.getName());
@@ -59,5 +66,12 @@ public class GameState {
 		playerList[0] = team1.listOfPlayers();
 		playerList[1] = team2.listOfPlayers();
 		return playerList;
+	}
+	public Player getPlayerByName(String name){
+		Player player = null;
+		for(Player p1:players){
+			if(p1.getName().equals(name))player=p1;
+		}
+		return player;
 	}
 }

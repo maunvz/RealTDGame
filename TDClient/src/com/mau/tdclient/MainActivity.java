@@ -3,7 +3,9 @@ package com.mau.tdclient;
 import java.io.IOException;
 
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
 import android.hardware.Sensor;
 import android.hardware.SensorEventListener;
@@ -17,6 +19,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 
+import com.mau.tdgame.models.Event;
 import com.mau.tdgame.models.GameState;
 import com.mau.tdgame.models.Player;
 import com.mau.tdgame.models.Team;
@@ -36,6 +39,7 @@ public class MainActivity extends ActionBarActivity {
 	
 	private Player player;
 	private GameState gameState;
+	private NetworkConnection nc;
 	public int screenNo;
 	
 	@Override
@@ -56,7 +60,8 @@ public class MainActivity extends ActionBarActivity {
         String username = ((EditText)findViewById(R.id.username_edit_text)).getEditableText().toString();
         int selectedId = ((RadioGroup)findViewById(R.id.team_radio_group)).getCheckedRadioButtonId();
         int teamNo = selectedId==R.id.team1_button?Team.TEAM_1:Team.TEAM_2;
-        new NetworkConnection(ip, username, teamNo, MainActivity.this).execute();
+        nc = new NetworkConnection(ip, username, teamNo, MainActivity.this);
+        nc.execute();
 	}
 	public void prepareAudio(){
 	    try {
@@ -84,6 +89,7 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void youDie(){
 		mplayer.start();
+		nc.sendEvent(new Event(Event.DIED, player.getName(), null, 0));
 	}
 	public void onPause(){
 		super.onPause();
@@ -99,10 +105,11 @@ public class MainActivity extends ActionBarActivity {
 		super.onDestroy();
 		if(gameStarted)mplayer.release();
 	}
-	public void updateServer(String str){
-		((TextView)findViewById(R.id.server_state_text)).setText("Server Response\n"+str);
-	}
 	public void updateGameState(GameState newGameState){
+		if(newGameState==null){
+			alertUser("Error","That username is taken for this server.");
+			return;
+		}
 		this.gameState = newGameState;
 		if(!gameState.gameStarted()){
 			updateWaitRoom();
@@ -126,5 +133,22 @@ public class MainActivity extends ActionBarActivity {
 		}
 		((TextView)findViewById(R.id.team1_list)).setText(team1);
 		((TextView)findViewById(R.id.team2_list)).setText(team2);
+	}
+	public void alertUser(String title, String message){
+		new AlertDialog.Builder(this)
+	    .setTitle(title)
+	    .setMessage(message)
+	    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // continue with delete
+	        }
+	     })
+	    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int which) { 
+	            // do nothing
+	        }
+	     })
+	    .setIcon(android.R.drawable.ic_dialog_alert)
+	     .show();
 	}
 }

@@ -32,15 +32,19 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 
 			//Create the player
 			String username = br.readLine();
+			if(main.getGameState().getPlayerByName(username)!=null){
+				pw.println("Sorry, player by that name already exists.");
+				return null;
+			}
 			int team = Integer.parseInt(br.readLine());
 			player = new Player(username, team);
 			
 			//Add player to game state
 			main.print(player.getName()+" has joined team "+player.getTeam());
-			main.addPlayer(player);
+			main.getGameState().addPlayer(player);
 			//Send the player to the client
 			pw.println(player.toJSON().toString());
-			pw.println(main.gameState.toJSON().toString());
+			pw.println(main.getGameState().toJSON().toString());
 			//Tell everyone that player joined game
 			main.broadcastGameState();
 			
@@ -61,7 +65,7 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 	}
 	public void sendGameState(){
 		try {
-			pw.println(main.gameState.toJSON().toString());
+			pw.println(main.getGameState().toJSON().toString());
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
