@@ -53,7 +53,6 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 			while((str=br.readLine())!=null){
 				Event event = Event.fromJSON(new JSONObject(str));
 				main.updateGameState(event);
-				main.print(event.toString());
 				if(str.equals("bye")){
 					break;
 				}

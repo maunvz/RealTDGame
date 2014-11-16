@@ -11,6 +11,7 @@ import javax.swing.BoxLayout;
 import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
 
 import com.mau.tdgame.models.Event;
@@ -54,9 +55,11 @@ public class ServerMain {
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
 		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
+		
 		textArea = new JTextArea(20,40);
 		textArea.setEditable(false);
-
+		JScrollPane scrollPane = new JScrollPane(textArea);
+		
 		JPanel button_panel = new JPanel();
 		JButton start_listening_button = new JButton("Start Listening");
 		start_listening_button.addActionListener(new ActionListener(){
@@ -80,7 +83,7 @@ public class ServerMain {
 		button_panel.add(start_game_button);
 		panel.add(button_panel);
 		
-		panel.add(textArea);
+		panel.add(scrollPane);
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -88,6 +91,7 @@ public class ServerMain {
 	}
 	public synchronized void print(String str){
 		textArea.append(str+"\n");
+		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
 	
 	public synchronized void updateGameState(Event event){
