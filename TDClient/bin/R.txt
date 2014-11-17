@@ -458,8 +458,13 @@ int string abc_searchview_description_voice 0x7f0a000a
 int string abc_shareactionprovider_share_with 0x7f0a000e
 int string abc_shareactionprovider_share_with_application 0x7f0a000d
 int string app_name 0x7f0a000f
+int string capture_button 0x7f0a0018
 int string connect_button 0x7f0a0012
+int string effect_button 0x7f0a001a
 int string ip_hint 0x7f0a0010
+int string kill_button 0x7f0a0017
+int string respawn_button 0x7f0a0016
+int string score_button 0x7f0a0019
 int string team1 0x7f0a0014
 int string team2 0x7f0a0015
 int string username_hint 0x7f0a0011

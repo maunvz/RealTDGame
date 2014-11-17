@@ -10,9 +10,9 @@ public class Player {
 	public static final int HAS_SNIPER = 2;
 	public static final int SUPER_SPEED = 3;
 	
-	private boolean alive;
-	private boolean hasFlag;
-	private int score;
+	public boolean alive;
+	public boolean hasFlag;
+	public int score;
 	private int effect;
 	private int effectValue;
 	private int deaths;
@@ -33,12 +33,6 @@ public class Player {
 		kills = 0;
 		this.sensitivity = GameState.DEFAULT_SENSITIVITY;
 	}
-	public void die(){
-		alive = false;
-	}
-	public void respawn(){
-		alive = true;
-	}
 	public String getName(){
 		return name;
 	}
@@ -47,6 +41,9 @@ public class Player {
 	}
 	public int getSensitivity(){
 		return sensitivity;
+	}
+	public void effect(int effect){
+		this.effect=effect;
 	}
 	public JSONObject toJSON() throws JSONException{
 		JSONObject obj = new JSONObject();

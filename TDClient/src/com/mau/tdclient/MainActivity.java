@@ -158,4 +158,43 @@ public class MainActivity extends ActionBarActivity {
 	    .setIcon(android.R.drawable.ic_dialog_alert)
 	     .show();
 	}
+	//TEMPORARY
+	public void respawn(View view){
+		nc.sendEvent(new Event(Event.RESPAWNED, player.getName(), null, 0));
+	}
+	public void kill(View view){
+		final EditText input = new EditText(this);
+		getInput("Who to kill?", "Type name of player to kill.", input,
+				new DialogInterface.OnClickListener() {
+			        public void onClick(DialogInterface dialog, int whichButton) {
+			    		String playerToKill = input.getText().toString();
+			    		nc.sendEvent(new Event(Event.KILLED, player.getName(), playerToKill, 0));
+			    	}
+			    });
+	}
+	public void capture(View view){
+		nc.sendEvent(new Event(Event.CAPTURED_FLAG, player.getName(), null, 0));
+	}
+	public void score(View view){
+		nc.sendEvent(new Event(Event.SCORED, player.getName(), null, 0));
+	}
+	public void effect(View view){
+		final EditText input = new EditText(this);
+		getInput("Effect", "Write the effect number.", input,
+		new DialogInterface.OnClickListener() {
+	        public void onClick(DialogInterface dialog, int whichButton) {
+	    		int no = 0;
+	    		String effectNo = input.getText().toString();
+	        	try{no=Integer.parseInt(effectNo);}catch(NumberFormatException e){};
+	    		nc.sendEvent(new Event(Event.GOT_EFFECT, player.getName(), null, no));
+	        }
+	    });
+	}
+	public void getInput(String title, String message, EditText input, DialogInterface.OnClickListener listener){
+		new AlertDialog.Builder(this)
+	    .setTitle(title)
+	    .setMessage(message)
+	    .setView(input)
+	    .setPositiveButton("Ok", listener).show();
+	}
 }

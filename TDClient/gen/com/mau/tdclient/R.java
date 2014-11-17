@@ -1819,8 +1819,13 @@ containing a value of this type.
          */
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000d;
         public static final int app_name=0x7f0a000f;
+        public static final int capture_button=0x7f0a0018;
         public static final int connect_button=0x7f0a0012;
+        public static final int effect_button=0x7f0a001a;
         public static final int ip_hint=0x7f0a0010;
+        public static final int kill_button=0x7f0a0017;
+        public static final int respawn_button=0x7f0a0016;
+        public static final int score_button=0x7f0a0019;
         public static final int team1=0x7f0a0014;
         public static final int team2=0x7f0a0015;
         public static final int username_hint=0x7f0a0011;

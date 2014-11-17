@@ -11,8 +11,8 @@ public class Team {
 	public static final int TEAM_2=2;
 		
 	private ArrayList<String> players;
-	private int score;
-	private boolean flagAtBase;
+	public int score;
+	public boolean flagAtBase;
 	private int teamNo;
 	
 	public Team(int teamNo){
@@ -30,15 +30,6 @@ public class Team {
 			playerList[i] = players.get(i);
 		}
 		return playerList;
-	}
-	public int getScore(){
-		return score;
-	}
-	public int getTeamNumber(){
-		return teamNo;
-	}
-	public boolean flagAtBase(){
-		return flagAtBase;
 	}
 	public JSONObject toJSON() throws JSONException{
 		JSONArray playersArray = new JSONArray();

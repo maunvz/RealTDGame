@@ -7,10 +7,43 @@
         android:id="@+id/shake_meter"
         android:layout_width="50dp"
         android:layout_height="match_parent"/>
+	<LinearLayout
+        android:layout_width="60dp"
+    	android:layout_height="match_parent" 
+    	android:orientation="vertical"
+    	android:background="@color/black">
+    	<Button
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:text="@string/respawn_button"
+    	    android:onClick="respawn"/>
+    	<Button
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:text="@string/kill_button"
+    	    android:onClick="kill"/>
+    	<Button
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:text="@string/capture_button"
+    	    android:onClick="capture"/>
+    	<Button
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:text="@string/score_button"
+    	    android:onClick="score"/>
+    	<Button
+    	    android:layout_width="wrap_content"
+    	    android:layout_height="wrap_content"
+    	    android:text="@string/effect_button"
+    	    android:onClick="effect"/>
+    					
+    </LinearLayout>
     <LinearLayout
         android:layout_width="match_parent"
     	android:layout_height="match_parent" 
     	android:orientation="vertical">
+    	
     	<RelativeLayout
     	    android:layout_width="match_parent"
     	    android:layout_height="0dp"
@@ -18,13 +51,15 @@
     	    android:background="@color/grey">
     	    
     	</RelativeLayout>
-        	<RelativeLayout
+        
+        <RelativeLayout
     	    android:layout_width="match_parent"
     	    android:layout_height="0dp"
     	    android:layout_weight="0.4"
     	    android:background="@color/red">
-    	    
+
     	</RelativeLayout>
+    	
     	<RelativeLayout
     	    android:layout_width="match_parent"
     	    android:layout_height="0dp"
@@ -37,7 +72,8 @@
 	    	    <TextView
 	    	        android:id="@+id/server_message_textview"
 	    	        android:layout_width="match_parent"
-	    	        android:layout_height="wrap_content"/>    
+	    	        android:layout_height="wrap_content"
+	    	        android:textColor="@color/white"/>    
     	    </ScrollView>
     	</RelativeLayout>
     	
