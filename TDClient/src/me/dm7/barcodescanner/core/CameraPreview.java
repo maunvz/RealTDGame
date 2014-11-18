@@ -276,13 +276,12 @@ public class CameraPreview extends TextureView implements TextureView.SurfaceTex
 	@Override
 	public void onSurfaceTextureSizeChanged(SurfaceTexture arg0, int arg1,
 			int arg2) {
-		// TODO Auto-generated method stub
+		System.out.println("Changed");
 		
 	}
 	@Override
 	public void onSurfaceTextureUpdated(SurfaceTexture arg0) {
-		// TODO Auto-generated method stub
-		
+		System.out.println("Updated");
 	}
 
 	@Override

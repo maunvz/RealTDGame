@@ -32,6 +32,22 @@ public class GameFragment extends Fragment implements ResultHandler{
 	}
 	@Override
 	public void handleResult(Result rawResult) {
+		if(ma.getPlayer().getTeam()==0){
+			if(rawResult.getContents().equals("base_0")&&ma.getPlayer().hasFlag){
+				ma.capture(null);
+			}
+			else if(rawResult.getContents().equals("base_1")){
+				ma.capture(null);
+			}
+		}
+		else if(ma.getPlayer().getTeam()==1){
+			if(rawResult.getContents().equals("base_1")&&ma.getPlayer().hasFlag){
+				ma.capture(null);
+			}
+			else if(rawResult.getContents().equals("base_0")){
+				ma.capture(null);
+			}
+		}
 		System.out.println(rawResult.getContents());
 		ma.capture(null);
 		onResume();

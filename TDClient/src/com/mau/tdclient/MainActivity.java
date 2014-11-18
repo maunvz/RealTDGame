@@ -198,4 +198,10 @@ public class MainActivity extends ActionBarActivity {
 	    .setView(input)
 	    .setPositiveButton("Ok", listener).show();
 	}
+	public Player getPlayer(){
+		return player;
+	}
+	public GameState getGameState(){
+		return gameState;
+	}
 }

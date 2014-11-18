@@ -23,8 +23,7 @@ import me.dm7.barcodescanner.core.DisplayUtils;
 
 public class ZBarScannerView extends BarcodeScannerView {
 	static int result = 0;
-	LiveScanThread lst;
-
+	LiveScanThread lst = new LiveScanThread();
     public interface ResultHandler {
         public void handleResult(Result rawResult);
     }
@@ -33,72 +32,32 @@ public class ZBarScannerView extends BarcodeScannerView {
         System.loadLibrary("iconv");
     }
 
-    private ImageScanner mScanner;
-    private List<BarcodeFormat> mFormats;
-    private ResultHandler mResultHandler;
+//    private ImageScanner mScanner;
+    static ResultHandler mResultHandler;
 
     public ZBarScannerView(Context context) {
         super(context);
-        setupScanner();
+//        setupScanner();
     }
 
     public ZBarScannerView(Context context, AttributeSet attributeSet) {
         super(context, attributeSet);
-        setupScanner();
+//        setupScanner();
     }
 
     public void setFormats(List<BarcodeFormat> formats) {
-        mFormats = formats;
-        setupScanner();
+//        mFormats = formats;
+//        setupScanner();
     }
 
     public void setResultHandler(ResultHandler resultHandler) {
         mResultHandler = resultHandler;
     }
 
-    public Collection<BarcodeFormat> getFormats() {
-        if(mFormats == null) {
-            return BarcodeFormat.ALL_FORMATS;
-        }
-        return mFormats;
-    }
-
-    public void setupScanner() {
-        mScanner = new ImageScanner();
-        mScanner.setConfig(0, Config.X_DENSITY, 3);
-        mScanner.setConfig(0, Config.Y_DENSITY, 3);
-
-        mScanner.setConfig(Symbol.NONE, Config.ENABLE, 0);
-        for(BarcodeFormat format : getFormats()) {
-            mScanner.setConfig(format.getId(), Config.ENABLE, 1);
-        }
-    }
-
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-    	if(!LiveScanThread.isRunning){
-    		lst = new LiveScanThread(data,camera,getContext(),mScanner);
-    		lst.start();
-    	}
-//    	if (lst.scanFinished&&lst.result != 0) {
-//            stopCamera();
-//            if(mResultHandler != null) {
-////                SymbolSet syms = mScanner.getResults();
-////                Result rawResult = new Result();
-////                for (Symbol sym : syms) {
-////                    String symData = sym.getData();
-////                    if (!TextUtils.isEmpty(symData)) {
-////                        rawResult.setContents(symData);
-////                        rawResult.setBarcodeFormat(BarcodeFormat.getFormatById(sym.getType()));
-////                        break;
-////                    }
-////                }
-////                mResultHandler.handleResult(rawResult);
-//            }
-//        } else {
-            camera.setOneShotPreviewCallback(this);
-//        }
-//    	lst.scanFinished = false;
-  
+      	lst = new LiveScanThread(data,camera,getContext());
+    	lst.start();
+        camera.setOneShotPreviewCallback(this);  
     }
 }
