@@ -8,6 +8,5 @@
 	<classpathentry kind="lib" path="libs/zbar.jar"/>
 	<classpathentry kind="lib" path="libs/org.json-20120521.jar"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/CTFGame"/>
-	<classpathentry kind="lib" path="libs/android-support-v4.jar"/>
 	<classpathentry kind="output" path="bin/classes"/>
 </classpath>
