@@ -10,9 +10,9 @@ import android.widget.FrameLayout;
 
 public abstract class BarcodeScannerView extends FrameLayout implements Camera.PreviewCallback  {
     private Camera mCamera;
-    private CameraPreview mPreview;
-    private ViewFinderView mViewFinderView;
-    private Rect mFramingRectInPreview;
+    private CameraPreviewT mPreview;
+    //private ViewFinderView mViewFinderView;
+    //private Rect mFramingRectInPreview;
 
     public BarcodeScannerView(Context context) {
         super(context);
@@ -25,16 +25,16 @@ public abstract class BarcodeScannerView extends FrameLayout implements Camera.P
     }
 
     public void setupLayout() {
-        mPreview = new CameraPreview(getContext());
-        mViewFinderView = new ViewFinderView(getContext());
+        mPreview = new CameraPreviewT(getContext());
+        //mViewFinderView = new ViewFinderView(getContext());
         addView(mPreview);
-        addView(mViewFinderView);
+        //addView(mViewFinderView);
     }
 
     public void startCamera() {
         mCamera = CameraUtils.getCameraInstance();
         if(mCamera != null) {
-            mViewFinderView.setupViewFinder();
+            //mViewFinderView.setupViewFinder();
             mPreview.setCamera(mCamera, this);
             mPreview.initCameraPreview();
         }
@@ -50,28 +50,29 @@ public abstract class BarcodeScannerView extends FrameLayout implements Camera.P
     }
 
     public synchronized Rect getFramingRectInPreview(int width, int height) {
-        if (mFramingRectInPreview == null) {
-            Rect framingRect = mViewFinderView.getFramingRect();
-            if (framingRect == null) {
-                return null;
-            }
-            Rect rect = new Rect(framingRect);
-            Point screenResolution = DisplayUtils.getScreenResolution(getContext());
-            Point cameraResolution = new Point(width, height);
-
-            if (cameraResolution == null || screenResolution == null) {
-                // Called early, before init even finished
-                return null;
-            }
-
-            rect.left = rect.left * cameraResolution.x / screenResolution.x;
-            rect.right = rect.right * cameraResolution.x / screenResolution.x;
-            rect.top = rect.top * cameraResolution.y / screenResolution.y;
-            rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;
-
-            mFramingRectInPreview = rect;
-        }
-        return mFramingRectInPreview;
+//        if (mFramingRectInPreview == null) {
+//            Rect framingRect = mViewFinderView.getFramingRect();
+//            if (framingRect == null) {
+//                return null;
+//            }
+//            Rect rect = new Rect(framingRect);
+//            Point screenResolution = DisplayUtils.getScreenResolution(getContext());
+//            Point cameraResolution = new Point(width, height);
+//
+//            if (cameraResolution == null || screenResolution == null) {
+//                // Called early, before init even finished
+//                return null;
+//            }
+//
+//            rect.left = rect.left * cameraResolution.x / screenResolution.x;
+//            rect.right = rect.right * cameraResolution.x / screenResolution.x;
+//            rect.top = rect.top * cameraResolution.y / screenResolution.y;
+//            rect.bottom = rect.bottom * cameraResolution.y / screenResolution.y;
+//
+//            mFramingRectInPreview = rect;
+//        }
+//        return mFramingRectInPreview;
+    	return null;
     }
 
     public void setFlash(boolean flag) {
@@ -121,4 +122,5 @@ public abstract class BarcodeScannerView extends FrameLayout implements Camera.P
             mPreview.setAutoFocus(state);
         }
     }
+    
 }
