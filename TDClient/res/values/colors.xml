@@ -5,4 +5,7 @@
 	<color name="blue">#4444FF</color> 
 	<color name="black">#000000</color> 
 	<color name="grey">#555555</color> 
+	<color name="viewfinder_mask">#60000000</color>
+    <color name="viewfinder_laser">#ffcc0000</color>
+    <color name="viewfinder_border">#ffafed44</color>
 </resources>

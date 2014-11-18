@@ -1,7 +1,7 @@
-<?xml version="1.0" encoding="utf-8"?>
-<resources>
-
-    <string name="app_name">TDClient</string>
+<resources>    
+    <integer name="viewfinder_border_width">4</integer>
+    <integer name="viewfinder_border_length">60</integer>
+     <string name="app_name">TDClient</string>
     <string name="ip_hint">Enter Server IP</string>
     <string name="username_hint">Enter Username</string>
     <string name="connect_button">Connect</string>
@@ -14,5 +14,4 @@
     <string name="capture_button">Capture</string>
     <string name="score_button">Score</string>
     <string name="effect_button">Effect</string>
-        
 </resources>

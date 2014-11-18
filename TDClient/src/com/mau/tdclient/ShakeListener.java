@@ -9,6 +9,8 @@ public class ShakeListener implements SensorEventListener{
 	float last_x, last_y, last_z;
 	long lastUpdate;
 	int threshold = 650;
+	int timesOverThreshold = 0;
+	boolean wasTriggeredBefore = false;
 	MainActivity ma;
 	
 	public ShakeListener(MainActivity ma, int threshold){
@@ -30,7 +32,18 @@ public class ShakeListener implements SensorEventListener{
 		    float speed = Math.abs(x+y+z-last_x-last_y-last_z) / diffTime * 10000;
 
 		    if (speed > threshold) {
-		    	ma.youDie();
+		    	wasTriggeredBefore = true;
+		    	timesOverThreshold ++;
+		    	if(timesOverThreshold > 1){
+		    		ma.youDie();
+		    		timesOverThreshold = 0;
+		    	}
+		    }
+		    else{
+		    	if(wasTriggeredBefore){
+		    		wasTriggeredBefore = false;
+		    		timesOverThreshold = 0;
+		    	}
 		    }
 		    last_x = x;
 		    last_y = y;

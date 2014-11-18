@@ -52,13 +52,13 @@
     	    
     	</RelativeLayout>
         
-        <RelativeLayout
-    	    android:layout_width="match_parent"
-    	    android:layout_height="0dp"
-    	    android:layout_weight="0.4"
-    	    android:background="@color/red">
-
-    	</RelativeLayout>
+        
+    	<me.dm7.barcodescanner.zbar.ZBarScannerView
+    	    android:id = "@+id/zbarscan"
+    	    android:layout_width = "match_parent"
+    	    android:layout_height = "0dp"
+    	    android:layout_weight = "0.4">
+    	</me.dm7.barcodescanner.zbar.ZBarScannerView>
     	
     	<RelativeLayout
     	    android:layout_width="match_parent"

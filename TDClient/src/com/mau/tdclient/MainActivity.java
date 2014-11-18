@@ -113,6 +113,7 @@ public class MainActivity extends ActionBarActivity {
         int teamNo = selectedId==R.id.team1_button?Team.TEAM_1:Team.TEAM_2;
         nc = new NetworkConnection(ip, username, teamNo, MainActivity.this);
         nc.execute();
+        System.out.println("Connecting...");
 	}
 	public void onPause(){
 		super.onPause();
