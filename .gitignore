@@ -244,3 +244,14 @@ proguard/
 
 # Log Files
 *.log
+TDClient/bin/jarlist.cache
+
+*.class
+
+TDClient/.classpath
+
+TDClient/project.properties
+
+TDClient/gen/android/support/v7/appcompat/R.java
+
+TDClient/gen/com/mau/tdclient/R.java
