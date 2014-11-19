@@ -34,7 +34,7 @@ public class GameState {
 	}
 	public void processEvent(Event event){
 		Player player1 = getPlayerByName(event.player1);
-		message = "";
+		message = event.toString();
 		switch(event.getType()){
 		case Event.DIED:
 			playerDies(player1);

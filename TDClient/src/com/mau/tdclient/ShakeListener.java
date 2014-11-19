@@ -48,7 +48,8 @@ public class ShakeListener implements SensorEventListener{
 		    last_x = x;
 		    last_y = y;
 		    last_z = z;
-		    ((ShakeMeter)ma.findViewById(R.id.shake_meter)).updateValue(speed, threshold);
+		    if(ma.screenNo==MainActivity.GAME_SCREEN)
+		    	((ShakeMeter)ma.findViewById(R.id.shake_meter)).updateValue(speed, threshold);
 		}
 	}
 	@Override
