@@ -78,22 +78,23 @@ public class LiveScanThread extends Thread {
 
           Image barcode = new Image(width, height, "Y800");
           barcode.setData(data);
-	          int result = mScanner.scanImage(barcode);    
-//	          scanFinished = true;
-	      	if (result != 0) {
-//            stopCamera();
-	            if(ZBarScannerView.mResultHandler != null) {
-	                SymbolSet syms = mScanner.getResults();
-	                Result rawResult = new Result();
-	                for (Symbol sym : syms) {
-	                    String symData = sym.getData();
-	                    if (!TextUtils.isEmpty(symData)) {
-	                        rawResult.setContents(symData);
-	                        rawResult.setBarcodeFormat(BarcodeFormat.getFormatById(sym.getType()));
-	                        break;
-	                    }
+	      int result = mScanner.scanImage(barcode);
+	      barcode.destroy();
+//	      scanFinished = true;
+	      if (result != 0) {
+//        stopCamera();
+	    	  if(ZBarScannerView.mResultHandler != null) {
+	    		  SymbolSet syms = mScanner.getResults();
+	              Result rawResult = new Result();
+	              for (Symbol sym : syms) {
+	              	String symData = sym.getData();
+	                if (!TextUtils.isEmpty(symData)) {
+	                	rawResult.setContents(symData);
+	                	rawResult.setBarcodeFormat(BarcodeFormat.getFormatById(sym.getType()));
+	                	break;
 	                }
-	                ZBarScannerView.mResultHandler.handleResult(rawResult);
+	              }
+	              ZBarScannerView.mResultHandler.handleResult(rawResult);
 	            }
 	      	}
           isRunning = false;

@@ -35,7 +35,6 @@ public class GameFragment extends Fragment implements ResultHandler{
 	@Override
 	public void handleResult(Result rawResult) {
 		ma.getNC().sendEvent(new Event(Event.QR_EVENT, ma.getPlayer().getName(), rawResult.getContents()));
-		onResume();
 	}
 	public void onResume(){
 		super.onResume();
