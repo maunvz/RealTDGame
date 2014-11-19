@@ -14,6 +14,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RadioGroup;
@@ -62,7 +63,8 @@ public class MainActivity extends ActionBarActivity {
 		}
 		//During game GameState management
 		if(screenNo==GAME_SCREEN){
-			((TextView)findViewById(R.id.server_message_textview)).append(gameState.getMessage()+"\n");
+			if(!gameState.getMessage().equals(""))
+				((TextView)findViewById(R.id.server_message_textview)).append(gameState.getMessage()+"\n");
 			//TODO - update UI based on server's response
 		}
 	}
@@ -91,6 +93,7 @@ public class MainActivity extends ActionBarActivity {
 	//------------------------------------------------------------------------
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);		
 		JoinGameFragment jgFrag = new JoinGameFragment();

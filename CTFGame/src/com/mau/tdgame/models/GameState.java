@@ -34,7 +34,7 @@ public class GameState {
 	}
 	public void processEvent(Event event){
 		Player player1 = getPlayerByName(event.player1);
-		message = event.toString();
+		message = "";
 		switch(event.getType()){
 		case Event.DIED:
 			playerDies(player1);
@@ -42,66 +42,75 @@ public class GameState {
 			break;
 		case Event.QR_EVENT:
 			if(event.value1.equals(BASE_1_QR)){
-				if(player1.getTeam()==Team.TEAM_1){
-					if(!player1.alive)
-						player1.alive=true;
-					if(player1.hasFlag)
-						scoreFlag(player1);					
-				} else {
-					if(!player1.hasFlag&&player1.alive){
-						captureFlag(player1);
-					}
-				}
+				if(player1.getTeam()==Team.TEAM_1) playerReachedOwnBase(player1);
+				else playerReachedEnemyBase(player1);
 			}
 			else if(event.value1.equals(BASE_2_QR)){
-				if(player1.getTeam()==Team.TEAM_2){
-					if(!player1.alive)
-						player1.alive=true;
-					if(player1.hasFlag)
-						scoreFlag(player1);					
-				} else {
-					if(!player1.hasFlag&&player1.alive){
-						captureFlag(player1);
-					}
-				}
+				if(player1.getTeam()==Team.TEAM_2) playerReachedOwnBase(player1);
+				else playerReachedEnemyBase(player1);
 			}
 			else {
-				killPlayer(player1, getPlayerByQRId(event.value1));
+				if(killPlayer(player1, getPlayerByQRId(event.value1)))return;
+				//check for QR powerup
 			}
-			//later add powerups
 			break;
 		}
 	}
-	public void playerDies(Player player1){
-		player1.alive=false;
-		if(player1.hasFlag){
-			player1.hasFlag=false;
-			if(player1.getTeam()==Team.TEAM_1)team2.flagAtBase=true;
-			if(player1.getTeam()==Team.TEAM_2)team1.flagAtBase=true;
+	public void playerReachedOwnBase(Player player){
+		if(playerRespawns(player))return;
+		if(scoreFlag(player))return;
+	}
+	public void playerReachedEnemyBase(Player player){
+		if(captureFlag(player))return;
+	}
+	public boolean playerRespawns(Player player){
+		if(player.alive)return false;
+		player.alive=true;
+		message = player.getName()+" has respawned";
+		return true;
+	}
+	public boolean playerDies(Player player){
+		if(player==null)return false;
+		if(!player.alive)return false;
+		player.alive=false;
+		if(player.hasFlag){
+			player.hasFlag=false;
+			if(player.getTeam()==Team.TEAM_1)team2.flagAtBase=true;
+			if(player.getTeam()==Team.TEAM_2)team1.flagAtBase=true;
 		}
+		return true;
 	}
-	public void killPlayer(Player killer, Player victim){
+	public boolean killPlayer(Player killer, Player victim){
+		if(killer==null||victim==null)return false;
+		if(!killer.alive)return false;
+		if(!playerDies(victim))return false;
 		killer.score+=KILL_VALUE;
-		playerDies(victim);
 		message = killer.getName() +" killed "+victim.getName()+".";
-		//steal powerup? steal flag?
+		return true;
 	}
-	public void scoreFlag(Player player1){
-		player1.hasFlag=false;
-		player1.score+=SCORE_VALUE;
-		if(player1.getTeam()==Team.TEAM_1)
+	public boolean scoreFlag(Player player){
+		if(!player.alive||!player.hasFlag)return false;
+		player.hasFlag=false;
+		player.score+=SCORE_VALUE;
+		if(player.getTeam()==Team.TEAM_1)
 			team2.flagAtBase=true;
 		else 
 			team1.flagAtBase=true;
-		message = player1.getName()+" just scored! Flag returns to base.";
+		message = player.getName()+" just scored! Flag returns to base.";
+		return true;
 	}
-	public void captureFlag(Player player1){
-		player1.hasFlag=true;
-		if(player1.getTeam()==Team.TEAM_1)
+	public boolean captureFlag(Player player){
+		if(!player.alive||player.hasFlag)return false;
+		if(player.getTeam()==Team.TEAM_1){
+			if(!team2.flagAtBase)return false;
 			team2.flagAtBase=false;
-		else
-			team1.flagAtBase=false;
-		message = player1.getName()+" has the flag! Go kill him now.";
+		} else {
+			if(!team1.flagAtBase)return false;
+			team1.flagAtBase=false;			
+		}
+		message = player.getName()+" has the flag! Go kill him now.";
+		player.hasFlag=true;
+		return true;
 	}
 	public void addPlayer(Player player){
 		players.add(player);

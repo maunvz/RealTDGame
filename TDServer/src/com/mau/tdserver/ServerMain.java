@@ -97,7 +97,7 @@ public class ServerMain {
 	public synchronized void updateGameState(Event event){
 		gameState.processEvent(event);
 		broadcastGameState();
-		print(gameState.getMessage());
+		if(!gameState.getMessage().equals(""))print(gameState.getMessage());
 	}
 	public synchronized void broadcastGameState(){
 		for(ClientThread client:clients){
