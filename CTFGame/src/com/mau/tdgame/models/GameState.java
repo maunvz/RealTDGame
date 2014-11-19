@@ -7,7 +7,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class GameState {
-	public static final int SCORE_VALUE=5;
+	public static final String BASE_1_QR = "base_0";
+	public static final String BASE_2_QR = "base_1";
+	
+	public static final int SCORE_VALUE=10;
 	public static final int KILL_VALUE=2;
 	public static final int DEFAULT_SENSITIVITY = 650;
 	private boolean gameStarted;
@@ -30,22 +33,75 @@ public class GameState {
 		gameStarted=true;
 	}
 	public void processEvent(Event event){
-		message = event.toString();
 		Player player1 = getPlayerByName(event.player1);
-		
+		message = "";
 		switch(event.getType()){
 		case Event.DIED:
-			player1.alive=false;
-			if(player1.hasFlag){
-				player1.hasFlag=false;
-				if(player1.getTeam()==Team.TEAM_1)team2.flagAtBase=true;
-				if(player1.getTeam()==Team.TEAM_2)team1.flagAtBase=true;
-			}
+			playerDies(player1);
+			message = player1.getName() + " died.";
 			break;
 		case Event.QR_EVENT:
-			
+			if(event.value1.equals(BASE_1_QR)){
+				if(player1.getTeam()==Team.TEAM_1){
+					if(!player1.alive)
+						player1.alive=true;
+					if(player1.hasFlag)
+						scoreFlag(player1);					
+				} else {
+					if(!player1.hasFlag&&player1.alive){
+						captureFlag(player1);
+					}
+				}
+			}
+			else if(event.value1.equals(BASE_2_QR)){
+				if(player1.getTeam()==Team.TEAM_2){
+					if(!player1.alive)
+						player1.alive=true;
+					if(player1.hasFlag)
+						scoreFlag(player1);					
+				} else {
+					if(!player1.hasFlag&&player1.alive){
+						captureFlag(player1);
+					}
+				}
+			}
+			else {
+				killPlayer(player1, getPlayerByQRId(event.value1));
+			}
+			//later add powerups
 			break;
 		}
+	}
+	public void playerDies(Player player1){
+		player1.alive=false;
+		if(player1.hasFlag){
+			player1.hasFlag=false;
+			if(player1.getTeam()==Team.TEAM_1)team2.flagAtBase=true;
+			if(player1.getTeam()==Team.TEAM_2)team1.flagAtBase=true;
+		}
+	}
+	public void killPlayer(Player killer, Player victim){
+		killer.score+=KILL_VALUE;
+		playerDies(victim);
+		message = killer.getName() +" killed "+victim.getName()+".";
+		//steal powerup? steal flag?
+	}
+	public void scoreFlag(Player player1){
+		player1.hasFlag=false;
+		player1.score+=SCORE_VALUE;
+		if(player1.getTeam()==Team.TEAM_1)
+			team2.flagAtBase=true;
+		else 
+			team1.flagAtBase=true;
+		message = player1.getName()+" just scored! Flag returns to base.";
+	}
+	public void captureFlag(Player player1){
+		player1.hasFlag=true;
+		if(player1.getTeam()==Team.TEAM_1)
+			team2.flagAtBase=false;
+		else
+			team1.flagAtBase=false;
+		message = player1.getName()+" has the flag! Go kill him now.";
 	}
 	public void addPlayer(Player player){
 		players.add(player);
@@ -79,8 +135,7 @@ public class GameState {
 		JSONArray playerArray = new JSONArray();
 		for(Player player:players){
 			playerArray.put(player.toJSON());
-		}
-		
+		}		
 		JSONObject obj = new JSONObject();
 		obj.put("gameStarted", gameStarted);
 		obj.put("team1", team1.toJSON());
