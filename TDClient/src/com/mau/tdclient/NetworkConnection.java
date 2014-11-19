@@ -21,18 +21,20 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 	private Socket socket;
 	private String host;
 	private String username;
+	private String QRId;
 	private int teamNo;
 
 	private PrintWriter pw;
 	private BufferedReader br;
 	private MainActivity ma;
 	
-	public NetworkConnection(String host, String username, int teamNo, MainActivity ma){
+	public NetworkConnection(String host, String username, String QRId, int teamNo, MainActivity ma){
 		super();
 		this.host = host;
 		this.ma=ma;
 		this.username = username;
 		this.teamNo = teamNo;
+		this.QRId = QRId;
 	}
 	@Override
 	protected Void doInBackground(Void... params) {
@@ -45,6 +47,7 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 			pw = new PrintWriter(socket.getOutputStream(), true);
 			
 			pw.println(username);
+			pw.println(QRId);
 			pw.println(teamNo);
 			
 			try{
@@ -67,7 +70,6 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 				}
 			}
 		} catch (IOException e) {
-			System.out.println("I'm doing some");
 			e.printStackTrace();
 		}
 		return null;

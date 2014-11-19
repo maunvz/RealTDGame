@@ -36,11 +36,16 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 				pw.println("Sorry, player by that name already exists.");
 				return null;
 			}
+			String QRId = br.readLine();
+			if(main.getGameState().getPlayerByQRId(QRId)!=null){
+				pw.println("Sorry, player by that QR already exists.");
+				return null;
+			}
 			int team = Integer.parseInt(br.readLine());
-			player = new Player(username, team);
+			player = new Player(username, QRId, team);
 			
 			//Add player to game state
-			main.print(player.getName()+" has joined team "+player.getTeam());
+			main.print(player.getName()+" has joined team "+player.getTeam()+" with QR "+player.getQRId());
 			main.getGameState().addPlayer(player);
 			//Send the player to the client
 			pw.println(player.toJSON().toString());

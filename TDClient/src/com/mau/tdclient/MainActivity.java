@@ -45,11 +45,7 @@ public class MainActivity extends ActionBarActivity {
 	//Called when the phone shakes too much
 	public void youDie(){
 		mplayer.start();
-		nc.sendEvent(new Event(Event.DIED, player.getName(), null, 0));
-	}
-	public void scannedQR(/*some parameter*/){	
-		//send the QR data to the server, who will respond telling you if you killed someone
-		//or captured a flag or came back to life, or got a power up, etc.
+		nc.sendEvent(new Event(Event.DIED, player.getName(), null));
 	}
 	//Called when the server sends an updated GameState
 	public void updateGameState(GameState newGameState){
@@ -109,9 +105,10 @@ public class MainActivity extends ActionBarActivity {
         //Opens a connection based on the input
 		String ip = ((EditText)findViewById(R.id.ip_edit_text)).getEditableText().toString();
         String username = ((EditText)findViewById(R.id.username_edit_text)).getEditableText().toString();
+        String QRId = ((EditText)findViewById(R.id.qrid_edit_text)).getEditableText().toString();
         int selectedId = ((RadioGroup)findViewById(R.id.team_radio_group)).getCheckedRadioButtonId();
         int teamNo = selectedId==R.id.team1_button?Team.TEAM_1:Team.TEAM_2;
-        nc = new NetworkConnection(ip, username, teamNo, MainActivity.this);
+        nc = new NetworkConnection(ip, username, QRId, teamNo, MainActivity.this);
         nc.execute();
         System.out.println("Connecting...");
 	}
@@ -159,49 +156,13 @@ public class MainActivity extends ActionBarActivity {
 	    .setIcon(android.R.drawable.ic_dialog_alert)
 	     .show();
 	}
-	//TEMPORARY
-	public void respawn(View view){
-		nc.sendEvent(new Event(Event.RESPAWNED, player.getName(), null, 0));
-	}
-	public void kill(View view){
-		final EditText input = new EditText(this);
-		getInput("Who to kill?", "Type name of player to kill.", input,
-				new DialogInterface.OnClickListener() {
-			        public void onClick(DialogInterface dialog, int whichButton) {
-			    		String playerToKill = input.getText().toString();
-			    		nc.sendEvent(new Event(Event.KILLED, player.getName(), playerToKill, 0));
-			    	}
-			    });
-	}
-	public void capture(View view){
-		nc.sendEvent(new Event(Event.CAPTURED_FLAG, player.getName(), null, 0));
-	}
-	public void score(View view){
-		nc.sendEvent(new Event(Event.SCORED, player.getName(), null, 0));
-	}
-	public void effect(View view){
-		final EditText input = new EditText(this);
-		getInput("Effect", "Write the effect number.", input,
-		new DialogInterface.OnClickListener() {
-	        public void onClick(DialogInterface dialog, int whichButton) {
-	    		int no = 0;
-	    		String effectNo = input.getText().toString();
-	        	try{no=Integer.parseInt(effectNo);}catch(NumberFormatException e){};
-	    		nc.sendEvent(new Event(Event.GOT_EFFECT, player.getName(), null, no));
-	        }
-	    });
-	}
-	public void getInput(String title, String message, EditText input, DialogInterface.OnClickListener listener){
-		new AlertDialog.Builder(this)
-	    .setTitle(title)
-	    .setMessage(message)
-	    .setView(input)
-	    .setPositiveButton("Ok", listener).show();
-	}
 	public Player getPlayer(){
 		return player;
 	}
 	public GameState getGameState(){
 		return gameState;
+	}
+	public NetworkConnection getNC(){
+		return nc;
 	}
 }

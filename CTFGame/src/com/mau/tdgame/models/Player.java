@@ -19,11 +19,13 @@ public class Player {
 	private int kills;
 	private int team;
 	private String name;
+	private String QRId;
 	private int sensitivity;
 	
-	public Player(String name, int team){
+	public Player(String name, String QRId, int team){
 		this.name = name;
 		this.team = team;
+		this.QRId = QRId;
 		alive = true;
 		hasFlag = false;
 		score = 0;
@@ -35,6 +37,9 @@ public class Player {
 	}
 	public String getName(){
 		return name;
+	}
+	public String getQRId(){
+		return QRId;
 	}
 	public int getTeam(){
 		return team;
@@ -49,6 +54,7 @@ public class Player {
 		JSONObject obj = new JSONObject();
 		obj.put("name", name);
 		obj.put("team", team);
+		obj.put("QRId", QRId);
 		obj.put("alive", alive);
 		obj.put("hasFlag", hasFlag);
 		obj.put("score", score);
@@ -60,7 +66,7 @@ public class Player {
 		return obj;
 	}
 	public static Player fromJSON(JSONObject obj) throws JSONException{		
-		Player player = new Player(obj.getString("name"),obj.getInt("team"));
+		Player player = new Player(obj.getString("name"),obj.getString("QRId"),obj.getInt("team"));
 		player.alive = obj.getBoolean("alive");
 		player.hasFlag = obj.getBoolean("hasFlag");
 		player.score = obj.getInt("score");

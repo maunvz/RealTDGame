@@ -32,7 +32,6 @@ public class GameState {
 	public void processEvent(Event event){
 		message = event.toString();
 		Player player1 = getPlayerByName(event.player1);
-		Player player2 = getPlayerByName(event.player2);
 		
 		switch(event.getType()){
 		case Event.DIED:
@@ -43,33 +42,8 @@ public class GameState {
 				if(player1.getTeam()==Team.TEAM_2)team1.flagAtBase=true;
 			}
 			break;
-		case Event.KILLED:
-			if(player2!=null)player2.alive=false;
-			player1.score+=KILL_VALUE;
-			break;
-		case Event.CAPTURED_FLAG:
-			if(player1.getTeam()==Team.TEAM_1&&team2.flagAtBase){
-				team2.flagAtBase = false;
-				player1.hasFlag = true;
-				message=player1.getName()+" has captured team 2's flag!";
-			}
-			if(player1.getTeam()==Team.TEAM_2&&team1.flagAtBase){
-				team1.flagAtBase = false;
-				player1.hasFlag = true;
-				message=player1.getName()+" has captured team 1's flag!";
-			}
-			break;
-		case Event.RESPAWNED:
-			player1.alive=true;
-			break;
-		case Event.SCORED:
-			player1.hasFlag=false;
-			if(player1.getTeam()==Team.TEAM_1)team1.score+=1;
-			else team2.score+=1;
-			player1.score+=SCORE_VALUE;
-			break;
-		case Event.GOT_EFFECT:
-			player1.effect(event.value1);
+		case Event.QR_EVENT:
+			
 			break;
 		}
 	}
@@ -88,6 +62,13 @@ public class GameState {
 		Player player = null;
 		for(Player p1:players){
 			if(p1.getName().equals(name))player=p1;
+		}
+		return player;
+	}
+	public Player getPlayerByQRId(String QRId){
+		Player player = null;
+		for(Player p1:players){
+			if(p1.getQRId().equals(QRId))player=p1;
 		}
 		return player;
 	}

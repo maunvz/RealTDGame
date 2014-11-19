@@ -4,14 +4,10 @@
      <string name="app_name">TDClient</string>
     <string name="ip_hint">Enter Server IP</string>
     <string name="username_hint">Enter Username</string>
+    <string name="qrid_hint">Enter QR</string>
     <string name="connect_button">Connect</string>
     <string name="waiting_room_title">Waiting to Start</string>
     <string name="team1">Team 1</string>
     <string name="team2">Team 2</string>
-	
-	<string name="respawn_button">Respawn</string>
-    <string name="kill_button">Kill</string>
-    <string name="capture_button">Capture</string>
-    <string name="score_button">Score</string>
-    <string name="effect_button">Effect</string>
+
 </resources>
