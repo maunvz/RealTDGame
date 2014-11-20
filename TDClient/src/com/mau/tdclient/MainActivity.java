@@ -39,6 +39,7 @@ public class MainActivity extends ActionBarActivity {
 	public int screenNo;
 	
 	//Game state variables
+	private String QRId;
 	private boolean gameStarted;
 	private Player player;
 	private GameState gameState;
@@ -83,6 +84,18 @@ public class MainActivity extends ActionBarActivity {
 		((TextView)findViewById(R.id.team1_list)).setText(team1);
 		((TextView)findViewById(R.id.team2_list)).setText(team2);
 	}
+	public synchronized void setQRId(final String id){
+		runOnUiThread(new Runnable(){
+			@Override
+			public void run() {
+				QRId = id;
+				((TextView)findViewById(R.id.qr_id_textview)).setText("QR Scanned. You may connect.");				
+			}			
+		});
+	}
+	public synchronized String getQRId(){
+		return QRId;
+	}
 	//Called when server adds player to game, move to waiting room
 	public void joinGame(Player player, GameState gameState){
 		this.player = player;
@@ -96,7 +109,7 @@ public class MainActivity extends ActionBarActivity {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);		
-		JoinGameFragment jgFrag = new JoinGameFragment();
+		JoinGameFragment jgFrag = new JoinGameFragment(this);
 		getFragmentManager().beginTransaction().add(R.id.fragment_holder, jgFrag).commit();
 		gameStarted=false;
 		screenNo=JOIN_SCREEN;
@@ -113,10 +126,13 @@ public class MainActivity extends ActionBarActivity {
         //Opens a connection based on the input
 		String ip = ((EditText)findViewById(R.id.ip_edit_text)).getEditableText().toString();
         String username = ((EditText)findViewById(R.id.username_edit_text)).getEditableText().toString();
-        String QRId = ((EditText)findViewById(R.id.qrid_edit_text)).getEditableText().toString();
         int selectedId = ((RadioGroup)findViewById(R.id.team_radio_group)).getCheckedRadioButtonId();
         int teamNo = selectedId==R.id.team1_button?Team.TEAM_1:Team.TEAM_2;
-        nc = new NetworkConnection(ip, username, QRId, teamNo, MainActivity.this);
+        if(username.equals("")||QRId==null||ip.equals("")){
+        	alertUser("Error","Make sure you have an IP, username, and QR id.");
+        	return;
+        }
+        nc = new NetworkConnection(ip, username, getQRId(), teamNo, MainActivity.this);
         nc.execute();
         System.out.println("Connecting...");
 	}

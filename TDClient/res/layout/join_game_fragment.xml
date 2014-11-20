@@ -30,12 +30,6 @@
 	    android:layout_height="wrap_content"
 		android:inputType="text"
 	    android:hint="@string/username_hint"/>
-	<EditText 
-	    android:id="@+id/qrid_edit_text"
-	    android:layout_width="match_parent"
-	    android:layout_height="wrap_content"
-		android:inputType="text"
-	    android:hint="@string/qrid_hint"/>
 	<RadioGroup 
 	    android:id="@+id/team_radio_group"
 	    android:layout_width="match_parent"
@@ -53,6 +47,19 @@
 	        android:layout_height="wrap_content"
 	        android:text="@string/team2"/>
 	</RadioGroup>
+	<TextView
+	    android:id="@+id/qr_id_textview"
+	    android:layout_width="wrap_content"
+	    android:layout_height="wrap_content"
+		android:text="@string/qr_id_text"
+	    />
+	<me.dm7.barcodescanner.zbar.ZBarScannerView
+    	android:id = "@+id/zbarscan"
+    	android:layout_width = "match_parent"
+    	android:layout_height = "0dp"
+    	android:layout_weight = "0.6">
+    </me.dm7.barcodescanner.zbar.ZBarScannerView>
+	
 	<Button 
 	    android:id="@+id/connect_button"
 	    android:layout_height="wrap_content"

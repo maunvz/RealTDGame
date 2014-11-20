@@ -21,7 +21,7 @@ public class GameFragment extends Fragment implements ResultHandler{
 	public void onPause(){
 		super.onPause();
 		if(mScannerView != null)
-			mScannerView.stopCamera();  
+			mScannerView.stopCamera();
 	}
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);

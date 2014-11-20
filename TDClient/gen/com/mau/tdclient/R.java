@@ -1680,7 +1680,7 @@ containing a value of this type.
         public static final int normal=0x7f050001;
         public static final int progress_circular=0x7f05001e;
         public static final int progress_horizontal=0x7f05001f;
-        public static final int qrid_edit_text=0x7f050048;
+        public static final int qr_id_textview=0x7f05004b;
         public static final int radio=0x7f05002d;
         public static final int scan_button=0x7f050046;
         public static final int search_badge=0x7f050037;
@@ -1702,11 +1702,11 @@ containing a value of this type.
         public static final int split_action_bar=0x7f05001b;
         public static final int submit_area=0x7f05003e;
         public static final int tabMode=0x7f050003;
-        public static final int team1_button=0x7f05004a;
+        public static final int team1_button=0x7f050049;
         public static final int team1_list=0x7f05004f;
-        public static final int team2_button=0x7f05004b;
+        public static final int team2_button=0x7f05004a;
         public static final int team2_list=0x7f050050;
-        public static final int team_radio_group=0x7f050049;
+        public static final int team_radio_group=0x7f050048;
         public static final int title=0x7f050029;
         public static final int top=0x7f050015;
         public static final int up=0x7f050018;
@@ -1832,6 +1832,7 @@ containing a value of this type.
         public static final int app_name=0x7f0a000f;
         public static final int connect_button=0x7f0a0013;
         public static final int ip_hint=0x7f0a0010;
+        public static final int qr_id_text=0x7f0a0018;
         public static final int qrid_hint=0x7f0a0012;
         public static final int scan_button=0x7f0a0014;
         public static final int team1=0x7f0a0016;
