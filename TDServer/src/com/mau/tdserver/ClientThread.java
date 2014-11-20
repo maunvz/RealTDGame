@@ -20,9 +20,11 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 	private BufferedReader br;
 	private Player player;
 	private ServerMain main;
+	private boolean dead;
 	public ClientThread(Socket socket, ServerMain main){
 		this.socket = socket;
 		this.main = main;
+		dead=false;
 	}
 	@Override
 	protected Void doInBackground() throws Exception {
@@ -32,6 +34,7 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 
 			//Create the player
 			String username = br.readLine();
+			if(username.equals("server_scan"))return null;
 			if(main.getGameState().getPlayerByName(username)!=null){
 				pw.println("Sorry, player by that name already exists.");
 				return null;
@@ -67,9 +70,11 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 			e.printStackTrace();
 			main.print(e.getMessage());
 		}
+		dead=true;
 		return null;
 	}
 	public void sendGameState(){
+		if(dead)return;
 		try {
 			pw.println(main.getGameState().toJSON().toString());
 		} catch (JSONException e) {

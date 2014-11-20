@@ -1,11 +1,12 @@
 <resources>    
     <integer name="viewfinder_border_width">4</integer>
     <integer name="viewfinder_border_length">60</integer>
-     <string name="app_name">TDClient</string>
+    <string name="app_name">TDClient</string>
     <string name="ip_hint">Enter Server IP</string>
     <string name="username_hint">Enter Username</string>
     <string name="qrid_hint">Enter QR</string>
     <string name="connect_button">Connect</string>
+    <string name="scan_button">Scan</string>
     <string name="waiting_room_title">Waiting to Start</string>
     <string name="team1">Team 1</string>
     <string name="team2">Team 2</string>

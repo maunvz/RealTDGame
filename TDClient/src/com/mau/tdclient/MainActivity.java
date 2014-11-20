@@ -101,6 +101,11 @@ public class MainActivity extends ActionBarActivity {
 		gameStarted=false;
 		screenNo=JOIN_SCREEN;
 	}
+	public void foundServer(String ip){
+		if(screenNo==JOIN_SCREEN){
+			((EditText)findViewById(R.id.ip_edit_text)).setText(ip);
+		}
+	}
 	public void onConnectClicked(View view){
 		//Hide keyboard
 		InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
@@ -114,6 +119,9 @@ public class MainActivity extends ActionBarActivity {
         nc = new NetworkConnection(ip, username, QRId, teamNo, MainActivity.this);
         nc.execute();
         System.out.println("Connecting...");
+	}
+	public void onScanClicked(View view){
+		new ServerScanner(this).execute();
 	}
 	public void onPause(){
 		super.onPause();
