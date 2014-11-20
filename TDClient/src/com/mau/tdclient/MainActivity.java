@@ -33,7 +33,7 @@ public class MainActivity extends ActionBarActivity {
 	//Technical stuff
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
-	private SensorEventListener listener;
+	private ShakeListener listener;
 	private MediaPlayer mplayer;
 	private NetworkConnection nc;
 	public int screenNo;
@@ -67,7 +67,52 @@ public class MainActivity extends ActionBarActivity {
 			if(!gameState.getMessage().equals(""))
 				((TextView)findViewById(R.id.server_message_textview)).append(gameState.getMessage()+"\n");
 			//TODO - update UI based on server's response
+			updateUIGameState();
 		}
+	}
+	public void updateUIGameState(){
+		Player tplayer = gameState.getPlayerByName(player.getName());
+		if(!tplayer.alive){
+			listener.turnOffListener();
+			if(gameState.getMessage().contains("killed "+player.getName())){
+				if(player.hasFlag){
+					//Message saying you got killed by x, x has flag now
+					((TextView)findViewById(R.id.status_message_textview)).setText(gameState.getMessage()+" Go respawn.");		
+				}
+				else{
+					//Message saying you got killed by x
+					((TextView)findViewById(R.id.status_message_textview)).setText(gameState.getMessage()+" Go respawn.");	
+				}	
+			}
+			else if(player.hasFlag&&gameState.getMessage().contains("died")&&gameState.getMessage().contains(player.getName())){
+				//Message saying flag was returned to opponent base		
+				((TextView)findViewById(R.id.status_message_textview)).setText("You died - flag is back at opponent base."+" Go respawn.");	
+			}
+			else if(gameState.getMessage().contains("died")&&gameState.getMessage().contains(player.getName())){
+				//Message saying you died, go respawn
+				((TextView)findViewById(R.id.status_message_textview)).setText("You died."+" Go respawn.");	
+			}
+		}
+		else if(tplayer.alive){
+			listener.turnOnListener();
+			if(gameState.getMessage().contains(player.getName()+" killed")){
+				//Message saying you killed x
+				((TextView)findViewById(R.id.status_message_textview)).setText(gameState.getMessage());	
+			}
+			if(gameState.getMessage().contains(player.getName()+" just scored! Flag returns to base.")){
+				//Message saying you scored the flag
+				((TextView)findViewById(R.id.status_message_textview)).setText(gameState.getMessage());	
+			}
+			if(gameState.getMessage().contains(player.getName()+" has the flag!")){
+				//Message saying you got the flag, go score it
+				((TextView)findViewById(R.id.status_message_textview)).setText("You have the flag");	
+			}
+			if(gameState.getMessage().contains(player.getName()+" has respawned")){
+				//Message saying congrats, you respawned
+				((TextView)findViewById(R.id.status_message_textview)).setText("Congrats, you respawned.");
+			}
+		}	
+		player = tplayer;
 	}
 	//called when a new player joins the waiting room adds all the names of the players in gameState to their respective lists
 	public void updateWaitRoom(){

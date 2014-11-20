@@ -80,6 +80,7 @@ public class LiveScanThread extends Thread {
           barcode.setData(data);
 	      int result = mScanner.scanImage(barcode);
 	      barcode.destroy();
+	      data = null;
 //	      scanFinished = true;
 	      if (result != 0) {
 //        stopCamera();

@@ -11,7 +11,16 @@
         android:layout_width="match_parent"
     	android:layout_height="match_parent" 
     	android:orientation="vertical">
-        
+        <ScrollView 
+    		android:layout_width="match_parent"
+    		android:layout_height="0dp"
+    		android:layout_weight="0.2">
+	    	<TextView
+	    		android:id="@+id/status_message_textview"
+	    	    android:layout_width="match_parent"
+	    	    android:layout_height="wrap_content"
+	    	    android:textColor="@color/black"/>    
+ 		</ScrollView>
     	<me.dm7.barcodescanner.zbar.ZBarScannerView
     	    android:id = "@+id/zbarscan"
     	    android:layout_width = "match_parent"
@@ -21,12 +30,12 @@
     	<ScrollView 
     		android:layout_width="match_parent"
     		android:layout_height="0dp"
-    		android:layout_weight="0.4">
+    		android:layout_weight="0.2">
 	    	<TextView
 	    		android:id="@+id/server_message_textview"
 	    	    android:layout_width="match_parent"
 	    	    android:layout_height="wrap_content"
-	    	    android:textColor="@color/white"/>    
+	    	    android:textColor="@color/black"/>    
  		</ScrollView>		
     </LinearLayout>
 </LinearLayout>
