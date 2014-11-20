@@ -140,6 +140,15 @@ public class GameState {
 	public String getMessage(){
 		return message;
 	}
+	public int[] getTeamScores(){
+		int t1 = 0;
+		int t2 = 0;
+		for(Player p1:players){
+			if(p1.getTeam()==Team.TEAM_1)t1+=p1.score;
+			if(p1.getTeam()==Team.TEAM_2)t2+=p1.score;
+		}
+		return new int[]{t1,t2};
+	}
 	public JSONObject toJSON() throws JSONException{
 		JSONArray playerArray = new JSONArray();
 		for(Player player:players){

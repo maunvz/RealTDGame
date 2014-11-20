@@ -69,6 +69,7 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 					e.printStackTrace();
 				}
 			}
+			socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

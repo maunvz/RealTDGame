@@ -63,7 +63,7 @@ public class LiveScanThread extends Thread {
         Camera.Size size = parameters.getPreviewSize();
         int width = size.width;
         int height = size.height;
-        
+  
     	        if(DisplayUtils.getScreenOrientation(c) == Configuration.ORIENTATION_PORTRAIT) {
               byte[] rotatedData = new byte[data.length];
               for (int y = 0; y < height; y++) {

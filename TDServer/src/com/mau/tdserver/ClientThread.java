@@ -48,7 +48,7 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 			player = new Player(username, QRId, team);
 			
 			//Add player to game state
-			main.print(player.getName()+" has joined team "+player.getTeam()+" with QR "+player.getQRId());
+			main.print(player.getName()+" has joined team "+player.getTeam()+" with QR "+player.getQRId()+" and IP "+socket.getInetAddress().getHostAddress());
 			main.getGameState().addPlayer(player);
 			//Send the player to the client
 			pw.println(player.toJSON().toString());

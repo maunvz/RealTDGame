@@ -8,7 +8,6 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
 import android.hardware.Sensor;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
@@ -18,6 +17,7 @@ import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.EditText;
 import android.widget.RadioGroup;
+import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.mau.tdgame.models.Event;
@@ -64,9 +64,10 @@ public class MainActivity extends ActionBarActivity {
 		}
 		//During game GameState management
 		if(screenNo==GAME_SCREEN){
-			if(!gameState.getMessage().equals(""))
+			if(!gameState.getMessage().equals("")){
 				((TextView)findViewById(R.id.server_message_textview)).append(gameState.getMessage()+"\n");
-			//TODO - update UI based on server's response
+				((ScrollView)findViewById(R.id.message_scroll)).fullScroll(View.FOCUS_DOWN);
+			}
 			updateUIGameState();
 		}
 	}
@@ -111,8 +112,16 @@ public class MainActivity extends ActionBarActivity {
 				//Message saying congrats, you respawned
 				((TextView)findViewById(R.id.status_message_textview)).setText("Congrats, you respawned.");
 			}
-		}	
+		}
 		player = tplayer;
+		updateScoreDisplay();
+	}
+	public void updateScoreDisplay(){
+		if(screenNo==GAME_SCREEN){
+			((TextView)findViewById(R.id.score_text_team1)).setText(""+gameState.getTeamScores()[0]);
+			((TextView)findViewById(R.id.score_text_team2)).setText(""+gameState.getTeamScores()[1]);
+			((TextView)findViewById(R.id.score_text_player)).setText(""+player.score);
+		}
 	}
 	//called when a new player joins the waiting room adds all the names of the players in gameState to their respective lists
 	public void updateWaitRoom(){
