@@ -3,9 +3,13 @@ package com.mau.tdserver;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
+import java.net.InetAddress;
+import java.net.NetworkInterface;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.SocketException;
 import java.util.ArrayList;
+import java.util.Enumeration;
 
 import javax.swing.BoxLayout;
 import javax.swing.JButton;
@@ -27,6 +31,7 @@ public class ServerMain {
 		port = 1726;
 		createUI().setVisible(true);
 		clients = new ArrayList<ClientThread>();
+		print("Server ip: "+getIp().getHostAddress());
 	}
 	public void startListening(){
 		gameState = new GameState();
@@ -109,5 +114,22 @@ public class ServerMain {
 	}
 	public static void main(String[] args) {
 		new ServerMain();
+	}
+	public static InetAddress getIp(){
+		try {
+			Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
+			while(e.hasMoreElements()){
+				NetworkInterface ni = e.nextElement();
+				Enumeration<InetAddress> a = ni.getInetAddresses();
+				while(a.hasMoreElements()){
+					InetAddress ia = a.nextElement();
+					if(ia.isSiteLocalAddress())
+						return ia;
+				}
+			}
+		} catch (SocketException e) {
+			e.printStackTrace();
+		}
+		return null;
 	}
 }

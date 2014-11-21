@@ -12,6 +12,7 @@ public class GameState {
 	
 	public static final int SCORE_VALUE=10;
 	public static final int KILL_VALUE=2;
+	public static final int KILL_PENALTY=1;
 	public static final int DEFAULT_SENSITIVITY = 650;
 	private boolean gameStarted;
 	private Team team1;
@@ -84,8 +85,11 @@ public class GameState {
 		if(killer==null||victim==null)return false;
 		if(!killer.alive)return false;
 		if(!playerDies(victim))return false;
+		if(killer.getTeam()==victim.getTeam())return false;
 		killer.score+=KILL_VALUE;
+		victim.score-=KILL_PENALTY;
 		message = killer.getName() +" killed "+victim.getName()+".";
+		System.out.println("Success to kill");
 		return true;
 	}
 	public boolean scoreFlag(Player player){

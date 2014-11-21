@@ -7,39 +7,58 @@ import java.net.NetworkInterface;
 import java.net.Socket;
 import java.net.SocketException;
 import java.util.Enumeration;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 
 import android.os.AsyncTask;
 
-public class ServerScanner extends AsyncTask<Void, Void, String>{
+public class ServerScanner extends AsyncTask<Void, Integer, String>{
 	String server_ip;
 	MainActivity ma;
+	int finished;
 	public ServerScanner(MainActivity ma){
 		this.ma=ma;
+		server_ip="";
+		finished=0;
 	}
 	@Override
 	protected String doInBackground(Void... params) {
+		long start = System.nanoTime();
+		System.out.println("Scanning for server");
+		ExecutorService ex = Executors.newFixedThreadPool(512);
 		try{
 			final byte[] myIp = getIp().getAddress();
-			int div=3;
-			for(int j=myIp[2]-div; j<myIp[2]+div; j++){
+			for(int j=0; j<256; j++){
 				for(int i=0; i<256; i++){
-					new TryIpThread(myIp, j, i).start();
-				}				
+					ex.execute(new TryIpThread(myIp, j, i));
+				}
 			}
 		} catch (NullPointerException e) {
 			e.printStackTrace();
 		}
-		try {
-			Thread.sleep(500);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
+		ex.shutdown();
+		System.out.println("Done adding, " + ((System.nanoTime()-start)/1000000));
+		while(!ex.isTerminated()){
+			try {
+				Thread.sleep(50);
+			} catch (InterruptedException e) {
+				e.printStackTrace();
+			}
 		}
+		System.out.println("Done searching, " + ((System.nanoTime()-start)/1000000)+" ip: "+server_ip);
 		return server_ip;
+	}
+	protected void onProgressUpdate(Integer... values){
+		ma.foundServer("scanning..."+(values[0]/256+1)+"/256");
 	}
 	private synchronized void setServerIp(String ip){
 		server_ip=ip;
 	}
-	class TryIpThread extends Thread{
+	private synchronized void finishedThread(){
+		finished++;
+		if(finished%256==0)publishProgress(finished);
+	}
+	class TryIpThread implements Runnable{
 		byte[] myIp;
 		int lastByte;
 		int secondLastByte;
@@ -52,6 +71,7 @@ public class ServerScanner extends AsyncTask<Void, Void, String>{
 			try {
 				tryIp(myIp, secondLastByte, lastByte);
 			} catch (Exception e) {}
+			finishedThread();
 		}
 	}
 	protected void onPostExecute(String ip){
@@ -60,7 +80,7 @@ public class ServerScanner extends AsyncTask<Void, Void, String>{
 	public void tryIp(byte[] myIp, int secondLastByte, int lastByte) throws Exception{
 		InetAddress ia = InetAddress.getByAddress(new byte[]{myIp[0],myIp[1],(byte)secondLastByte,(byte)lastByte});
 		Socket s = new Socket();
-		s.connect(new InetSocketAddress(ia,1726), 200);
+		s.connect(new InetSocketAddress(ia,1726), 120);
 		PrintWriter pw = new PrintWriter(s.getOutputStream(), true);
 		pw.println("server_scan");
 		s.close();
@@ -83,5 +103,4 @@ public class ServerScanner extends AsyncTask<Void, Void, String>{
 		}
 		return null;
 	}
-
 }
