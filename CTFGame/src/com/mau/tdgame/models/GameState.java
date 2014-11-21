@@ -14,11 +14,14 @@ public class GameState {
 	public static final int KILL_VALUE=2;
 	public static final int KILL_PENALTY=1;
 	public static final int DEFAULT_SENSITIVITY = 650;
+	public static final int DEFAULT_MAX_SCORE = 100;
+	
 	private boolean gameStarted;
 	private Team team1;
 	private Team team2;
 	private ArrayList<Player> players;
 	private String message;
+	private int maxScore;
 	
 	public GameState(){
 		team1 = new Team(Team.TEAM_1);
@@ -26,12 +29,16 @@ public class GameState {
 		players = new ArrayList<Player>();
 		gameStarted = false;
 		message="";
+		maxScore = DEFAULT_MAX_SCORE;
 	}
 	public boolean gameStarted(){
 		return gameStarted;
 	}
 	public void startGame(){
 		gameStarted=true;
+	}
+	public void endGame(){
+		gameStarted=false;
 	}
 	public void processEvent(Event event){
 		Player player1 = getPlayerByName(event.player1);
@@ -55,6 +62,9 @@ public class GameState {
 				//check for QR powerup
 			}
 			break;
+		}
+		if(getTeamScores()[0]>=maxScore||getTeamScores()[1]>=maxScore){
+			endGame();
 		}
 	}
 	public void playerReachedOwnBase(Player player){

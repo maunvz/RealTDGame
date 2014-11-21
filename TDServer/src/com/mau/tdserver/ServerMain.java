@@ -1,7 +1,5 @@
 package com.mau.tdserver;
 
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 import java.io.IOException;
 import java.net.InetAddress;
 import java.net.NetworkInterface;
@@ -11,27 +9,29 @@ import java.net.SocketException;
 import java.util.ArrayList;
 import java.util.Enumeration;
 
-import javax.swing.BoxLayout;
-import javax.swing.JButton;
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.JScrollPane;
-import javax.swing.JTextArea;
 
 import com.mau.tdgame.models.Event;
 import com.mau.tdgame.models.GameState;
 
 public class ServerMain {
+	private ArrayList<ClientThread> clients;
 	private ServerSocket socket;
 	private int port;
-	private JTextArea textArea;
 	private GameState gameState;
-	private ArrayList<ClientThread> clients;
+	
+	private Console console;
+	private GlobalOptionsPanel gop;
+	private PlayerList playerList;
+	private PlayerOptionsPanel pop;
+	
 	public ServerMain(){
 		port = 1726;
 		createUI().setVisible(true);
 		clients = new ArrayList<ClientThread>();
 		print("Server ip: "+getIp().getHostAddress());
+		startListening();
 	}
 	public void startListening(){
 		gameState = new GameState();
@@ -47,58 +47,42 @@ public class ServerMain {
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
-				}				
+					System.exit(0);
+				}
 			}
 		};
 		listenThread.start();
+		print("Waiting for players to connect.");
 	}
 	public void startGame(){
+		print("Starting Game.");
 		gameState.startGame();
+		broadcastGameState();
+	}
+	public void endGame(){
+		print("Ending Game.");
+		gameState.endGame();
 		broadcastGameState();
 	}
 	public JFrame createUI(){
 		JFrame frame = new JFrame();
 		JPanel panel = new JPanel();
-		panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
 		
-		textArea = new JTextArea(20,40);
-		textArea.setEditable(false);
-		JScrollPane scrollPane = new JScrollPane(textArea);
+		console = new Console();
+		gop = new GlobalOptionsPanel(this);
+		playerList = new PlayerList(this);
+		pop = new PlayerOptionsPanel(this);
 		
-		JPanel button_panel = new JPanel();
-		JButton start_listening_button = new JButton("Start Listening");
-		start_listening_button.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				startListening();
-				print("Waiting for players to connect.");
-			}
-		});
+		panel.add(gop);
+		panel.add(console);
+		panel.add(playerList);
+		panel.add(pop);
 		
-		JButton start_game_button = new JButton("Start Game");
-		start_game_button.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {
-				startGame();
-				print("Starting Game.");
-			}
-		});
-		
-		button_panel.add(start_listening_button);	
-		button_panel.add(start_game_button);
-		panel.add(button_panel);
-		
-		panel.add(scrollPane);
 		frame.setContentPane(panel);
 		frame.pack();
 		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 		return frame;
-	}
-	public synchronized void print(String str){
-		textArea.append(str+"\n");
-		textArea.setCaretPosition(textArea.getDocument().getLength());
-	}
-	
+	}	
 	public synchronized void updateGameState(Event event){
 		gameState.processEvent(event);
 		broadcastGameState();
@@ -131,5 +115,8 @@ public class ServerMain {
 			e.printStackTrace();
 		}
 		return null;
+	}
+	public void print(String str){
+		console.print(str);
 	}
 }
