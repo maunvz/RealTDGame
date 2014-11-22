@@ -49,6 +49,7 @@ public class PlayerList extends JPanel{
 		for(int i=0; i<players[1].length; i++){
 			lm1.addElement(players[1][i]);
 		}
+		if(lm1.isEmpty())lm1.addElement(" ");
 	}
 	public Player getSelectedPlayer(){
 		return main.getGameState().getPlayerByName(team1List.getSelectedValue());

@@ -59,6 +59,7 @@ public class ServerMain {
 		for(ClientThread client:clients){
 			if(client.player==null)continue;
 			if(client.player.equals(player)){
+				client.closeConnection();
 				client.cancel(true);
 				clients.remove(client);
 				return;

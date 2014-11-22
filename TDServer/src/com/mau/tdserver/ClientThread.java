@@ -61,9 +61,6 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 			while((str=br.readLine())!=null){
 				Event event = Event.fromJSON(new JSONObject(str));
 				main.updateGameState(event);
-				if(str.equals("bye")){
-					break;
-				}
 			}
 			main.print(username+" is gone.");
 		} catch (IOException e) {
@@ -80,5 +77,8 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+	}
+	public void closeConnection(){
+		pw.println("bye");
 	}
 }

@@ -29,6 +29,7 @@ public class JoinGameFragment extends Fragment implements ResultHandler{
 	}
 	public void onCreate(Bundle savedInstanceState){
 		super.onCreate(savedInstanceState);
+		ma.screenNo=MainActivity.JOIN_SCREEN;
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View v = inflater.inflate(R.layout.join_game_fragment, container, false);

@@ -59,45 +59,49 @@ public class LiveScanThread extends Thread {
         return mFormats;
     }
 	public void run(){
-		Camera.Parameters parameters = camera.getParameters();
-        Camera.Size size = parameters.getPreviewSize();
-        int width = size.width;
-        int height = size.height;
-  
-    	        if(DisplayUtils.getScreenOrientation(c) == Configuration.ORIENTATION_PORTRAIT) {
-              byte[] rotatedData = new byte[data.length];
-              for (int y = 0; y < height; y++) {
-                  for (int x = 0; x < width; x++)
-                      rotatedData[x * height + height - y - 1] = data[x + y * width];
-              }
-              int tmp = width;
-              width = height;
-              height = tmp;
-              data = rotatedData;
-          }
-
-          Image barcode = new Image(width, height, "Y800");
-          barcode.setData(data);
-	      int result = mScanner.scanImage(barcode);
-	      barcode.destroy();
-	      data = null;
-//	      scanFinished = true;
-	      if (result != 0) {
-//        stopCamera();
-	    	  if(ZBarScannerView.mResultHandler != null) {
-	    		  SymbolSet syms = mScanner.getResults();
-	              Result rawResult = new Result();
-	              for (Symbol sym : syms) {
-	              	String symData = sym.getData();
-	                if (!TextUtils.isEmpty(symData)) {
-	                	rawResult.setContents(symData);
-	                	rawResult.setBarcodeFormat(BarcodeFormat.getFormatById(sym.getType()));
-	                	break;
-	                }
+		try{
+			Camera.Parameters parameters = camera.getParameters();
+	        Camera.Size size = parameters.getPreviewSize();
+	        int width = size.width;
+	        int height = size.height;
+	  
+	    	      if(DisplayUtils.getScreenOrientation(c) == Configuration.ORIENTATION_PORTRAIT) {
+	              byte[] rotatedData = new byte[data.length];
+	              for (int y = 0; y < height; y++) {
+	                  for (int x = 0; x < width; x++)
+	                      rotatedData[x * height + height - y - 1] = data[x + y * width];
 	              }
-	              ZBarScannerView.mResultHandler.handleResult(rawResult);
-	            }
-	      	}
-          isRunning = false;
+	              int tmp = width;
+	              width = height;
+	              height = tmp;
+	              data = rotatedData;
+	          }
+
+	          Image barcode = new Image(width, height, "Y800");
+	          barcode.setData(data);
+		      int result = mScanner.scanImage(barcode);
+		      barcode.destroy();
+		      data = null;
+//		      scanFinished = true;
+		      if (result != 0) {
+//	        stopCamera();
+		    	  if(ZBarScannerView.mResultHandler != null) {
+		    		  SymbolSet syms = mScanner.getResults();
+		              Result rawResult = new Result();
+		              for (Symbol sym : syms) {
+		              	String symData = sym.getData();
+		                if (!TextUtils.isEmpty(symData)) {
+		                	rawResult.setContents(symData);
+		                	rawResult.setBarcodeFormat(BarcodeFormat.getFormatById(sym.getType()));
+		                	break;
+		                }
+		              }
+		              ZBarScannerView.mResultHandler.handleResult(rawResult);
+		            }
+		      	}
+		} catch(NullPointerException e){
+			
+		}
+        isRunning = false;
 	}
 }

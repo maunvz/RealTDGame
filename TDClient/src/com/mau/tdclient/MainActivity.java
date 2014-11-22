@@ -234,6 +234,9 @@ public class MainActivity extends ActionBarActivity {
 		gameStarted=true;
 		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new GameFragment(this)).commit();
 	}
+	public void reset(){
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new JoinGameFragment(this)).commit();
+	}
 	//creates a popup dialog box that tells the player message
 	public void alertUser(String title, String message){
 		new AlertDialog.Builder(this)

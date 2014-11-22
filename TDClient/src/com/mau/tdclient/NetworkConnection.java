@@ -62,6 +62,7 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 			
 			String str;
 			while((str=br.readLine())!=null){
+				if(str.equals("bye"))break;
 				try {
 					GameState state = GameState.fromJSON(new JSONObject(str));
 					publishProgress(state);
@@ -87,5 +88,8 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 		} catch (JSONException e) {
 			e.printStackTrace();
 		}
+	}
+	protected void onPostExecute(Void result){
+		ma.reset();
 	}
 }
