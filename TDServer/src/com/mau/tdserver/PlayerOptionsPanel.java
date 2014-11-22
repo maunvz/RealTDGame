@@ -8,6 +8,7 @@ import java.awt.event.ActionListener;
 
 import javax.swing.JButton;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 
 import com.mau.tdgame.models.Player;
@@ -51,22 +52,25 @@ public class PlayerOptionsPanel extends JPanel{
 		JButton givePowerButton = new JButton("Power");
 		givePowerButton.addActionListener(new ActionListener(){
 			@Override
-			public void actionPerformed(ActionEvent e) {	
-				main.powerPlayer(playerList.getSelectedPlayer(), 0);
+			public void actionPerformed(ActionEvent e) {
+				int pow = Integer.parseInt(JOptionPane.showInputDialog("What player sensitivity?"));
+				main.powerPlayer(playerList.getSelectedPlayer(), pow);
 			}
 		});
 		JButton sendMessageButton = new JButton("Message");
 		sendMessageButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {	
-				main.messagePlayer(playerList.getSelectedPlayer(), "Hello there");
+				String message = JOptionPane.showInputDialog("What message to send?");
+				main.messagePlayer(playerList.getSelectedPlayer(), message);
 			}
 		});
 		JButton setSensitivityButton = new JButton("Sensitivity");
 		setSensitivityButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {	
-				main.setPlayerSensitivity(playerList.getSelectedPlayer(), 650);
+				float sens = Float.parseFloat(JOptionPane.showInputDialog("What player sensitivity?"));
+				main.setPlayerSensitivity(playerList.getSelectedPlayer(), sens);
 			}
 		});
 		buttonPanel.add(kickButton);

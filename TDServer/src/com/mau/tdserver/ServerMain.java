@@ -80,7 +80,7 @@ public class ServerMain {
 	public void powerPlayer(Player player, int power){
 		//TODO
 	}
-	public void setPlayerSensitivity(Player player, int sensitivity){
+	public void setPlayerSensitivity(Player player, float sensitivity){
 		player.setSensitivity(sensitivity);
 		broadcastGameState();
 	}
