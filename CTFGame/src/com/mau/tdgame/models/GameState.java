@@ -21,7 +21,7 @@ public class GameState {
 	private Team team2;
 	private ArrayList<Player> players;
 	private String message;
-	private int maxScore;
+	public int maxScore;
 	public String globalMessage;
 	public String playerMessage;
 	public int gameSensitivity;

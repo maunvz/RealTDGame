@@ -43,6 +43,12 @@ public class GlobalOptionsPanel extends JPanel{
 			}
 		});
 		endGameButton = new JButton("End Game");
+		endGameButton.addActionListener(new ActionListener(){
+			@Override
+			public void actionPerformed(ActionEvent e) {
+				 GlobalOptionsPanel.this.main.endGame();
+			}
+		});
 		
 		preGamePanel.add(ssLabel);
 		preGamePanel.add(sensitivitySpinner);

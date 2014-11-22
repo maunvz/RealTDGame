@@ -56,6 +56,9 @@ public class MainActivity extends ActionBarActivity {
 			alertUser("Error","That username is taken for this server.");return;
 		}
 		gameState = newGameState;
+		if(screenNo==GAME_SCREEN&&!newGameState.gameStarted()){//game ended
+			reset(); return;
+		}
 		if(!gameState.gameStarted()){
 			updateWaitRoom();return;
 		}

@@ -42,6 +42,8 @@ public class ServerMain {
 	public void startGame(){
 		print("Starting Game.");
 		gameState.startGame();
+		gameState.gameSensitivity=(Integer)gop.sensitivitySpinner.getValue();
+		gameState.maxScore=Integer.parseInt(gop.maxScoreField.getText());
 		broadcastGameState();
 	}
 	public void endGame(){
