@@ -9,8 +9,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnTouchListener;
+import android.view.ViewGroup;
 
 import com.mau.tdgame.models.Event;
 
@@ -53,7 +53,7 @@ public class GameFragment extends Fragment implements ResultHandler{
 	public void onResume(){
 		super.onResume();
 		ma.screenNo = MainActivity.GAME_SCREEN;
-		ma.updateScoreDisplay();
+		ma.updateStateDisplay();
 		enableQR();
 	}
 	public void enableQR(){

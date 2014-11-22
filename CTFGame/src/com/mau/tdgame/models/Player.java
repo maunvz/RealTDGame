@@ -11,7 +11,6 @@ public class Player {
 	public static final int SUPER_SPEED = 3;
 	
 	public boolean alive;
-	public boolean hasFlag;
 	public int score;
 	private int effect;
 	private int effectValue;
@@ -27,7 +26,6 @@ public class Player {
 		this.team = team;
 		this.QRId = QRId;
 		alive = true;
-		hasFlag = false;
 		score = 0;
 		effect = NO_EFFECT;
 		effectValue = 0;
@@ -59,7 +57,6 @@ public class Player {
 		obj.put("team", team);
 		obj.put("QRId", QRId);
 		obj.put("alive", alive);
-		obj.put("hasFlag", hasFlag);
 		obj.put("score", score);
 		obj.put("effect", effect);
 		obj.put("effectValue", effectValue);
@@ -71,7 +68,6 @@ public class Player {
 	public static Player fromJSON(JSONObject obj) throws JSONException{		
 		Player player = new Player(obj.getString("name"),obj.getString("QRId"),obj.getInt("team"));
 		player.alive = obj.getBoolean("alive");
-		player.hasFlag = obj.getBoolean("hasFlag");
 		player.score = obj.getInt("score");
 		player.effect = obj.getInt("effect");
 		player.effectValue = obj.getInt("effectValue");

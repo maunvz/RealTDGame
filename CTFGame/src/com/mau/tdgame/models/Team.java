@@ -11,12 +11,10 @@ public class Team {
 	public static final int TEAM_2=2;
 		
 	private ArrayList<String> players;
-	public boolean flagAtBase;
 	private int teamNo;
 	
 	public Team(int teamNo){
 		this.teamNo = teamNo;
-		flagAtBase = true;
 		players = new ArrayList<String>();
 	}
 	public void addPlayer(String playerName){ 
@@ -37,13 +35,11 @@ public class Team {
 		for(String playerName:players)playersArray.put(playerName);
 		JSONObject obj = new JSONObject();
 		obj.put("teamNo", teamNo);
-		obj.put("flagAtBase", flagAtBase);
 		obj.put("players", playersArray);
 		return obj;
 	}
 	public static Team fromJSON(JSONObject obj) throws JSONException{
 		Team team = new Team(obj.getInt("teamNo"));
-		team.flagAtBase = obj.getBoolean("flagAtBase");
 		JSONArray players = obj.getJSONArray("players");
 		for(int i=0; i<players.length(); i++){
 			team.addPlayer(players.getString(i));

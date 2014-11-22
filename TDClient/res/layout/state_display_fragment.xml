@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="horizontal"
+    android:baselineAligned="false" >
+    <RelativeLayout
+    	android:layout_width="0dp"
+    	android:layout_height="match_parent"
+    	android:layout_weight="0.5"
+    	android:background="@color/red">
+		<TextView 
+		    android:id="@+id/team1_state"
+		    android:textColor="@color/white"
+		    android:textAppearance="@android:style/TextAppearance.Medium"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"/>
+   	</RelativeLayout>
+	<RelativeLayout
+    	android:layout_width="0dp"
+    	android:layout_height="match_parent"
+    	android:layout_weight="0.5"
+    	android:background="@color/blue">
+		<TextView 
+		    android:id="@+id/team2_state"
+		    android:textColor="@color/white"
+		    android:textAppearance="@android:style/TextAppearance.Medium"
+		    android:layout_width="wrap_content"
+		    android:layout_height="wrap_content"/>	
+	</RelativeLayout>
+</LinearLayout>

@@ -1,7 +1,7 @@
 <resources>    
     <integer name="viewfinder_border_width">4</integer>
     <integer name="viewfinder_border_length">60</integer>
-    <string name="app_name">TDClient</string>
+    <string name="app_name">SpyDroid</string>
     <string name="ip_hint">Enter Server IP</string>
     <string name="username_hint">Enter Username</string>
     <string name="qrid_hint">Enter QR</string>

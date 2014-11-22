@@ -79,19 +79,9 @@ public class MainActivity extends ActionBarActivity {
 		if(!tplayer.alive){
 			listener.turnOffListener();
 			if(gameState.getMessage().contains("killed "+player.getName())){
-				if(player.hasFlag){
-					//Message saying you got killed by x, x has flag now
-					((TextView)findViewById(R.id.status_message_textview)).setText(gameState.getMessage()+" Go respawn.");		
-				}
-				else{
 					//Message saying you got killed by x
 					((TextView)findViewById(R.id.status_message_textview)).setText(gameState.getMessage()+" Go respawn.");
-				}
 				mplayer.start();
-			}
-			else if(player.hasFlag&&gameState.getMessage().contains("died")&&gameState.getMessage().contains(player.getName())){
-				//Message saying flag was returned to opponent base		
-				((TextView)findViewById(R.id.status_message_textview)).setText("You died - flag is back at opponent base."+" Go respawn.");	
 			}
 			else if(gameState.getMessage().contains("died")&&gameState.getMessage().contains(player.getName())){
 				//Message saying you died, go respawn
@@ -119,13 +109,19 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 		player = tplayer;
-		updateScoreDisplay();
+		updateStateDisplay();
 	}
-	public void updateScoreDisplay(){
+	public void updateStateDisplay(){
 		if(screenNo==GAME_SCREEN){
-			((TextView)findViewById(R.id.score_text_team1)).setText(""+gameState.getTeamScores()[0]);
-			((TextView)findViewById(R.id.score_text_team2)).setText(""+gameState.getTeamScores()[1]);
-			((TextView)findViewById(R.id.score_text_player)).setText(""+player.score);
+			String team1_text="Team 1\n";
+			String team2_text="Team 2\n";
+			team1_text+="Score: "+gameState.getTeamScores()[0]+"\n";
+			team2_text+="Score: "+gameState.getTeamScores()[1]+"\n";
+			team1_text+="Flag: "+(gameState.playerWithFlag1.equals("")?"At Base":gameState.playerWithFlag1)+"\n";
+			team2_text+="Flag: "+(gameState.playerWithFlag2.equals("")?"At Base":gameState.playerWithFlag2)+"\n";
+
+			((TextView)findViewById(R.id.team1_state)).setText(team1_text);
+			((TextView)findViewById(R.id.team2_state)).setText(team2_text);
 		}
 	}
 	//called when a new player joins the waiting room adds all the names of the players in gameState to their respective lists
@@ -155,8 +151,10 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void setScanEnabled(boolean enabled){
 		Button scanButton = ((Button)findViewById(R.id.scan_button));
+		Button connectButton = ((Button)findViewById(R.id.connect_button));
 		if(scanButton==null)return;
 		scanButton.setEnabled(enabled);
+		connectButton.setEnabled(enabled);
 	}
 	public synchronized String getQRId(){
 		return QRId;

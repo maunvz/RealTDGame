@@ -11,20 +11,23 @@ public class GameState {
 	public static final String BASE_2_QR = "base_1";
 	
 	public static final int SCORE_VALUE=10;
+	public static final int RETURN_VALUE=5;
 	public static final int KILL_VALUE=2;
 	public static final int KILL_PENALTY=1;
 	public static final int DEFAULT_SENSITIVITY = 650;
 	public static final int DEFAULT_MAX_SCORE = 100;
 	
 	private boolean gameStarted;
-	private Team team1;
-	private Team team2;
 	private ArrayList<Player> players;
 	private String message;
 	public int maxScore;
 	public String globalMessage;
 	public String playerMessage;
 	public int gameSensitivity;
+	public Team team1;
+	public Team team2;
+	public String playerWithFlag1;
+	public String playerWithFlag2;
 	
 	public GameState(){
 		team1 = new Team(Team.TEAM_1);
@@ -34,6 +37,8 @@ public class GameState {
 		message="";
 		globalMessage="";
 		playerMessage="";
+		playerWithFlag1="";
+		playerWithFlag2="";
 		maxScore = DEFAULT_MAX_SCORE;
 		gameSensitivity=DEFAULT_SENSITIVITY;
 	}
@@ -90,46 +95,49 @@ public class GameState {
 		if(!player.alive)return false;
 		player.alive=false;
 		message = player.getName() + " died.";
-		if(player.hasFlag){
-			player.hasFlag=false;
-			if(player.getTeam()==Team.TEAM_1)team2.flagAtBase=true;
-			if(player.getTeam()==Team.TEAM_2)team1.flagAtBase=true;
-		}
+		if(playerWithFlag1==player.getName())playerWithFlag1="";
+		if(playerWithFlag2==player.getName())playerWithFlag2="";
 		return true;
 	}
 	public boolean killPlayer(Player killer, Player victim){
 		if(killer==null||victim==null)return false;
-		if(!killer.alive)return false;
-		if(!playerDies(victim))return false;
 		if(killer.getTeam()==victim.getTeam())return false;
+		if(!killer.alive)return false;
+		if(victim.getName()==playerWithFlag1)playerWithFlag1=killer.getName();
+		if(victim.getName()==playerWithFlag2)playerWithFlag2=killer.getName();
+		if(!playerDies(victim))return false;
 		killer.score+=KILL_VALUE;
 		victim.score-=KILL_PENALTY;
 		message = killer.getName() +" killed "+victim.getName()+".";
-		System.out.println("Success to kill");
 		return true;
 	}
 	public boolean scoreFlag(Player player){
-		if(!player.alive||!player.hasFlag)return false;
-		player.hasFlag=false;
-		player.score+=SCORE_VALUE;
-		if(player.getTeam()==Team.TEAM_1)
-			team2.flagAtBase=true;
-		else 
-			team1.flagAtBase=true;
+		if(!player.alive)return false;
+		if(player.getName()==playerWithFlag1){
+			playerWithFlag1="";
+			if(player.getTeam()==Team.TEAM_1)
+				player.score+=SCORE_VALUE;
+			else 
+				player.score+=RETURN_VALUE;
+		}
+		if(player.getName()==playerWithFlag2){
+			playerWithFlag2="";
+			if(player.getTeam()==Team.TEAM_2)
+				player.score+=SCORE_VALUE;
+			else 
+				player.score+=RETURN_VALUE;
+		}
 		message = player.getName()+" just scored! Flag returns to base.";
 		return true;
 	}
 	public boolean captureFlag(Player player){
-		if(!player.alive||player.hasFlag)return false;
-		if(player.getTeam()==Team.TEAM_1){
-			if(!team2.flagAtBase)return false;
-			team2.flagAtBase=false;
-		} else {
-			if(!team1.flagAtBase)return false;
-			team1.flagAtBase=false;			
+		if(!player.alive)return false;
+		if(player.getTeam()==Team.TEAM_1&&playerWithFlag2==""){
+			playerWithFlag2=player.getName();
+		} else if(player.getTeam()==Team.TEAM_2&&playerWithFlag1==""){
+			playerWithFlag1=player.getName();
 		}
 		message = player.getName()+" has the flag! Go kill him now.";
-		player.hasFlag=true;
 		return true;
 	}
 	public void addPlayer(Player player){
@@ -191,6 +199,8 @@ public class GameState {
 		obj.put("globalMessage", globalMessage);
 		obj.put("playerMessage", playerMessage);
 		obj.put("gameSensitivity", gameSensitivity);
+		obj.put("playerWithFlag1", playerWithFlag1);
+		obj.put("playerWithFlag2", playerWithFlag2);
 		return obj;
 	}
 	public static GameState fromJSON(JSONObject obj) throws JSONException{
@@ -206,6 +216,8 @@ public class GameState {
 		state.playerMessage=obj.getString("playerMessage");
 		state.globalMessage=obj.getString("globalMessage");
 		state.gameSensitivity=obj.getInt("gameSensitivity");
+		state.playerWithFlag1=obj.getString("playerWithFlag1");
+		state.playerWithFlag2=obj.getString("playerWithFlag2");
 		return state;
 	}
 }
