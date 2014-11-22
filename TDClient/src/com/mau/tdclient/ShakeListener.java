@@ -8,14 +8,12 @@ public class ShakeListener implements SensorEventListener{
 	float x,y,z;
 	float last_x, last_y, last_z;
 	long lastUpdate;
-	int threshold = 650;
 	int timesOverThreshold = 0;
 	boolean wasTriggeredBefore = false;
 	MainActivity ma;
 	static private boolean listenerOn = true;
-	public ShakeListener(MainActivity ma, int threshold){
+	public ShakeListener(MainActivity ma){
 		this.ma=ma;
-		this.threshold=threshold;
 	}
 	@Override
 	public void onSensorChanged(SensorEvent event) {
@@ -32,7 +30,7 @@ public class ShakeListener implements SensorEventListener{
 	
 			    float speed = Math.abs(x+y+z-last_x-last_y-last_z) / diffTime * 10000;
 	
-			    if (speed > threshold) {
+			    if (speed > ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity()) {
 			    	wasTriggeredBefore = true;
 			    	timesOverThreshold ++;
 			    	if(timesOverThreshold > 1){
@@ -50,13 +48,13 @@ public class ShakeListener implements SensorEventListener{
 			    last_y = y;
 			    last_z = z;
 			    if(ma.screenNo==MainActivity.GAME_SCREEN)
-			    	((ShakeMeter)ma.findViewById(R.id.shake_meter)).updateValue(speed, threshold);
+			    	((ShakeMeter)ma.findViewById(R.id.shake_meter)).updateValue(speed, ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity());
 			}
 		}
 		else{
 			timesOverThreshold = 0;
 			wasTriggeredBefore = false;
-			((ShakeMeter)ma.findViewById(R.id.shake_meter)).updateValue(0, threshold);
+			((ShakeMeter)ma.findViewById(R.id.shake_meter)).updateValue(0, ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity());
 		}
 	}
 	public void turnOffListener(){

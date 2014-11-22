@@ -20,7 +20,7 @@ public class Player {
 	private int team;
 	private String name;
 	private String QRId;
-	private int sensitivity;
+	private float sensitivity;
 	
 	public Player(String name, String QRId, int team){
 		this.name = name;
@@ -33,7 +33,7 @@ public class Player {
 		effectValue = 0;
 		deaths = 0;
 		kills = 0;
-		this.sensitivity = GameState.DEFAULT_SENSITIVITY;
+		this.sensitivity = 1;
 	}
 	public String getName(){
 		return name;
@@ -44,7 +44,7 @@ public class Player {
 	public int getTeam(){
 		return team;
 	}
-	public int getSensitivity(){
+	public float getSensitivity(){
 		return sensitivity;
 	}
 	public void effect(int effect){
@@ -77,7 +77,7 @@ public class Player {
 		player.effectValue = obj.getInt("effectValue");
 		player.deaths = obj.getInt("deaths");
 		player.kills = obj.getInt("kills");
-		player.sensitivity = obj.getInt("sensitivity");
+		player.sensitivity = (float) obj.getDouble("sensitivity");
 		return player;
 	}
 }

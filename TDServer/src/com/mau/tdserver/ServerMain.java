@@ -83,13 +83,20 @@ public class ServerMain {
 		broadcastGameState();
 	}
 	public void messagePlayer(Player player, String message){
-		//TODO
+		gameState.playerMessage = player.getName()+"`"+message;
+		broadcastGameState();
+	}
+	public void messageAll(String message){
+		gameState.globalMessage=message;
+		broadcastGameState();
 	}
 	public synchronized void broadcastGameState(){
 		for(ClientThread client:clients){
 			client.sendGameState();
 		}
 		gameState.clearMessage();
+		gameState.globalMessage="";
+		gameState.playerMessage="";
 	}
 	public synchronized GameState getGameState(){
 		return gameState;

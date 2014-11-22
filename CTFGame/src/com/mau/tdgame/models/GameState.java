@@ -22,8 +22,9 @@ public class GameState {
 	private ArrayList<Player> players;
 	private String message;
 	private int maxScore;
-	private String globalMessage;
-	private String playerMessage;
+	public String globalMessage;
+	public String playerMessage;
+	public int gameSensitivity;
 	
 	public GameState(){
 		team1 = new Team(Team.TEAM_1);
@@ -34,6 +35,7 @@ public class GameState {
 		globalMessage="";
 		playerMessage="";
 		maxScore = DEFAULT_MAX_SCORE;
+		gameSensitivity=DEFAULT_SENSITIVITY;
 	}
 	public boolean gameStarted(){
 		return gameStarted;
@@ -50,7 +52,6 @@ public class GameState {
 		switch(event.getType()){
 		case Event.DIED:
 			playerDies(player1);
-			message = player1.getName() + " died.";
 			break;
 		case Event.QR_EVENT:
 			if(event.value1.equals(BASE_1_QR)){
@@ -88,6 +89,7 @@ public class GameState {
 		if(player==null)return false;
 		if(!player.alive)return false;
 		player.alive=false;
+		message = player.getName() + " died.";
 		if(player.hasFlag){
 			player.hasFlag=false;
 			if(player.getTeam()==Team.TEAM_1)team2.flagAtBase=true;
@@ -188,7 +190,7 @@ public class GameState {
 		obj.put("message", message);
 		obj.put("globalMessage", globalMessage);
 		obj.put("playerMessage", playerMessage);
-		
+		obj.put("gameSensitivity", gameSensitivity);
 		return obj;
 	}
 	public static GameState fromJSON(JSONObject obj) throws JSONException{
@@ -203,6 +205,7 @@ public class GameState {
 		state.message=obj.getString("message");
 		state.playerMessage=obj.getString("playerMessage");
 		state.globalMessage=obj.getString("globalMessage");
+		state.gameSensitivity=obj.getInt("gameSensitivity");
 		return state;
 	}
 }

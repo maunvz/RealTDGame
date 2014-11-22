@@ -47,7 +47,6 @@ public class MainActivity extends ActionBarActivity {
 	
 	//Called when the phone shakes too much
 	public void youDie(){
-		mplayer.start();
 		nc.sendEvent(new Event(Event.DIED, player.getName(), null));
 	}
 	//Called when the server sends an updated GameState
@@ -83,8 +82,9 @@ public class MainActivity extends ActionBarActivity {
 				}
 				else{
 					//Message saying you got killed by x
-					((TextView)findViewById(R.id.status_message_textview)).setText(gameState.getMessage()+" Go respawn.");	
-				}	
+					((TextView)findViewById(R.id.status_message_textview)).setText(gameState.getMessage()+" Go respawn.");
+				}
+				mplayer.start();
 			}
 			else if(player.hasFlag&&gameState.getMessage().contains("died")&&gameState.getMessage().contains(player.getName())){
 				//Message saying flag was returned to opponent base		
@@ -92,7 +92,8 @@ public class MainActivity extends ActionBarActivity {
 			}
 			else if(gameState.getMessage().contains("died")&&gameState.getMessage().contains(player.getName())){
 				//Message saying you died, go respawn
-				((TextView)findViewById(R.id.status_message_textview)).setText("You died."+" Go respawn.");	
+				((TextView)findViewById(R.id.status_message_textview)).setText("You died."+" Go respawn.");
+				mplayer.start();
 			}
 		}
 		else if(tplayer.alive){
@@ -229,7 +230,7 @@ public class MainActivity extends ActionBarActivity {
 		prepareAudio();
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-		listener = new ShakeListener(this, player.getSensitivity());
+		listener = new ShakeListener(this);
 		mSensorManager.registerListener(listener, mSensor, SensorManager.SENSOR_DELAY_GAME);
 		gameStarted=true;
 		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new GameFragment(this)).commit();
