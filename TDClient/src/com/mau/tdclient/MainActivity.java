@@ -15,6 +15,7 @@ import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
+import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
@@ -143,9 +144,15 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void run() {
 				QRId = id;
-				((TextView)findViewById(R.id.qr_id_textview)).setText("QR Scanned. You may connect.");				
+				TextView qrid = ((TextView)findViewById(R.id.qr_id_textview));
+				if(qrid!=null)qrid.setText("QR Scanned. You may connect.");
 			}			
 		});
+	}
+	public void setScanEnabled(boolean enabled){
+		Button scanButton = ((Button)findViewById(R.id.scan_button));
+		if(scanButton==null)return;
+		scanButton.setEnabled(enabled);
 	}
 	public synchronized String getQRId(){
 		return QRId;
@@ -192,6 +199,7 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void onScanClicked(View view){
 		new ServerScanner(this).execute();
+		setScanEnabled(false);
 	}
 	public void onPause(){
 		super.onPause();

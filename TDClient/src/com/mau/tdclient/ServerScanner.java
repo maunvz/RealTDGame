@@ -9,6 +9,7 @@ import java.net.SocketException;
 import java.util.Enumeration;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.TimeUnit;
 
 import android.os.AsyncTask;
 
@@ -25,15 +26,22 @@ public class ServerScanner extends AsyncTask<Void, Integer, String>{
 	protected String doInBackground(Void... params) {
 		long start = System.nanoTime();
 		System.out.println("Scanning for server");
-		ExecutorService ex = Executors.newFixedThreadPool(512);
+		ExecutorService ex = Executors.newFixedThreadPool(512);			
 		try{
+			ExecutorService exq = Executors.newFixedThreadPool(512);
 			final byte[] myIp = getIp().getAddress();
+			for(int i=0; i<256; i++){
+				exq.execute(new TryIpThread(myIp, myIp[2], i));
+			}
+			exq.shutdown();
+			exq.awaitTermination(1000, TimeUnit.MILLISECONDS);
+			if(!server_ip.equals(""))return server_ip;
 			for(int j=0; j<256; j++){
 				for(int i=0; i<256; i++){
 					ex.execute(new TryIpThread(myIp, j, i));
 				}
 			}
-		} catch (NullPointerException e) {
+		} catch (NullPointerException | InterruptedException e) {
 			e.printStackTrace();
 		}
 		ex.shutdown();
@@ -76,6 +84,7 @@ public class ServerScanner extends AsyncTask<Void, Integer, String>{
 	}
 	protected void onPostExecute(String ip){
 		ma.foundServer(ip);
+		ma.setScanEnabled(true);
 	}
 	public void tryIp(byte[] myIp, int secondLastByte, int lastByte) throws Exception{
 		InetAddress ia = InetAddress.getByAddress(new byte[]{myIp[0],myIp[1],(byte)secondLastByte,(byte)lastByte});

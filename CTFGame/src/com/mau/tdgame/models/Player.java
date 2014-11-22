@@ -50,6 +50,9 @@ public class Player {
 	public void effect(int effect){
 		this.effect=effect;
 	}
+	public void setSensitivity(int sensitivity){
+		this.sensitivity=sensitivity;
+	}
 	public JSONObject toJSON() throws JSONException{
 		JSONObject obj = new JSONObject();
 		obj.put("name", name);

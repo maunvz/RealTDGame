@@ -22,6 +22,9 @@ public class Team {
 	public void addPlayer(String playerName){ 
 		players.add(playerName);
 	}
+	public void removePlayer(String playerName){
+		players.remove(playerName);
+	}
 	public String[] listOfPlayers(){
 		String[] playerList = new String[players.size()];
 		for(int i=0; i<players.size(); i++){

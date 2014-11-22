@@ -22,6 +22,8 @@ public class GameState {
 	private ArrayList<Player> players;
 	private String message;
 	private int maxScore;
+	private String globalMessage;
+	private String playerMessage;
 	
 	public GameState(){
 		team1 = new Team(Team.TEAM_1);
@@ -29,6 +31,8 @@ public class GameState {
 		players = new ArrayList<Player>();
 		gameStarted = false;
 		message="";
+		globalMessage="";
+		playerMessage="";
 		maxScore = DEFAULT_MAX_SCORE;
 	}
 	public boolean gameStarted(){
@@ -131,6 +135,11 @@ public class GameState {
 		if(player.getTeam()==Team.TEAM_1)team1.addPlayer(player.getName());
 		if(player.getTeam()==Team.TEAM_2)team2.addPlayer(player.getName());
 	}
+	public void removePlayer(Player player){
+		players.remove(player);
+		team1.removePlayer(player.getName());
+		team2.removePlayer(player.getName());
+	}
 	public String[][] listPlayers(){
 		String[][] playerList = new String[2][];
 		playerList[0] = team1.listOfPlayers();
@@ -154,6 +163,9 @@ public class GameState {
 	public String getMessage(){
 		return message;
 	}
+	public void clearMessage(){
+		message="";
+	}
 	public int[] getTeamScores(){
 		int t1 = 0;
 		int t2 = 0;
@@ -174,6 +186,9 @@ public class GameState {
 		obj.put("team2", team2.toJSON());
 		obj.put("players", playerArray);
 		obj.put("message", message);
+		obj.put("globalMessage", globalMessage);
+		obj.put("playerMessage", playerMessage);
+		
 		return obj;
 	}
 	public static GameState fromJSON(JSONObject obj) throws JSONException{
@@ -186,6 +201,8 @@ public class GameState {
 			state.players.add(Player.fromJSON(players.getJSONObject(i)));
 		}
 		state.message=obj.getString("message");
+		state.playerMessage=obj.getString("playerMessage");
+		state.globalMessage=obj.getString("globalMessage");
 		return state;
 	}
 }

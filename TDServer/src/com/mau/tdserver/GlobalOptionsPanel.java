@@ -23,7 +23,8 @@ public class GlobalOptionsPanel extends JPanel{
 	public GlobalOptionsPanel(ServerMain main){
 		super();
 		this.main=main;
-		setLayout(new GridLayout(0,2));
+		JPanel preGamePanel = new JPanel();
+		preGamePanel.setLayout(new GridLayout(0,2));
 		
 		JLabel ssLabel = new JLabel("Sensitivity");
 		sensitivitySpinner = new JSpinner();
@@ -43,11 +44,12 @@ public class GlobalOptionsPanel extends JPanel{
 		});
 		endGameButton = new JButton("End Game");
 		
-		add(ssLabel);
-		add(sensitivitySpinner);
-		add(msLabel);
-		add(maxScoreField);
-		add(startGameButton);
-		add(endGameButton);
+		preGamePanel.add(ssLabel);
+		preGamePanel.add(sensitivitySpinner);
+		preGamePanel.add(msLabel);
+		preGamePanel.add(maxScoreField);
+		preGamePanel.add(startGameButton);
+		preGamePanel.add(endGameButton);
+		add(preGamePanel);
 	}
 }
