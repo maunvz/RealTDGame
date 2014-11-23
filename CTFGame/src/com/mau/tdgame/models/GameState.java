@@ -62,14 +62,11 @@ public class GameState {
 			if(event.value1.equals(BASE_1_QR)){
 				if(player1.getTeam()==Team.TEAM_1) playerReachedOwnBase(player1);
 				else playerReachedEnemyBase(player1);
-			}
-			else if(event.value1.equals(BASE_2_QR)){
+			}else if(event.value1.equals(BASE_2_QR)){
 				if(player1.getTeam()==Team.TEAM_2) playerReachedOwnBase(player1);
 				else playerReachedEnemyBase(player1);
-			}
-			else {
+			}else {
 				if(killPlayer(player1, getPlayerByQRId(event.value1)))return;
-				//check for QR powerup
 			}
 			break;
 		}
@@ -140,6 +137,7 @@ public class GameState {
 		message = player.getName()+" has the flag! Go kill him now.";
 		return true;
 	}
+	
 	public void addPlayer(Player player){
 		players.add(player);
 		if(player.getTeam()==Team.TEAM_1)team1.addPlayer(player.getName());

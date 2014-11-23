@@ -20,6 +20,7 @@ import android.widget.EditText;
 import android.widget.RadioGroup;
 import android.widget.ScrollView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mau.tdgame.models.Event;
 import com.mau.tdgame.models.GameState;
@@ -72,6 +73,16 @@ public class MainActivity extends ActionBarActivity {
 				((ScrollView)findViewById(R.id.message_scroll)).fullScroll(View.FOCUS_DOWN);
 			}
 			updateUIGameState();
+			//Server messages
+			if(!gameState.playerMessage.equals("")){
+				String playerName = gameState.playerMessage.split("`")[0];
+				if(playerName.equals(player.getName())&&gameState.playerMessage.split("`").length==2){
+					Toast.makeText(this, gameState.playerMessage.split("`")[1], Toast.LENGTH_SHORT).show();				
+				}
+			} 
+			if(!gameState.globalMessage.equals("")){
+				Toast.makeText(this, gameState.globalMessage, Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 	public void updateUIGameState(){

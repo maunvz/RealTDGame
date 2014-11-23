@@ -53,7 +53,7 @@ public class PlayerOptionsPanel extends JPanel{
 		givePowerButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				int pow = Integer.parseInt(JOptionPane.showInputDialog("What player sensitivity?"));
+				int pow = Integer.parseInt(JOptionPane.showInputDialog("What power to give?"));
 				main.powerPlayer(playerList.getSelectedPlayer(), pow);
 			}
 		});

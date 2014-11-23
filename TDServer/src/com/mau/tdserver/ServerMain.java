@@ -85,6 +85,7 @@ public class ServerMain {
 		broadcastGameState();
 	}
 	public void messagePlayer(Player player, String message){
+		if(player==null)return;
 		gameState.playerMessage = player.getName()+"`"+message;
 		broadcastGameState();
 	}
