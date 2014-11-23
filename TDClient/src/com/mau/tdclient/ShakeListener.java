@@ -48,13 +48,15 @@ public class ShakeListener implements SensorEventListener{
 			    last_y = y;
 			    last_z = z;
 			    if(ma.screenNo==MainActivity.GAME_SCREEN)
-			    	((ShakeMeter)ma.findViewById(R.id.shake_meter)).updateValue(speed, ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity());
+			    	((ShakeMeter)ma.findViewById(R.id.shake_meter_1)).updateValue(speed, ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity());
+			    	((ShakeMeter)ma.findViewById(R.id.shake_meter_2)).updateValue(speed, ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity());
 			}
 		}
 		else{
 			timesOverThreshold = 0;
 			wasTriggeredBefore = false;
-			((ShakeMeter)ma.findViewById(R.id.shake_meter)).updateValue(0, ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity());
+			((ShakeMeter)ma.findViewById(R.id.shake_meter_1)).updateValue(0, ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity());
+	    	((ShakeMeter)ma.findViewById(R.id.shake_meter_2)).updateValue(0, ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity());
 		}
 	}
 	public void turnOffListener(){

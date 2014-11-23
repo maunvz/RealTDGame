@@ -6,7 +6,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class StateDisplayFragment extends Fragment {
+public class GameStateDisplayFragment extends Fragment {
 	public void onPause(){
 		super.onPause();
 	}
@@ -14,7 +14,7 @@ public class StateDisplayFragment extends Fragment {
 		super.onCreate(savedInstanceState);
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-		View v = inflater.inflate(R.layout.state_display_fragment,container,false);
+		View v = inflater.inflate(R.layout.game_state_display_fragment,container,false);
 		return v;
 	}
 }

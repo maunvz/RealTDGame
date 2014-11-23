@@ -18,7 +18,6 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.RadioGroup;
-import android.widget.ScrollView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -68,10 +67,6 @@ public class MainActivity extends ActionBarActivity {
 		}
 		//During game GameState management
 		if(screenNo==GAME_SCREEN){
-			if(!gameState.getMessage().equals("")){
-				((TextView)findViewById(R.id.server_message_textview)).append(gameState.getMessage()+"\n");
-				((ScrollView)findViewById(R.id.message_scroll)).fullScroll(View.FOCUS_DOWN);
-			}
 			updateUIGameState();
 			//Server messages
 			if(!gameState.playerMessage.equals("")){
@@ -133,6 +128,7 @@ public class MainActivity extends ActionBarActivity {
 
 			((TextView)findViewById(R.id.team1_state)).setText(team1_text);
 			((TextView)findViewById(R.id.team2_state)).setText(team2_text);
+			((TextView)findViewById(R.id.player_score_textview)).setText("Score: "+player.score);
 		}
 	}
 	//called when a new player joins the waiting room adds all the names of the players in gameState to their respective lists

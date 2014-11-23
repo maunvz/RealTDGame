@@ -1,50 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
-    android:layout_height="match_parent" 
-    android:orientation="horizontal">
+    android:layout_height="match_parent">
     <com.mau.tdclient.ShakeMeter 
-        android:id="@+id/shake_meter"
-        android:layout_width="50dp"
+        android:id="@+id/shake_meter_1"
+        android:layout_width="20dp"
         android:layout_height="match_parent"/>
+    <com.mau.tdclient.ShakeMeter 
+        android:id="@+id/shake_meter_2"
+        android:layout_width="20dp"
+        android:layout_height="match_parent"
+        android:layout_alignParentRight="true"
+        android:layout_alignParentEnd="true"/>
     <LinearLayout
         android:layout_width="match_parent"
     	android:layout_height="match_parent" 
-    	android:orientation="vertical">
+    	android:orientation="vertical"
+    	android:layout_toRightOf="@+id/shake_meter_1"
+    	android:layout_toEndOf="@+id/shake_meter_1"
+    	android:layout_toLeftOf="@+id/shake_meter_2"
+    	android:layout_toStartOf="@+id/shake_meter_2">
         <fragment 
-			android:id="@+id/state_display"
-			android:name="com.mau.tdclient.StateDisplayFragment"
-            android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="0.2"/>
-        <ScrollView 
+            android:id="@+id/player_state_display"
+            android:name="com.mau.tdclient.PlayerStateDisplayFragment"
     		android:layout_width="match_parent"
     		android:layout_height="0dp"
-    		android:layout_weight="0.2"
-    		android:background="@color/grey">
-	    	<TextView
-	    		android:id="@+id/status_message_textview"
-	    	    android:layout_width="match_parent"
-	    	    android:layout_height="wrap_content"
-	    	    android:textColor="@color/white"/>    
- 		</ScrollView>
-    	<me.dm7.barcodescanner.zbar.ZBarScannerView
+    		android:layout_weight="0.15"/>
+        <me.dm7.barcodescanner.zbar.ZBarScannerView
     	    android:id = "@+id/zbarscan"
     	    android:layout_width = "match_parent"
     	    android:layout_height = "0dp"
-    	    android:layout_weight = "0.5">
+    	    android:layout_weight = "0.65">
     	</me.dm7.barcodescanner.zbar.ZBarScannerView>
-    	<ScrollView 
-    	    android:id="@+id/message_scroll"
-    		android:layout_width="match_parent"
-    		android:layout_height="0dp"
-    		android:layout_weight="0.2"
-    		android:background="@color/grey">
-	    	<TextView
-	    		android:id="@+id/server_message_textview"
-	    	    android:layout_width="match_parent"
-	    	    android:layout_height="wrap_content"
-	    	    android:textColor="@color/white"/>    
- 		</ScrollView>		
+    	<fragment 
+			android:id="@+id/game_state_display"
+			android:name="com.mau.tdclient.GameStateDisplayFragment"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="0.2"/>
     </LinearLayout>
-</LinearLayout>
+</RelativeLayout>
