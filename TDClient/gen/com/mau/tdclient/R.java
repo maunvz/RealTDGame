@@ -1679,8 +1679,9 @@ containing a value of this type.
         public static final int never=0x7f05000b;
         public static final int none=0x7f050004;
         public static final int normal=0x7f050001;
-        public static final int player_score_textview=0x7f050054;
+        public static final int player_score_textview=0x7f050055;
         public static final int player_state_display=0x7f050044;
+        public static final int powerup_button_holder=0x7f050054;
         public static final int progress_circular=0x7f05001e;
         public static final int progress_horizontal=0x7f05001f;
         public static final int qr_id_textview=0x7f05004f;
@@ -1707,10 +1708,10 @@ containing a value of this type.
         public static final int submit_area=0x7f05003e;
         public static final int tabMode=0x7f050003;
         public static final int team1_button=0x7f05004d;
-        public static final int team1_list=0x7f050055;
+        public static final int team1_list=0x7f050056;
         public static final int team1_state=0x7f050047;
         public static final int team2_button=0x7f05004e;
-        public static final int team2_list=0x7f050056;
+        public static final int team2_list=0x7f050057;
         public static final int team2_state=0x7f050048;
         public static final int team_radio_group=0x7f05004c;
         public static final int title=0x7f050029;

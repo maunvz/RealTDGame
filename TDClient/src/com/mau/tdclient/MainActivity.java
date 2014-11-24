@@ -13,10 +13,12 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.LinearLayout;
 import android.widget.RadioGroup;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -45,9 +47,12 @@ public class MainActivity extends ActionBarActivity {
 	private Player player;
 	private GameState gameState;
 	
+	//User Interface
+	Button[] buttons;
+	
 	//Called when the phone shakes too much
 	public void youDie(){
-		nc.sendEvent(new Event(Event.DIED, player.getName(), null));
+		nc.sendEvent(new Event(Event.DIED, player.getName(), null, 0));
 	}
 	//Called when the server sends an updated GameState
 	public void updateGameState(GameState newGameState){
@@ -116,20 +121,30 @@ public class MainActivity extends ActionBarActivity {
 		}
 		player = tplayer;
 		updateStateDisplay();
+		updatePowerupButtons();
+	}
+	public void updatePowerupButtons(){
+		LinearLayout buttonLayout = (LinearLayout)findViewById(R.id.powerup_button_holder);
+		buttonLayout.removeAllViews();
+		boolean[] added = new boolean[6];
+		for(Integer power:player.powerups){
+			if(added[power])continue;
+			added[power] = true;
+			buttonLayout.addView(buttons[power]);
+		}
 	}
 	public void updateStateDisplay(){
-		if(screenNo==GAME_SCREEN){
-			String team1_text="Team 1\n";
-			String team2_text="Team 2\n";
-			team1_text+="Score: "+gameState.getTeamScores()[0]+"\n";
-			team2_text+="Score: "+gameState.getTeamScores()[1]+"\n";
-			team1_text+="Flag: "+(gameState.playerWithFlag1.equals("")?"At Base":gameState.playerWithFlag1)+"\n";
-			team2_text+="Flag: "+(gameState.playerWithFlag2.equals("")?"At Base":gameState.playerWithFlag2)+"\n";
+		if(screenNo!=GAME_SCREEN)return;
+		String team1_text="Team 1\n";
+		String team2_text="Team 2\n";
+		team1_text+="Score: "+gameState.getTeamScores()[0]+"\n";
+		team2_text+="Score: "+gameState.getTeamScores()[1]+"\n";
+		team1_text+="Flag: "+(gameState.playerWithFlag1.equals("")?"At Base":gameState.playerWithFlag1)+"\n";
+		team2_text+="Flag: "+(gameState.playerWithFlag2.equals("")?"At Base":gameState.playerWithFlag2)+"\n";
 
-			((TextView)findViewById(R.id.team1_state)).setText(team1_text);
-			((TextView)findViewById(R.id.team2_state)).setText(team2_text);
-			((TextView)findViewById(R.id.player_score_textview)).setText("Score: "+player.score);
-		}
+		((TextView)findViewById(R.id.team1_state)).setText(team1_text);
+		((TextView)findViewById(R.id.team2_state)).setText(team2_text);
+		((TextView)findViewById(R.id.player_score_textview)).setText("Score: "+player.score);
 	}
 	//called when a new player joins the waiting room adds all the names of the players in gameState to their respective lists
 	public void updateWaitRoom(){
@@ -183,6 +198,7 @@ public class MainActivity extends ActionBarActivity {
 		getFragmentManager().beginTransaction().add(R.id.fragment_holder, jgFrag).commit();
 		gameStarted=false;
 		screenNo=JOIN_SCREEN;
+		createButtons();
 	}
 	public void foundServer(String ip){
 		if(screenNo==JOIN_SCREEN){
@@ -265,5 +281,19 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public NetworkConnection getNC(){
 		return nc;
+	}
+	public void createButtons(){
+		buttons = new Button[6];
+		for(int i=0; i<buttons.length; i++){
+			final int p = i;
+			buttons[i] = new Button(this);
+			buttons[i].setText(Player.POWER_UP_NAMES[i]);
+			buttons[i].setOnClickListener(new OnClickListener(){
+				@Override
+				public void onClick(View v) {
+					nc.sendEvent(new Event(Event.POWERUP_USED, player.getName(),"",p));
+				}
+			});
+		}
 	}
 }

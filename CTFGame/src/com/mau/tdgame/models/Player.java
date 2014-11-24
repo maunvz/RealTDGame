@@ -7,13 +7,13 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 public class Player {
-	public static final int NUKE = 1;//kill everyone but self
-	public static final int SNIPER = 2;//kill one person from anywhere
-	public static final int IMMORTAL = 3;//can be killed once and not die
-	public static final int HALF_SENSITIVITY = 4;//sensitivity cut by half
-	public static final int RESPAWN_ANYWHERE = 5;//click the button to respawn
-	public static final int FLAG_STEAL = 6;//steal the flag from any player, including your own
-	
+	public static final int NUKE = 0;//kill everyone but self
+	public static final int SNIPER = 1;//kill one person from anywhere
+	public static final int SHIELD = 2;//can be killed once and not die
+	public static final int STRONGER = 3;//sensitivity cut by half
+	public static final int RESPAWN_ANYWHERE = 4;//click the button to respawn
+	public static final int FLAG_STEAL = 5;//steal the flag from any player, including your own
+	public static final String[] POWER_UP_NAMES = {"NUKE","SNIPER","SHIELD","STRONGER","RESPAWN","STEAL"};
 	public boolean alive;
 	public int score;
 	private int deaths;
@@ -22,6 +22,9 @@ public class Player {
 	private String name;
 	private String QRId;
 	private float sensitivity;
+	public boolean shield;
+	public boolean stronger;
+	public int killCount;
 	public ArrayList<Integer> powerups;
 	
 	public Player(String name, String QRId, int team){
@@ -33,7 +36,10 @@ public class Player {
 		deaths = 0;
 		kills = 0;
 		sensitivity = 1;
+		shield=false;
+		stronger=false;
 		powerups = new ArrayList<Integer>();
+		killCount=0;
 	}
 	public String getName(){
 		return name;
@@ -60,6 +66,9 @@ public class Player {
 		obj.put("deaths", deaths);
 		obj.put("kills", kills);	
 		obj.put("sensitivity", sensitivity);
+		obj.put("shield", shield);
+		obj.put("stronger", stronger);
+		obj.put("killCount", killCount);
 		JSONArray powerups = new JSONArray();
 		for(int i=0; i<this.powerups.size();i++){
 			powerups.put(this.powerups.get(i));
@@ -79,6 +88,9 @@ public class Player {
 		for(int i=0; i<powerups.length(); i++){
 			player.powerups.add(powerups.getInt(i));
 		}
+		player.stronger = obj.getBoolean("stronger");
+		player.shield = obj.getBoolean("shield");
+		player.killCount = obj.getInt("killCount");
 		return player;
 	}
 }

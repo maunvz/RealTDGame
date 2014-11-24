@@ -35,6 +35,7 @@ public class ServerMain {
 		startListening();
 	}
 	public synchronized void updateGameState(Event event){
+		print(event.toString());
 		gameState.processEvent(event);
 		broadcastGameState();
 		if(!gameState.getMessage().equals(""))print(gameState.getMessage());
@@ -78,7 +79,8 @@ public class ServerMain {
 		broadcastGameState();
 	}
 	public void powerPlayer(Player player, int power){
-		//TODO
+		player.powerups.add(power);
+		broadcastGameState();
 	}
 	public void setPlayerSensitivity(Player player, float sensitivity){
 		player.setSensitivity(sensitivity);

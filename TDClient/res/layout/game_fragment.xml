@@ -25,7 +25,7 @@
             android:name="com.mau.tdclient.PlayerStateDisplayFragment"
     		android:layout_width="match_parent"
     		android:layout_height="0dp"
-    		android:layout_weight="0.15"/>
+    		android:layout_weight="0.2"/>
         <me.dm7.barcodescanner.zbar.ZBarScannerView
     	    android:id = "@+id/zbarscan"
     	    android:layout_width = "match_parent"
@@ -37,6 +37,6 @@
 			android:name="com.mau.tdclient.GameStateDisplayFragment"
             android:layout_width="match_parent"
             android:layout_height="0dp"
-            android:layout_weight="0.2"/>
+            android:layout_weight="0.15"/>
     </LinearLayout>
 </RelativeLayout>

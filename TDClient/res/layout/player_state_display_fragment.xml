@@ -10,6 +10,14 @@
 	    android:textColor="@color/white"
 		android:gravity="center"
 	    android:textAppearance="@android:style/TextAppearance.Medium"/>
+	<LinearLayout
+	    android:id="@+id/powerup_button_holder"
+	    android:orientation="horizontal"
+	    android:layout_width="match_parent"
+	    android:layout_height="wrap_content"
+	    android:gravity="center"
+	    android:layout_below="@+id/status_message_textview">
+	</LinearLayout>
 	<TextView
 		android:id="@+id/player_score_textview"
 	    android:layout_width="match_parent"

@@ -1,6 +1,7 @@
 package com.mau.tdgame.models;
 
 import java.util.ArrayList;
+import java.util.Random;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -59,20 +60,73 @@ public class GameState {
 			playerDies(player1);
 			break;
 		case Event.QR_EVENT:
-			if(event.value1.equals(BASE_1_QR)){
+			if(event.string1.equals(BASE_1_QR)){
 				if(player1.getTeam()==Team.TEAM_1) playerReachedOwnBase(player1);
 				else playerReachedEnemyBase(player1);
-			}else if(event.value1.equals(BASE_2_QR)){
+			}else if(event.string1.equals(BASE_2_QR)){
 				if(player1.getTeam()==Team.TEAM_2) playerReachedOwnBase(player1);
 				else playerReachedEnemyBase(player1);
 			}else {
-				if(killPlayer(player1, getPlayerByQRId(event.value1)))return;
+				if(killPlayer(player1, getPlayerByQRId(event.string1)))return;
+				processPower(player1, event);
 			}
+			break;
+		case Event.POWERUP_USED:
+			for(int i=0; i<player1.powerups.size(); i++){
+				if(player1.powerups.get(i).equals(event.int1)){
+					player1.powerups.remove(i);
+					break;
+				}
+			}
+			usePower(player1, event.int1, event.string1);
 			break;
 		}
 		if(getTeamScores()[0]>=maxScore||getTeamScores()[1]>=maxScore){
 			endGame();
 		}
+	}
+	public void processPower(Player player, Event event){
+		if(event.string1.equals("respawn_power")){
+			
+		}
+		if(event.string1.equals("flag_steal_power")){
+			
+		}
+		if(event.string1.equals("stronger_power")){
+			
+		}
+		if(event.string1.equals("shield_power")){
+			
+		}
+	}
+	public void usePower(Player player, int power, String str){
+		switch(power){
+		case Player.NUKE:
+			for(Player p:players)
+				if(!p.equals(player))
+					playerDies(p);
+			break;
+		case Player.RESPAWN_ANYWHERE:
+			playerRespawns(player);	
+			break;
+		case Player.SNIPER:
+			killPlayer(player, randomPlayer());
+			break;
+		case Player.SHIELD:
+			player.shield=true;
+			break;
+		case Player.STRONGER:
+			player.stronger=true;
+			break;
+		case Player.FLAG_STEAL:
+			if(playerWithFlag1.equals(str))playerWithFlag1=player.getName();
+			if(playerWithFlag2.equals(str))playerWithFlag2=player.getName();
+			break;
+		}
+	}
+	public Player randomPlayer(){
+		Random r = new Random();
+		return players.get(r.nextInt(players.size()));
 	}
 	public void playerReachedOwnBase(Player player){
 		if(playerRespawns(player))return;
@@ -90,7 +144,14 @@ public class GameState {
 	public boolean playerDies(Player player){
 		if(player==null)return false;
 		if(!player.alive)return false;
+		if(player.shield){
+			player.shield=false;
+			return false;
+		}
+		player.shield=false;
 		player.alive=false;
+		player.powerups.clear();
+		player.killCount=0;
 		message = player.getName() + " died.";
 		if(playerWithFlag1==player.getName())playerWithFlag1="";
 		if(playerWithFlag2==player.getName())playerWithFlag2="";
@@ -104,8 +165,11 @@ public class GameState {
 		if(victim.getName()==playerWithFlag2)playerWithFlag2=killer.getName();
 		if(!playerDies(victim))return false;
 		killer.score+=KILL_VALUE;
+		killer.killCount++;
 		victim.score-=KILL_PENALTY;
 		message = killer.getName() +" killed "+victim.getName()+".";
+		if(killer.killCount==5)killer.powerups.add(Player.NUKE);
+		if(killer.killCount==2)killer.powerups.add(Player.SNIPER);
 		return true;
 	}
 	public boolean scoreFlag(Player player){
