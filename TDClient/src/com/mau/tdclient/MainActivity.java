@@ -283,7 +283,7 @@ public class MainActivity extends ActionBarActivity {
 		return nc;
 	}
 	public void createButtons(){
-		buttons = new Button[6];
+		buttons = new Button[4];
 		for(int i=0; i<buttons.length; i++){
 			final int p = i;
 			buttons[i] = new Button(this);
