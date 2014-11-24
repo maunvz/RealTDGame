@@ -9,11 +9,9 @@ import org.json.JSONObject;
 public class Player {
 	public static final int NUKE = 0;//kill everyone but self
 	public static final int SNIPER = 1;//kill one person from anywhere
-	public static final int SHIELD = 2;//can be killed once and not die
-	public static final int STRONGER = 3;//sensitivity cut by half
-	public static final int RESPAWN_ANYWHERE = 4;//click the button to respawn
-	public static final int FLAG_STEAL = 5;//steal the flag from any player, including your own
-	public static final String[] POWER_UP_NAMES = {"NUKE","SNIPER","SHIELD","STRONGER","RESPAWN","STEAL"};
+	public static final int STRONGER = 2;//sensitivity cut by half
+	public static final int RESPAWN_ANYWHERE = 3;//click the button to respawn
+	public static final String[] POWER_UP_NAMES = {"NUKE","SNIPER","STRONGER","RESPAWN"};
 	public boolean alive;
 	public int score;
 	private int deaths;
@@ -22,7 +20,6 @@ public class Player {
 	private String name;
 	private String QRId;
 	private float sensitivity;
-	public boolean shield;
 	public boolean stronger;
 	public int killCount;
 	public ArrayList<Integer> powerups;
@@ -36,7 +33,6 @@ public class Player {
 		deaths = 0;
 		kills = 0;
 		sensitivity = 1;
-		shield=false;
 		stronger=false;
 		powerups = new ArrayList<Integer>();
 		killCount=0;
@@ -66,7 +62,6 @@ public class Player {
 		obj.put("deaths", deaths);
 		obj.put("kills", kills);	
 		obj.put("sensitivity", sensitivity);
-		obj.put("shield", shield);
 		obj.put("stronger", stronger);
 		obj.put("killCount", killCount);
 		JSONArray powerups = new JSONArray();
@@ -89,7 +84,6 @@ public class Player {
 			player.powerups.add(powerups.getInt(i));
 		}
 		player.stronger = obj.getBoolean("stronger");
-		player.shield = obj.getBoolean("shield");
 		player.killCount = obj.getInt("killCount");
 		return player;
 	}

@@ -87,16 +87,10 @@ public class GameState {
 	}
 	public void processPower(Player player, Event event){
 		if(event.string1.equals("respawn_power")){
-			
-		}
-		if(event.string1.equals("flag_steal_power")){
-			
+			player.powerups.add(Player.RESPAWN_ANYWHERE);
 		}
 		if(event.string1.equals("stronger_power")){
-			
-		}
-		if(event.string1.equals("shield_power")){
-			
+			player.powerups.add(Player.STRONGER);	
 		}
 	}
 	public void usePower(Player player, int power, String str){
@@ -112,15 +106,8 @@ public class GameState {
 		case Player.SNIPER:
 			killPlayer(player, randomPlayer());
 			break;
-		case Player.SHIELD:
-			player.shield=true;
-			break;
 		case Player.STRONGER:
 			player.stronger=true;
-			break;
-		case Player.FLAG_STEAL:
-			if(playerWithFlag1.equals(str))playerWithFlag1=player.getName();
-			if(playerWithFlag2.equals(str))playerWithFlag2=player.getName();
 			break;
 		}
 	}
@@ -144,17 +131,15 @@ public class GameState {
 	public boolean playerDies(Player player){
 		if(player==null)return false;
 		if(!player.alive)return false;
-		if(player.shield){
-			player.shield=false;
-			return false;
-		}
-		player.shield=false;
 		player.alive=false;
-		player.powerups.clear();
 		player.killCount=0;
 		message = player.getName() + " died.";
 		if(playerWithFlag1==player.getName())playerWithFlag1="";
 		if(playerWithFlag2==player.getName())playerWithFlag2="";
+		boolean respawn = false;
+		if(player.powerups.contains(Player.RESPAWN_ANYWHERE))respawn=true;
+		player.powerups.clear();
+		if(respawn)player.powerups.add(Player.RESPAWN_ANYWHERE);
 		return true;
 	}
 	public boolean killPlayer(Player killer, Player victim){

@@ -49,7 +49,7 @@ public class ShakeListener implements SensorEventListener{
 			    last_z = z;
 			    if(ma.screenNo==MainActivity.GAME_SCREEN){
 			    	float max = ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity();
-			    	if(ma.getPlayer().stronger)max/=2;
+			    	if(ma.getPlayer().stronger)max*=1.5;
 			    	((ShakeMeter)ma.findViewById(R.id.shake_meter_1)).updateValue(speed, max);
 			    	((ShakeMeter)ma.findViewById(R.id.shake_meter_2)).updateValue(speed, max);
 			    }
