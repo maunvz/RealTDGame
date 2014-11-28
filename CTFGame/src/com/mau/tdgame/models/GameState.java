@@ -10,6 +10,8 @@ import org.json.JSONObject;
 public class GameState {
 	public static final String BASE_1_QR = "base_0";
 	public static final String BASE_2_QR = "base_1";
+	public static final String FLAG_1_QR = "flag_0";
+	public static final String FLAG_2_QR = "flag_1";
 	
 	public static final int SCORE_VALUE=10;
 	public static final int RETURN_VALUE=5;
@@ -60,13 +62,11 @@ public class GameState {
 			playerDies(player1);
 			break;
 		case Event.QR_EVENT:
-			if(event.string1.equals(BASE_1_QR)){
-				if(player1.getTeam()==Team.TEAM_1) playerReachedOwnBase(player1);
-				else playerReachedEnemyBase(player1);
-			}else if(event.string1.equals(BASE_2_QR)){
-				if(player1.getTeam()==Team.TEAM_2) playerReachedOwnBase(player1);
-				else playerReachedEnemyBase(player1);
-			}else {
+			if(event.string1.equals(BASE_1_QR)&&player1.getTeam()==Team.TEAM_1||event.string1.equals(BASE_2_QR)&&player1.getTeam()==Team.TEAM_2){
+				playerReachedOwnBase(player1);
+			} else if(event.string1.equals(FLAG_1_QR)&&player1.getTeam()==Team.TEAM_2||event.string1.equals(FLAG_2_QR)&&player1.getTeam()==Team.TEAM_1){
+				playerReachedEnemyBase(player1);
+			} else {
 				if(killPlayer(player1, getPlayerByQRId(event.string1)))return;
 				processPower(player1, event);
 			}
@@ -86,6 +86,7 @@ public class GameState {
 		}
 	}
 	public void processPower(Player player, Event event){
+		if(!player.alive)return;
 		if(event.string1.equals("respawn_power")){
 			player.powerups.add(Player.RESPAWN_ANYWHERE);
 		}
@@ -161,19 +162,26 @@ public class GameState {
 		if(!player.alive)return false;
 		if(player.getName()==playerWithFlag1){
 			playerWithFlag1="";
-			if(player.getTeam()==Team.TEAM_1)
-				player.score+=SCORE_VALUE;
-			else 
+			if(player.getTeam()==Team.TEAM_2){
+				player.score+=SCORE_VALUE;				
+				message = player.getName()+" just scored! Flag returns to base.";
+				globalMessage = message;
+			} else {
 				player.score+=RETURN_VALUE;
+				message = player.getName()+" returned the flag to base!";
+			}
 		}
 		if(player.getName()==playerWithFlag2){
 			playerWithFlag2="";
-			if(player.getTeam()==Team.TEAM_2)
-				player.score+=SCORE_VALUE;
-			else 
-				player.score+=RETURN_VALUE;
+			if(player.getTeam()==Team.TEAM_1){
+				player.score+=SCORE_VALUE;				
+				message = player.getName()+" just scored! Flag returns to base.";
+				globalMessage = message;
+			} else {
+				player.score+=RETURN_VALUE;				
+				message = player.getName()+" returned the flag to base!";
+			}
 		}
-		message = player.getName()+" just scored! Flag returns to base.";
 		return true;
 	}
 	public boolean captureFlag(Player player){
@@ -183,7 +191,8 @@ public class GameState {
 		} else if(player.getTeam()==Team.TEAM_2&&playerWithFlag1==""){
 			playerWithFlag1=player.getName();
 		}
-		message = player.getName()+" has the flag! Go kill him now.";
+		message = player.getName()+" has the flag! Go kill them now.";
+		globalMessage = message;
 		return true;
 	}
 	
