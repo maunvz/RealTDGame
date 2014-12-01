@@ -7,6 +7,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
+import android.graphics.Typeface;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
@@ -115,6 +116,7 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void updateUIGameState(){
 		Player tplayer = gameState.getPlayerByName(player.getName());
+		((TextView)findViewById(R.id.status_message_textview)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/spyagency2_1.ttf"));
 		if(!tplayer.alive){
 			listener.turnOffListener();
 			if(gameState.getMessage().contains("killed "+player.getName())){
@@ -196,6 +198,7 @@ public class MainActivity extends ActionBarActivity {
 
 		((TextView)findViewById(R.id.team1_state)).setText(team1_text);
 		((TextView)findViewById(R.id.team2_state)).setText(team2_text);
+		((TextView)findViewById(R.id.player_score_textview)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/spyagency2_1.ttf"));
 		((TextView)findViewById(R.id.player_score_textview)).setText("Score: "+player.score);
 	}
 	//called when a new player joins the waiting room adds all the names of the players in gameState to their respective lists

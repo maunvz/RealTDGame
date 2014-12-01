@@ -9,7 +9,6 @@
 	    android:layout_height="wrap_content"
 	    android:textColor="@color/white"
 		android:gravity="center"
-		android:text = "TEST"
 	    android:textAppearance="@android:style/TextAppearance.Medium"/>
 	<LinearLayout
 	    android:id="@+id/powerup_button_holder"
@@ -26,6 +25,5 @@
 	    android:textColor="@color/white"
 	    android:layout_alignParentBottom="true"
 	    android:gravity="center"
-	    android:text = "TEST"
 	    android:textAppearance="@android:style/TextAppearance.Medium"/>
 </RelativeLayout>
