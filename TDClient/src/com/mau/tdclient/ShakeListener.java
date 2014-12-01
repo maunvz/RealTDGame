@@ -47,10 +47,6 @@ public class ShakeListener implements SensorEventListener{
 			    float max = ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity();
 			    if(ma.getPlayer().stronger){
 			    	max*=3;
-			    	((TextView)ma.findViewById(R.id.status_message_textview)).setText("SUPER SNEAKY "+max);
-			    }
-			    else{
-			    	((TextView)ma.findViewById(R.id.status_message_textview)).setText("weak.");
 			    }
 			    if (speed > max) {
 			    		ma.youDie();

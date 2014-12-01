@@ -16,6 +16,9 @@ import android.view.View;
 import android.view.View.OnClickListener;
 import android.view.Window;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
@@ -86,38 +89,85 @@ public class MainActivity extends ActionBarActivity {
 			}
 		}
 	}
+	public void animateStatus(final TextView tv){
+		Animation anim_out = AnimationUtils.loadAnimation(this, R.anim.fade_out_long);
+		tv.startAnimation(anim_out);
+		anim_out.setAnimationListener(new AnimationListener(){
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				tv.setVisibility(View.GONE);
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+				// TODO Auto-generated method stub
+				
+			}
+			
+		});
+	}
 	public void updateUIGameState(){
 		Player tplayer = gameState.getPlayerByName(player.getName());
 		if(!tplayer.alive){
 			listener.turnOffListener();
 			if(gameState.getMessage().contains("killed "+player.getName())){
 					//Message saying you got killed by x
-					((TextView)findViewById(R.id.status_message_textview)).setText(gameState.getMessage()+" Go respawn.");
+				final TextView tvToChange = ((TextView)findViewById(R.id.status_message_textview));
+				tvToChange.setVisibility(View.VISIBLE);
+				String actualMessage = gameState.getMessage().replaceAll(tplayer.getName(), "you");
+				actualMessage = actualMessage.substring(0,1).toUpperCase() + actualMessage.substring(1).toLowerCase();
+				tvToChange.setText(actualMessage+" Go respawn.");
 				mplayer.start();
+				animateStatus(tvToChange);
 			}
 			else if(gameState.getMessage().contains("died")&&gameState.getMessage().contains(player.getName())){
 				//Message saying you died, go respawn
-				((TextView)findViewById(R.id.status_message_textview)).setText("You died."+" Go respawn.");
+				final TextView tvToChange = ((TextView)findViewById(R.id.status_message_textview));
+				tvToChange.setVisibility(View.VISIBLE);
+				tvToChange.setText("You died."+" Go respawn.");
 				mplayer.start();
+				animateStatus(tvToChange);
 			}
 		}
 		else if(tplayer.alive){
 			listener.turnOnListener();
 			if(gameState.getMessage().contains(player.getName()+" killed")){
-				//Message saying you killed x
-				((TextView)findViewById(R.id.status_message_textview)).setText(gameState.getMessage());	
+				final TextView tvToChange = ((TextView)findViewById(R.id.status_message_textview));
+				tvToChange.setVisibility(View.VISIBLE);
+				String actualMessage = gameState.getMessage().replaceAll(tplayer.getName(), "you");
+				actualMessage = actualMessage.substring(0,1).toUpperCase() + actualMessage.substring(1).toLowerCase();
+				tvToChange.setText(actualMessage);	
+				animateStatus(tvToChange);
 			}
 			if(gameState.getMessage().contains(player.getName()+" just scored! Flag returns to base.")){
 				//Message saying you scored the flag
-				((TextView)findViewById(R.id.status_message_textview)).setText(gameState.getMessage());	
+				final TextView tvToChange = ((TextView)findViewById(R.id.status_message_textview));
+				tvToChange.setVisibility(View.VISIBLE);
+				String actualMessage = gameState.getMessage().replaceAll(tplayer.getName(), "you");
+				actualMessage = actualMessage.substring(0,1).toUpperCase() + actualMessage.substring(1).toLowerCase();
+				tvToChange.setText(actualMessage);	
+				animateStatus(tvToChange);
 			}
 			if(gameState.getMessage().contains(player.getName()+" has the flag!")){
 				//Message saying you got the flag, go score it
-				((TextView)findViewById(R.id.status_message_textview)).setText("You have the flag");	
+				final TextView tvToChange = ((TextView)findViewById(R.id.status_message_textview));
+				tvToChange.setVisibility(View.VISIBLE);
+				tvToChange.setText("You have the flag");
+				animateStatus(tvToChange);
 			}
 			if(gameState.getMessage().contains(player.getName()+" has respawned")){
 				//Message saying congrats, you respawned
-				((TextView)findViewById(R.id.status_message_textview)).setText("Congrats, you respawned.");
+				final TextView tvToChange = ((TextView)findViewById(R.id.status_message_textview));
+				tvToChange.setVisibility(View.VISIBLE);
+				tvToChange.setText("You have respawned.");
+				animateStatus(tvToChange);
 			}
 		}
 		player = tplayer;

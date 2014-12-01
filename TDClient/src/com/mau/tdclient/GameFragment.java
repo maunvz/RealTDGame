@@ -74,22 +74,14 @@ public class GameFragment extends Fragment implements ResultHandler{
 
 			@Override
 			public void onAnimationEnd(Animation animation) {
-				// TODO Auto-generated method stub
 				v.setBackgroundColor(Color.TRANSPARENT);
-				
 			}
 
 			@Override
-			public void onAnimationRepeat(Animation animation) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void onAnimationRepeat(Animation animation) {}
 
 			@Override
-			public void onAnimationStart(Animation animation) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void onAnimationStart(Animation animation) {}
       		
       	});
         new Thread(){
@@ -127,16 +119,10 @@ public class GameFragment extends Fragment implements ResultHandler{
 			}
 
 			@Override
-			public void onAnimationRepeat(Animation animation) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void onAnimationRepeat(Animation animation) {}
 
 			@Override
-			public void onAnimationStart(Animation animation) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void onAnimationStart(Animation animation) {}
       		
       	});
 		

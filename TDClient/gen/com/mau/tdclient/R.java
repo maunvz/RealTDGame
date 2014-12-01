@@ -17,6 +17,7 @@ public final class R {
         public static final int abc_slide_out_top=0x7f040005;
         public static final int fade_in=0x7f040006;
         public static final int fade_out=0x7f040007;
+        public static final int fade_out_long=0x7f040008;
     }
     public static final class attr {
         /**  Custom divider drawable to use for elements in the action bar. 
