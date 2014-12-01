@@ -20,7 +20,7 @@ import android.widget.ImageView;
 import com.mau.tdgame.models.Event;
 
 public class GameFragment extends Fragment implements ResultHandler{
-	boolean QREnabled;
+	public static boolean QREnabled;
 	int QR_time = 5000;
 	
 	public static MainActivity ma;
@@ -65,25 +65,25 @@ public class GameFragment extends Fragment implements ResultHandler{
 		if(QREnabled)return;Log.d("CAM", "Enabling Camera");
 		mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
 		mScannerView.startCamera();
-        QREnabled=true;        
-        Animation myFadeOutAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.fade_out);
-		final ImageView v = (ImageView) ma.findViewById(R.id.fader);
-		v.startAnimation(myFadeOutAnimation);
-		
-		myFadeOutAnimation.setAnimationListener(new AnimationListener(){
-
-			@Override
-			public void onAnimationEnd(Animation animation) {
-				v.setBackgroundColor(Color.TRANSPARENT);
-			}
-
-			@Override
-			public void onAnimationRepeat(Animation animation) {}
-
-			@Override
-			public void onAnimationStart(Animation animation) {}
-      		
-      	});
+//        QREnabled = true;
+//        Animation myFadeOutAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.fade_out);
+//		final ImageView v = (ImageView) ma.findViewById(R.id.fader);
+//		v.startAnimation(myFadeOutAnimation);
+//		
+//		myFadeOutAnimation.setAnimationListener(new AnimationListener(){
+//
+//			@Override
+//			public void onAnimationEnd(Animation animation) {
+//				v.setBackgroundColor(Color.TRANSPARENT);
+//			}
+//
+//			@Override
+//			public void onAnimationRepeat(Animation animation) {}
+//
+//			@Override
+//			public void onAnimationStart(Animation animation) {}
+//      		
+//      	});
         new Thread(){
         	public void run(){
         		try {

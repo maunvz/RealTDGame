@@ -44,7 +44,7 @@ public class MainActivity extends ActionBarActivity {
 	private ShakeListener listener;
 	private MediaPlayer mplayer;
 	private NetworkConnection nc;
-	public int screenNo;
+	public static int screenNo;
 	
 	//Game state variables
 	private String QRId;
@@ -96,10 +96,7 @@ public class MainActivity extends ActionBarActivity {
 		anim_out.setAnimationListener(new AnimationListener(){
 
 			@Override
-			public void onAnimationStart(Animation animation) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void onAnimationStart(Animation animation) {}
 
 			@Override
 			public void onAnimationEnd(Animation animation) {
@@ -107,10 +104,7 @@ public class MainActivity extends ActionBarActivity {
 			}
 
 			@Override
-			public void onAnimationRepeat(Animation animation) {
-				// TODO Auto-generated method stub
-				
-			}
+			public void onAnimationRepeat(Animation animation) {}
 			
 		});
 	}

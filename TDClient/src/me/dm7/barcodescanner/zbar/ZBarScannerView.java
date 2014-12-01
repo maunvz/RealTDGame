@@ -2,10 +2,19 @@ package me.dm7.barcodescanner.zbar;
 
 import java.util.List;
 
+import com.mau.tdclient.GameFragment;
+import com.mau.tdclient.MainActivity;
+import com.mau.tdclient.R;
+
 import me.dm7.barcodescanner.core.BarcodeScannerView;
 import android.content.Context;
+import android.graphics.Color;
 import android.hardware.Camera;
 import android.util.AttributeSet;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Animation.AnimationListener;
+import android.widget.ImageView;
 
 public class ZBarScannerView extends BarcodeScannerView {
 	static int result = 0;
@@ -45,5 +54,26 @@ public class ZBarScannerView extends BarcodeScannerView {
       	lst = new LiveScanThread(data,camera,getContext());
     	lst.start();
         camera.setOneShotPreviewCallback(this);
+        if(!GameFragment.QREnabled&&MainActivity.screenNo==MainActivity.GAME_SCREEN){
+        	GameFragment.QREnabled=true;
+        	Animation myFadeOutAnimation = AnimationUtils.loadAnimation(GameFragment.ma, R.anim.fade_out);
+    		final ImageView v = (ImageView) GameFragment.ma.findViewById(R.id.fader);
+    		v.startAnimation(myFadeOutAnimation);
+    		
+    		myFadeOutAnimation.setAnimationListener(new AnimationListener(){
+
+    			@Override
+    			public void onAnimationEnd(Animation animation) {
+    				v.setBackgroundColor(Color.TRANSPARENT);
+    			}
+
+    			@Override
+    			public void onAnimationRepeat(Animation animation) {}
+
+    			@Override
+    			public void onAnimationStart(Animation animation) {}
+          		
+          	});
+        }
     }
 }
