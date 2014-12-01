@@ -41,12 +41,10 @@ public abstract class BarcodeScannerView extends FrameLayout implements Camera.P
     }
 
     public void stopCamera() {
-        if(mCamera != null) {
-            mPreview.stopCameraPreview();
-            mPreview.setCamera(null, null);
-            mCamera.release();
-            mCamera = null;
-        }
+		mPreview.stopCameraPreview();
+        //mPreview.setCamera(null, null);
+        mCamera.release();
+        mCamera = null;
     }
 
     public synchronized Rect getFramingRectInPreview(int width, int height) {

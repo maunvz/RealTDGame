@@ -1,6 +1,7 @@
 package me.dm7.barcodescanner.core;
 
 import android.content.Context;
+import android.graphics.Color;
 import android.graphics.Point;
 import android.hardware.Camera;
 import android.os.Handler;
@@ -11,8 +12,15 @@ import android.view.Surface;
 import android.view.SurfaceHolder;
 import android.view.SurfaceView;
 import android.view.WindowManager;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Animation.AnimationListener;
+import android.widget.ImageView;
 
 import java.util.List;
+
+import com.mau.tdclient.GameFragment;
+import com.mau.tdclient.R;
 
 public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callback {
     private static final String TAG = "CameraPreview";
@@ -79,7 +87,15 @@ public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callbac
                 mCamera.setPreviewDisplay(getHolder());
                 mCamera.setDisplayOrientation(getDisplayOrientation());
                 mCamera.setOneShotPreviewCallback(mPreviewCallback);
-                mCamera.startPreview();
+                Thread t = new Thread(){
+                	public void run(){
+                		mCamera.startPreview();
+
+                	}
+                };
+                
+                t.start();
+//                mCamera.startPreview();
                 if(mAutoFocus) {
                     mCamera.autoFocus(autoFocusCB);
                 }
@@ -93,9 +109,18 @@ public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callbac
         if(mCamera != null) {
             try {
                 mPreviewing = false;
-                mCamera.cancelAutoFocus();
-                mCamera.setOneShotPreviewCallback(null);
-                mCamera.stopPreview();
+//                mCamera.cancelAutoFocus();
+                try{
+                	mCamera.setOneShotPreviewCallback(null);
+                }catch(Exception e){}
+                Thread t = new Thread(){
+                	public void run(){
+                		if(mCamera!=null)
+                			mCamera.stopPreview();
+                	}
+                };
+                //t.start();
+//                mCamera.stopPreview();
             } catch(Exception e) {
                 Log.e(TAG, e.toString(), e);
             }

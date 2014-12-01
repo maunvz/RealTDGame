@@ -23,7 +23,7 @@ public class GameFragment extends Fragment implements ResultHandler{
 	boolean QREnabled;
 	int QR_time = 5000;
 	
-	MainActivity ma;
+	public static MainActivity ma;
 	private ZBarScannerView mScannerView;
 	public GameFragment(MainActivity ma){
 		super();
@@ -113,8 +113,13 @@ public class GameFragment extends Fragment implements ResultHandler{
 			@Override
 			public void onAnimationEnd(Animation animation) {
 				if(!QREnabled)return;
-				if(mScannerView != null)
-					mScannerView.stopCamera();
+				Thread t = new Thread(){
+					public void run(){
+						if(mScannerView != null)
+							mScannerView.stopCamera();
+					}
+				};
+				t.start();
 				QREnabled=false;
 			}
 
