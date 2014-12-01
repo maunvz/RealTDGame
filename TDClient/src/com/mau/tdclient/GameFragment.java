@@ -4,6 +4,7 @@ import me.dm7.barcodescanner.zbar.Result;
 import me.dm7.barcodescanner.zbar.ZBarScannerView;
 import me.dm7.barcodescanner.zbar.ZBarScannerView.ResultHandler;
 import android.app.Fragment;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -11,6 +12,10 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.view.animation.Animation.AnimationListener;
+import android.widget.ImageView;
 
 import com.mau.tdgame.models.Event;
 
@@ -59,8 +64,34 @@ public class GameFragment extends Fragment implements ResultHandler{
 	public void enableQR(){
 		if(QREnabled)return;Log.d("CAM", "Enabling Camera");
 		mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
-        mScannerView.startCamera();
-        QREnabled=true;
+		mScannerView.startCamera();
+        QREnabled=true;        
+        Animation myFadeOutAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.fade_out);
+		final ImageView v = (ImageView) ma.findViewById(R.id.fader);
+		v.startAnimation(myFadeOutAnimation);
+		
+		myFadeOutAnimation.setAnimationListener(new AnimationListener(){
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				// TODO Auto-generated method stub
+				v.setBackgroundColor(Color.TRANSPARENT);
+				
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+				// TODO Auto-generated method stub
+				
+			}
+      		
+      	});
         new Thread(){
         	public void run(){
         		try {
@@ -68,6 +99,7 @@ public class GameFragment extends Fragment implements ResultHandler{
 					ma.runOnUiThread(new Runnable(){
 						@Override
 						public void run() {
+							
 							disableQR();
 						}					
 					});
@@ -78,9 +110,36 @@ public class GameFragment extends Fragment implements ResultHandler{
         }.start();
 	}
 	public synchronized void disableQR(){
-		if(!QREnabled)return;
-		if(mScannerView != null)
-			mScannerView.stopCamera();
-		QREnabled=false;
+	
+		Animation myFadeOutAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.fade_in);
+		final ImageView v = (ImageView) ma.findViewById(R.id.fader);
+		v.setBackgroundColor(Color.BLACK);
+		v.startAnimation(myFadeOutAnimation);
+		
+		myFadeOutAnimation.setAnimationListener(new AnimationListener(){
+
+			@Override
+			public void onAnimationEnd(Animation animation) {
+				if(!QREnabled)return;
+				if(mScannerView != null)
+					mScannerView.stopCamera();
+				QREnabled=false;
+			}
+
+			@Override
+			public void onAnimationRepeat(Animation animation) {
+				// TODO Auto-generated method stub
+				
+			}
+
+			@Override
+			public void onAnimationStart(Animation animation) {
+				// TODO Auto-generated method stub
+				
+			}
+      		
+      	});
+		
+		
 	}
 }

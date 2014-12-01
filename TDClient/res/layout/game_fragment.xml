@@ -1,37 +1,46 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<RelativeLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width = "match_parent"
+    android:layout_height = "match_parent"
+    >
+    
+    <me.dm7.barcodescanner.zbar.ZBarScannerView
+    	    android:id = "@+id/zbarscan"
+    	    android:layout_width = "match_parent"
+    	    android:layout_height = "match_parent"
+    	/>
+    <ImageView
+        android:id = "@+id/fader"
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:background = "#000000"></ImageView>
     <com.mau.tdclient.ShakeMeter 
         android:id="@+id/shake_meter_1"
-        android:layout_width="20dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"/>
-    <com.mau.tdclient.ShakeMeter 
-        android:id="@+id/shake_meter_2"
-        android:layout_width="20dp"
-        android:layout_height="match_parent"
-        android:layout_alignParentRight="true"
-        android:layout_alignParentEnd="true"/>
+    
+
+<RelativeLayout 
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    >"
+
     <LinearLayout
         android:layout_width="match_parent"
     	android:layout_height="match_parent" 
-    	android:orientation="vertical"
-    	android:layout_toRightOf="@+id/shake_meter_1"
-    	android:layout_toEndOf="@+id/shake_meter_1"
-    	android:layout_toLeftOf="@+id/shake_meter_2"
-    	android:layout_toStartOf="@+id/shake_meter_2">
+    	android:orientation="vertical">
         <fragment 
             android:id="@+id/player_state_display"
             android:name="com.mau.tdclient.PlayerStateDisplayFragment"
     		android:layout_width="match_parent"
     		android:layout_height="0dp"
     		android:layout_weight="0.2"/>
-        <me.dm7.barcodescanner.zbar.ZBarScannerView
-    	    android:id = "@+id/zbarscan"
+        
+    	<View 
     	    android:layout_width = "match_parent"
     	    android:layout_height = "0dp"
-    	    android:layout_weight = "0.65">
-    	</me.dm7.barcodescanner.zbar.ZBarScannerView>
+    	    android:layout_weight = "0.65"/>
     	<fragment 
 			android:id="@+id/game_state_display"
 			android:name="com.mau.tdclient.GameStateDisplayFragment"
@@ -39,4 +48,5 @@
             android:layout_height="0dp"
             android:layout_weight="0.15"/>
     </LinearLayout>
+</RelativeLayout>
 </RelativeLayout>

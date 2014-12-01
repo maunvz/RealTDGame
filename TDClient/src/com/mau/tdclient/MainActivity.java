@@ -14,6 +14,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.Window;
 import android.view.WindowManager;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
@@ -124,6 +125,7 @@ public class MainActivity extends ActionBarActivity {
 		updatePowerupButtons();
 	}
 	public void updatePowerupButtons(){
+//		((TextView)findViewById(R.id.status_message_textview)).setText("Buttons");
 		LinearLayout buttonLayout = (LinearLayout)findViewById(R.id.powerup_button_holder);
 		buttonLayout.removeAllViews();
 		boolean[] added = new boolean[6];
@@ -185,12 +187,17 @@ public class MainActivity extends ActionBarActivity {
 	public void joinGame(Player player, GameState gameState){
 		this.player = player;
 		this.gameState = gameState;
+		
 		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new WaitingRoomFragment(this)).commit();
+		
 	}
 	//Technical stuff below here, manages UI, sensors, sound, networking, etc.
 	//------------------------------------------------------------------------
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
+		requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN);
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);		
