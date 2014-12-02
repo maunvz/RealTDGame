@@ -112,7 +112,7 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void updateUIGameState(){
 		Player tplayer = gameState.getPlayerByName(player.getName());
-		((TextView)findViewById(R.id.status_message_textview)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/spyagency2_1.ttf"));
+		((TextView)findViewById(R.id.status_message_textview)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/LCD Display Grid.ttf"));
 		if(!tplayer.alive){
 			listener.turnOffListener();
 			if(gameState.getMessage().contains("killed "+player.getName())){
@@ -196,7 +196,7 @@ public class MainActivity extends ActionBarActivity {
 		RelativeLayout team1_layout = ((RelativeLayout)findViewById(R.id.team1_holder));
 		RelativeLayout team2_layout = ((RelativeLayout)findViewById(R.id.team2_holder));
 		ResizeAnimation team1_animation = new ResizeAnimation(team1_layout,((LinearLayout.LayoutParams)team1_layout.getLayoutParams()).weight,team1_ratio);
-		ResizeAnimation team2_animation = new ResizeAnimation(team2_layout,((LinearLayout.LayoutParams)team2_layout.getLayoutParams()).weight,1.0f-team1_ratio);
+		ResizeAnimation  team2_animation = new ResizeAnimation(team2_layout,((LinearLayout.LayoutParams)team2_layout.getLayoutParams()).weight,1.0f-team1_ratio);
 		team1_layout.startAnimation(team1_animation);
 		team2_layout.startAnimation(team2_animation);
 //		team1_layout.setLayoutParams(new LinearLayout.LayoutParams(0,
@@ -205,16 +205,18 @@ public class MainActivity extends ActionBarActivity {
 //				LayoutParams.MATCH_PARENT,1.0f-team1_ratio));
 		String team1_text="";
 		String team2_text="";
-		((TextView)findViewById(R.id.team1_state)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/spyagency2_1.ttf"));
-		((TextView)findViewById(R.id.team2_state)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/spyagency2_1.ttf"));
-		team1_text+=gameState.getTeamScores()[0]+"\n";
-		team2_text+=gameState.getTeamScores()[1]+"\n";
-		team1_text+="Flag: "+(gameState.playerWithFlag1.equals("")?"At Base":gameState.playerWithFlag1)+"\n";
-		team2_text+="Flag: "+(gameState.playerWithFlag2.equals("")?"At Base":gameState.playerWithFlag2)+"\n";
+		((TextView)findViewById(R.id.team1_state)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/LCD Display Grid.ttf"));
+		((TextView)findViewById(R.id.team2_state)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/LCD Display Grid.ttf"));
+		team1_text+=gameState.getTeamScores()[0];
+		team2_text+=gameState.getTeamScores()[1];
+//		team1_text+="Flag: "+(gameState.playerWithFlag1.equals("")?"At Base":gameState.playerWithFlag1)+"\n";
+//		team2_text+="Flag: "+(gameState.playerWithFlag2.equals("")?"At Base":gameState.playerWithFlag2)+"\n";
 
 		((TextView)findViewById(R.id.team1_state)).setText(team1_text);
 		((TextView)findViewById(R.id.team2_state)).setText(team2_text);
-		((TextView)findViewById(R.id.player_score_textview)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/spyagency2_1.ttf"));
+		((TextView)findViewById(R.id.player_who_has_red_blue)).setText("Flag: "+(gameState.playerWithFlag1.equals("")?"At Base":gameState.playerWithFlag1));
+		((TextView)findViewById(R.id.player_who_has_red_flag)).setText("Flag: "+(gameState.playerWithFlag2.equals("")?"At Base":gameState.playerWithFlag2));
+		((TextView)findViewById(R.id.player_score_textview)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/LCD Display Grid.ttf"));
 		((TextView)findViewById(R.id.player_score_textview)).setText("Score: "+player.score);
 	}
 	//called when a new player joins the waiting room adds all the names of the players in gameState to their respective lists

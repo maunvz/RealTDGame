@@ -97,7 +97,7 @@ public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callbac
                 t.start();
 //                mCamera.startPreview();
                 if(mAutoFocus) {
-                    mCamera.autoFocus(autoFocusCB);
+                    //mCamera.autoFocus(null);
                 }
             } catch (Exception e) {
                 Log.e(TAG, e.toString(), e);
@@ -131,6 +131,7 @@ public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callbac
         Camera.Size optimalSize = getOptimalPreviewSize();
         Camera.Parameters parameters = mCamera.getParameters();
         parameters.setPreviewSize(optimalSize.width, optimalSize.height);
+        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         mCamera.setParameters(parameters);
     }
 
