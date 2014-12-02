@@ -29,7 +29,7 @@ public class GlobalOptionsPanel extends JPanel{
 		
 		JLabel ssLabel = new JLabel("Sensitivity");
 		sensitivitySpinner = new JSpinner();
-		sensitivitySpinner.setModel(new SpinnerNumberModel(GameState.DEFAULT_SENSITIVITY,200,1000,50));
+		sensitivitySpinner.setModel(new SpinnerNumberModel(GameState.DEFAULT_SENSITIVITY,2,6,50));
 		sensitivitySpinner.setEditor(new JSpinner.NumberEditor(sensitivitySpinner,"###"));
 		
 		JLabel msLabel = new JLabel("Max Score");
