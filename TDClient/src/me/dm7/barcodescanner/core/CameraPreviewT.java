@@ -122,14 +122,7 @@ public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callbac
                 try{
                 	mCamera.setOneShotPreviewCallback(null);
                 }catch(Exception e){}
-                Thread t = new Thread(){
-                	public void run(){
-                		if(mCamera!=null)
-                			mCamera.stopPreview();
-                	}
-                };
-                //t.start();
-//                mCamera.stopPreview();
+                mCamera.stopPreview();
             } catch(Exception e) {
                 Log.e(TAG, e.toString(), e);
             }
