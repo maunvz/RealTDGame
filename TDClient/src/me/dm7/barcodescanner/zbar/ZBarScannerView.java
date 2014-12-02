@@ -18,6 +18,7 @@ import android.widget.ImageView;
 
 public class ZBarScannerView extends BarcodeScannerView {
 	static int result = 0;
+	static boolean started = false;
 	LiveScanThread lst = new LiveScanThread();
     public interface ResultHandler {
         public void handleResult(Result rawResult);
@@ -51,12 +52,16 @@ public class ZBarScannerView extends BarcodeScannerView {
 
     @Override
     public void onPreviewFrame(byte[] data, Camera camera) {
-      	lst = new LiveScanThread(data,camera,getContext());
-    	lst.start();
+    	if(!lst.isAlive()){
+			lst = new LiveScanThread(data,camera,getContext());
+	    	lst.start();
+    	}
     	if(MainActivity.screenNo == MainActivity.JOIN_SCREEN)
     		camera.setOneShotPreviewCallback(this);
-    	if(!GameFragment.QREnabled&&MainActivity.screenNo==MainActivity.GAME_SCREEN){
+    	if(MainActivity.screenNo == MainActivity.GAME_SCREEN)
     		camera.setOneShotPreviewCallback(this);
+    	if(!GameFragment.QREnabled&&MainActivity.screenNo==MainActivity.GAME_SCREEN){
+//    		camera.setOneShotPreviewCallback(this);
         	GameFragment.QREnabled=true;
         	Animation myFadeOutAnimation = AnimationUtils.loadAnimation(GameFragment.ma, R.anim.fade_out);
     		final ImageView v = (ImageView) GameFragment.ma.findViewById(R.id.fader);

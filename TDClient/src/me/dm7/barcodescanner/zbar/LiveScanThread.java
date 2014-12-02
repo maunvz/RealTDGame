@@ -37,6 +37,11 @@ public class LiveScanThread extends Thread {
 		this.c = c;
 		setupScanner();
 	}
+	public void updateData(byte[] data, Camera camera, Context cx){
+		this.data = data;
+		this.camera = camera;
+		this.c = cx;
+	}
 	public int getResult(){
 		return result;
 	}
@@ -98,6 +103,12 @@ public class LiveScanThread extends Thread {
 		              }
 		              ZBarScannerView.mResultHandler.handleResult(rawResult);
 		            }
+		    	  try {
+					Thread.sleep(100);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
 		      	}
 		} catch(NullPointerException e){
 			

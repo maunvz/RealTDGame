@@ -16,11 +16,15 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
+import android.widget.Toast;
 
 import com.mau.tdgame.models.Event;
+import com.mau.tdgame.models.Team;
 
 public class GameFragment extends Fragment implements ResultHandler{
 	public static boolean QREnabled;
+	public static Animation myFadeOutAnimation;
+	public static boolean animationCancelled;
 	int QR_time = 5000;
 	
 	public static MainActivity ma;
@@ -44,7 +48,12 @@ public class GameFragment extends Fragment implements ResultHandler{
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
 				if(event.getAction()==MotionEvent.ACTION_DOWN){
-					enableQR();
+					if(QREnabled){
+						Toast.makeText(ma, "Still Fading", Toast.LENGTH_SHORT).show();
+					}
+					else{
+						enableQR();
+					}
 				}
 				return false;
 			}	
@@ -53,6 +62,77 @@ public class GameFragment extends Fragment implements ResultHandler{
 	}
 	@Override
 	public void handleResult(Result rawResult) {
+		if(!rawResult.getContents().contains("player")&&!rawResult.getContents().contains("flag")&&
+				!rawResult.getContents().contains("base")&&!rawResult.getContents().contains("power")){
+			return;
+		}
+		else if(rawResult.getContents().equals("base_0")&&ma.getPlayer().getTeam()==Team.TEAM_1){
+			if(ma.getPlayer().alive&&!ma.getGameState().playerWithFlag2.equals(ma.getPlayer().getName())){
+//				Toast.makeText(getActivity(), "You already got the flag",Toast.LENGTH_SHORT).show();
+				
+				return;
+			}
+		}
+		else if(rawResult.getContents().equals("base_0")&&ma.getPlayer().getTeam()==2){
+			return;
+		}
+		else if(rawResult.getContents().equals("base_1")&&ma.getPlayer().getTeam()==Team.TEAM_2){
+			if(ma.getPlayer().alive&&!ma.getGameState().playerWithFlag1.equals(ma.getPlayer().getName())){
+//				Toast.makeText(getActivity(), "You already got the flag",Toast.LENGTH_SHORT).show();
+				return;
+			}
+		}
+		else if(rawResult.getContents().equals("base_1")&&ma.getPlayer().getTeam()==Team.TEAM_1){
+			return;
+		}
+		else if(rawResult.getContents().contains("player")){
+			if(ma.getPlayer().getTeam() == 0){
+				if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==0){
+					return;
+				}
+				else if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==1&&
+						!ma.getGameState().getPlayerByQRId(rawResult.getContents()).alive){
+					return;
+				}
+			}
+			else{
+				if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==1){
+					return;
+				}
+				else if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==0&&
+						!ma.getGameState().getPlayerByQRId(rawResult.getContents()).alive){
+					return;
+				}
+			}
+		}
+		else if(rawResult.getContents().contains("flag")){
+			if(!ma.getGameState().playerWithFlag1.equals("")){
+//				String actualMessage = ma.getGameState().playerWithFlag1.replaceAll(ma.getPlayer().getName(), "you");
+//				actualMessage = actualMessage.substring(0,1).toUpperCase() + actualMessage.substring(1).toLowerCase();
+//				if(actualMessage.toLowerCase().contains("you"))
+//					actualMessage += " already have the flag";
+//				else
+//					actualMessage += " has the flag.";
+//				ma.makeAToast(actualMessage);
+				return;
+			}
+			else if(!ma.getGameState().playerWithFlag2.equals("")){
+//				String actualMessage = ma.getGameState().playerWithFlag1.replaceAll(ma.getPlayer().getName(), "you");
+//				actualMessage = actualMessage.substring(0,1).toUpperCase() + actualMessage.substring(1).toLowerCase();
+//				if(actualMessage.toLowerCase().contains("you"))
+//					actualMessage += " already have the flag";
+//				else
+//					actualMessage += " has the flag.";
+//				ma.makeAToast(actualMessage);
+				return;
+			}
+			else if(rawResult.getContents().contains("0")&&ma.getPlayer().getTeam()==Team.TEAM_1){
+				return;
+			}
+			else if(rawResult.getContents().contains("1")&&ma.getPlayer().getTeam()==Team.TEAM_2){
+				return;
+			}
+		}
 		ma.getNC().sendEvent(new Event(Event.QR_EVENT, ma.getPlayer().getName(), rawResult.getContents(), 0));
 	}
 	public void onResume(){
@@ -63,27 +143,30 @@ public class GameFragment extends Fragment implements ResultHandler{
 	}
 	public void enableQR(){
 		if(QREnabled)return;Log.d("CAM", "Enabling Camera");
-		mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
-		mScannerView.startCamera();
-//        QREnabled = true;
-//        Animation myFadeOutAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.fade_out);
-//		final ImageView v = (ImageView) ma.findViewById(R.id.fader);
-//		v.startAnimation(myFadeOutAnimation);
-//		
-//		myFadeOutAnimation.setAnimationListener(new AnimationListener(){
-//
-//			@Override
-//			public void onAnimationEnd(Animation animation) {
-//				v.setBackgroundColor(Color.TRANSPARENT);
-//			}
-//
-//			@Override
-//			public void onAnimationRepeat(Animation animation) {}
-//
-//			@Override
-//			public void onAnimationStart(Animation animation) {}
-//      		
-//      	});
+		if(!animationCancelled){
+			mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
+			mScannerView.startCamera();
+	//        QREnabled = true;
+	//        Animation myFadeOutAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.fade_out);
+	//		final ImageView v = (ImageView) ma.findViewById(R.id.fader);
+	//		v.startAnimation(myFadeOutAnimation);
+	//		
+	//		myFadeOutAnimation.setAnimationListener(new AnimationListener(){
+	//
+	//			@Override
+	//			public void onAnimationEnd(Animation animation) {
+	//				v.setBackgroundColor(Color.TRANSPARENT);
+	//			}
+	//
+	//			@Override
+	//			public void onAnimationRepeat(Animation animation) {}
+	//
+	//			@Override
+	//			public void onAnimationStart(Animation animation) {}
+	//      		
+	//      	});
+		}
+		animationCancelled = false;
         new Thread(){
         	public void run(){
         		try {
@@ -103,24 +186,25 @@ public class GameFragment extends Fragment implements ResultHandler{
 	}
 	public synchronized void disableQR(){
 	
-		Animation myFadeOutAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.fade_in);
+		myFadeOutAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.fade_in);
 		final ImageView v = (ImageView) ma.findViewById(R.id.fader);
 		v.setBackgroundColor(Color.BLACK);
 		v.startAnimation(myFadeOutAnimation);
-		
 		myFadeOutAnimation.setAnimationListener(new AnimationListener(){
 
 			@Override
-			public void onAnimationEnd(Animation animation) {
+			public void onAnimationEnd(Animation animation){
 				if(!QREnabled)return;
 				Thread t = new Thread(){
 					public void run(){
-						if(mScannerView != null)
+						if(mScannerView != null){
 							mScannerView.stopCamera();
+							QREnabled=false;
+						}
+
 					}
 				};
 				t.start();
-				QREnabled=false;
 			}
 
 			@Override

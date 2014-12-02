@@ -25,6 +25,7 @@ import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioButton;
 import android.widget.RadioGroup;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
@@ -88,7 +89,8 @@ public class MainActivity extends ActionBarActivity {
 				}
 			} 
 			if(!gameState.globalMessage.equals("")){
-				Toast.makeText(this, gameState.globalMessage, Toast.LENGTH_SHORT).show();
+				if(!gameState.globalMessage.contains(getPlayer().getName()))
+					Toast.makeText(this, gameState.globalMessage, Toast.LENGTH_SHORT).show();
 			}
 		}
 	}
@@ -239,9 +241,34 @@ public class MainActivity extends ActionBarActivity {
 			@Override
 			public void run() {
 				QRId = id;
+				String playerNumber = id;
 				TextView qrid = ((TextView)findViewById(R.id.qr_id_textview));
-				if(qrid!=null)qrid.setText("QR Scanned. You may connect.");
-			}			
+				if(qrid!=null)qrid.setText("QR Scanned. You may connect. Your ID is "+id);
+				if(!playerNumber.contains("player")){
+					if(qrid!=null)qrid.setText("That isn't a valid player id. Rescan.");
+				}
+				else{
+					playerNumber = playerNumber.replace("player_","");
+					RadioButton team1button = (RadioButton)findViewById(R.id.team1_button);
+					RadioButton team2button = (RadioButton)findViewById(R.id.team2_button);
+					if(Integer.parseInt(playerNumber)>=8&&team1button.isChecked()){
+						team1button.setChecked(false);
+						team2button.setChecked(true);
+					}
+					else if(Integer.parseInt(playerNumber)<8&&team2button.isChecked()){
+						team1button.setChecked(true);
+						team2button.setChecked(false);
+					}
+				}
+			}
+		});
+	}
+	public synchronized void makeAToast(final String message){
+		runOnUiThread(new Runnable(){
+			@Override
+			public void run() {
+				Toast.makeText(GameFragment.ma, message, Toast.LENGTH_SHORT).show();
+			}
 		});
 	}
 	public void setScanEnabled(boolean enabled){

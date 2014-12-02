@@ -30,6 +30,7 @@ public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callbac
     private boolean mPreviewing = true;
     private boolean mAutoFocus = true;
     private boolean mSurfaceCreated = false;
+    public static boolean alreadySetUp = false;
     private Camera.PreviewCallback mPreviewCallback;
 
     public CameraPreviewT(Context context) {
@@ -83,7 +84,15 @@ public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callbac
         if(mCamera != null) {
             try {
                 mPreviewing = true;
-                setupCameraParameters();
+                System.out.println(alreadySetUp);
+//                if(!alreadySetUp){
+                try{
+                	setupCameraParameters();
+                }catch(Exception e){}
+//                	mCamera.setPreviewCallback(mPreviewCallback);
+//                	mCamera.setOneShotPreviewCallback(mPreviewCallback);
+                
+                
                 mCamera.setPreviewDisplay(getHolder());
                 mCamera.setDisplayOrientation(getDisplayOrientation());
                 mCamera.setOneShotPreviewCallback(mPreviewCallback);
@@ -133,6 +142,7 @@ public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callbac
         parameters.setPreviewSize(optimalSize.width, optimalSize.height);
         parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         mCamera.setParameters(parameters);
+        alreadySetUp = true;
     }
 
     public int getDisplayOrientation() {

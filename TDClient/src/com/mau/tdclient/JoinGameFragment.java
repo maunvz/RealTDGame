@@ -11,11 +11,13 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
+import android.widget.RadioButton;
+import android.widget.RadioGroup;
 
 public class JoinGameFragment extends Fragment implements ResultHandler{
 	boolean QREnabled;
 	int QR_time = 5000;
-	
+	private View v;
 	MainActivity ma;
 	private ZBarScannerView mScannerView;
 	
@@ -32,7 +34,7 @@ public class JoinGameFragment extends Fragment implements ResultHandler{
 		ma.screenNo=MainActivity.JOIN_SCREEN;
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-		View v = inflater.inflate(R.layout.join_game_fragment, container, false);
+		v = inflater.inflate(R.layout.join_game_fragment, container, false);
 		mScannerView = (ZBarScannerView)(v.findViewById(R.id.zbarscan));
 		mScannerView.setOnTouchListener(new OnTouchListener(){
 			@Override
@@ -47,7 +49,9 @@ public class JoinGameFragment extends Fragment implements ResultHandler{
 	}
 	@Override
 	public void handleResult(Result rawResult) {
-		ma.setQRId(rawResult.getContents());
+		String playerNumber = rawResult.getContents();
+		ma.setQRId(playerNumber);
+		
 	}
 	public void onResume(){
 		super.onResume();
