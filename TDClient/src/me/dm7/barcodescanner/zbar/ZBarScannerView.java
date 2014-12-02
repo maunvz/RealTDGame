@@ -57,7 +57,6 @@ public class ZBarScannerView extends BarcodeScannerView {
     		camera.setOneShotPreviewCallback(this);
     	if(!GameFragment.QREnabled&&MainActivity.screenNo==MainActivity.GAME_SCREEN){
     		camera.setOneShotPreviewCallback(this);
-
         	GameFragment.QREnabled=true;
         	Animation myFadeOutAnimation = AnimationUtils.loadAnimation(GameFragment.ma, R.anim.fade_out);
     		final ImageView v = (ImageView) GameFragment.ma.findViewById(R.id.fader);
