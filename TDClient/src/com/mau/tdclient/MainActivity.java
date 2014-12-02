@@ -188,6 +188,10 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void updateStateDisplay(){
 		if(screenNo!=GAME_SCREEN)return;
+		if(getPlayer().getTeam() == Team.TEAM_1)
+			findViewById(R.id.teamIdentifier).setBackgroundResource(R.drawable.scoreboard_red);
+		if(getPlayer().getTeam() == Team.TEAM_2)
+			findViewById(R.id.teamIdentifier).setBackgroundResource(R.drawable.scoreboard_blue);
 		float min = 0.2f;
 		float team1_ratio = ((gameState.getTeamScores()[0]+0.001f)/(gameState.getTeamScores()[1]+0.001f))/2.0f;
 		if(team1_ratio < min){
@@ -223,6 +227,9 @@ public class MainActivity extends ActionBarActivity {
 		((TextView)findViewById(R.id.player_who_has_red_flag)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/LCD Display Grid.ttf"));
 
 		if(!getGameState().playerWithFlag1.equals("")){
+			RelativeLayout.LayoutParams rl1 = (RelativeLayout.LayoutParams)((ImageView)findViewById(R.id.person_has_flag_blue)).getLayoutParams();
+			rl1.width = redFlag.getHeight();
+			((ImageView)findViewById(R.id.person_has_flag_blue)).setLayoutParams(rl1);
 			redFlag.setVisibility(View.GONE);
 			((TextView)findViewById(R.id.player_who_has_red_blue)).setVisibility(View.VISIBLE);
 			((TextView)findViewById(R.id.colonRight)).setVisibility(View.VISIBLE);
@@ -234,8 +241,12 @@ public class MainActivity extends ActionBarActivity {
 			((TextView)findViewById(R.id.player_who_has_red_blue)).setVisibility(View.GONE);
 			((TextView)findViewById(R.id.colonRight)).setVisibility(View.GONE);
 			((ImageView)findViewById(R.id.person_has_flag_blue)).setVisibility(View.GONE);
+			
 		}
 		if(!getGameState().playerWithFlag2.equals("")){
+			RelativeLayout.LayoutParams rl2 = (RelativeLayout.LayoutParams)((ImageView)findViewById(R.id.person_has_flag_red)).getLayoutParams();
+			rl2.width = blueFlag.getHeight();
+			((ImageView)findViewById(R.id.person_has_flag_red)).setLayoutParams(rl2);
 			blueFlag.setVisibility(View.GONE);
 			((TextView)findViewById(R.id.player_who_has_red_flag)).setVisibility(View.VISIBLE);
 			((TextView)findViewById(R.id.colonLeft)).setVisibility(View.VISIBLE);
@@ -247,6 +258,7 @@ public class MainActivity extends ActionBarActivity {
 			((TextView)findViewById(R.id.player_who_has_red_flag)).setVisibility(View.GONE);
 			((TextView)findViewById(R.id.colonLeft)).setVisibility(View.GONE);
 			((ImageView)findViewById(R.id.person_has_flag_red)).setVisibility(View.GONE);
+			
 		}
 //		((TextView)findViewById(R.id.player_who_has_red_blue)).setText("Flag: "+(gameState.playerWithFlag1.equals("")?"At Base":gameState.playerWithFlag1));
 //		((TextView)findViewById(R.id.player_who_has_red_flag)).setText("Flag: "+(gameState.playerWithFlag2.equals("")?"At Base":gameState.playerWithFlag2));

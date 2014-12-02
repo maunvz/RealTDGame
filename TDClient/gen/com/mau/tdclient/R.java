@@ -1086,7 +1086,9 @@ containing a value of this type.
         public static final int red_flag=0x7f02005b;
         public static final int red_flag_flipped=0x7f02005c;
         public static final int red_team=0x7f02005d;
-        public static final int scoreboardactual=0x7f02005e;
+        public static final int scoreboard_blue=0x7f02005e;
+        public static final int scoreboard_red=0x7f02005f;
+        public static final int scoreboardactual=0x7f020060;
     }
     public static final class id {
         public static final int action_bar=0x7f05001c;
@@ -1134,11 +1136,11 @@ containing a value of this type.
         public static final int normal=0x7f050000;
         public static final int person_has_flag_blue=0x7f050045;
         public static final int person_has_flag_red=0x7f050042;
-        public static final int player_score_textview=0x7f050058;
+        public static final int player_score_textview=0x7f050059;
         public static final int player_state_display=0x7f050040;
         public static final int player_who_has_red_blue=0x7f050047;
         public static final int player_who_has_red_flag=0x7f050044;
-        public static final int powerup_button_holder=0x7f050059;
+        public static final int powerup_button_holder=0x7f05005a;
         public static final int progress_circular=0x7f050018;
         public static final int progress_horizontal=0x7f050019;
         public static final int qr_id_textview=0x7f050054;
@@ -1160,19 +1162,20 @@ containing a value of this type.
         public static final int showHome=0x7f050004;
         public static final int showTitle=0x7f050006;
         public static final int split_action_bar=0x7f05001e;
-        public static final int status_message_textview=0x7f05005a;
+        public static final int status_message_textview=0x7f05005b;
         public static final int submit_area=0x7f050039;
         public static final int tabMode=0x7f050002;
         public static final int team1_button=0x7f050052;
         public static final int team1_holder=0x7f050048;
-        public static final int team1_list=0x7f05005b;
+        public static final int team1_list=0x7f05005c;
         public static final int team1_state=0x7f050049;
         public static final int team2_button=0x7f050053;
         public static final int team2_holder=0x7f05004b;
-        public static final int team2_list=0x7f05005c;
+        public static final int team2_list=0x7f05005d;
         public static final int team2_state=0x7f05004c;
         public static final int teamHasFlagBlue=0x7f05004d;
         public static final int teamHasFlagRed=0x7f05004a;
+        public static final int teamIdentifier=0x7f050058;
         public static final int team_radio_group=0x7f050051;
         public static final int title=0x7f05002b;
         public static final int top_action_bar=0x7f050020;
