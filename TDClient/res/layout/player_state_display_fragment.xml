@@ -25,5 +25,9 @@
 	    android:textColor="@color/white"
 	    android:layout_alignParentBottom="true"
 	    android:gravity="center"
+	    	    android:shadowColor = "#000000"
+	    android:shadowDx = "1"
+	    android:shadowDy = "1"
+	    android:shadowRadius = "10"
 	    android:textAppearance="@android:style/TextAppearance.Medium"/>
 </RelativeLayout>

@@ -24,6 +24,7 @@ import android.view.animation.AnimationUtils;
 import android.view.inputmethod.InputMethodManager;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.RadioButton;
 import android.widget.RadioGroup;
@@ -216,8 +217,39 @@ public class MainActivity extends ActionBarActivity {
 
 		((TextView)findViewById(R.id.team1_state)).setText(team1_text);
 		((TextView)findViewById(R.id.team2_state)).setText(team2_text);
-		((TextView)findViewById(R.id.player_who_has_red_blue)).setText("Flag: "+(gameState.playerWithFlag1.equals("")?"At Base":gameState.playerWithFlag1));
-		((TextView)findViewById(R.id.player_who_has_red_flag)).setText("Flag: "+(gameState.playerWithFlag2.equals("")?"At Base":gameState.playerWithFlag2));
+		ImageView redFlag = (ImageView)findViewById(R.id.teamHasFlagRed);
+		ImageView blueFlag = (ImageView)findViewById(R.id.teamHasFlagBlue);
+		((TextView)findViewById(R.id.player_who_has_red_blue)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/LCD Display Grid.ttf"));
+		((TextView)findViewById(R.id.player_who_has_red_flag)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/LCD Display Grid.ttf"));
+
+		if(!getGameState().playerWithFlag1.equals("")){
+			redFlag.setVisibility(View.GONE);
+			((TextView)findViewById(R.id.player_who_has_red_blue)).setVisibility(View.VISIBLE);
+			((TextView)findViewById(R.id.colonRight)).setVisibility(View.VISIBLE);
+			((TextView)findViewById(R.id.player_who_has_red_blue)).setText(gameState.playerWithFlag1);
+			((ImageView)findViewById(R.id.person_has_flag_blue)).setVisibility(View.VISIBLE);
+		}
+		else if(getGameState().playerWithFlag1.equals("")){
+			redFlag.setVisibility(View.VISIBLE);
+			((TextView)findViewById(R.id.player_who_has_red_blue)).setVisibility(View.GONE);
+			((TextView)findViewById(R.id.colonRight)).setVisibility(View.GONE);
+			((ImageView)findViewById(R.id.person_has_flag_blue)).setVisibility(View.GONE);
+		}
+		if(!getGameState().playerWithFlag2.equals("")){
+			blueFlag.setVisibility(View.GONE);
+			((TextView)findViewById(R.id.player_who_has_red_flag)).setVisibility(View.VISIBLE);
+			((TextView)findViewById(R.id.colonLeft)).setVisibility(View.VISIBLE);
+			((ImageView)findViewById(R.id.person_has_flag_red)).setVisibility(View.VISIBLE);
+			((TextView)findViewById(R.id.player_who_has_red_flag)).setText(gameState.playerWithFlag2);
+		}
+		else if(getGameState().playerWithFlag2.equals("")){
+			blueFlag.setVisibility(View.VISIBLE);
+			((TextView)findViewById(R.id.player_who_has_red_flag)).setVisibility(View.GONE);
+			((TextView)findViewById(R.id.colonLeft)).setVisibility(View.GONE);
+			((ImageView)findViewById(R.id.person_has_flag_red)).setVisibility(View.GONE);
+		}
+//		((TextView)findViewById(R.id.player_who_has_red_blue)).setText("Flag: "+(gameState.playerWithFlag1.equals("")?"At Base":gameState.playerWithFlag1));
+//		((TextView)findViewById(R.id.player_who_has_red_flag)).setText("Flag: "+(gameState.playerWithFlag2.equals("")?"At Base":gameState.playerWithFlag2));
 		((TextView)findViewById(R.id.player_score_textview)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/LCD Display Grid.ttf"));
 		((TextView)findViewById(R.id.player_score_textview)).setText("Score: "+player.score);
 	}
