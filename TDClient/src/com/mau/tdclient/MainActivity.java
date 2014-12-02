@@ -15,6 +15,7 @@ import android.os.Bundle;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -25,6 +26,7 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.RadioGroup;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -183,10 +185,30 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void updateStateDisplay(){
 		if(screenNo!=GAME_SCREEN)return;
-		String team1_text="Team 1\n";
-		String team2_text="Team 2\n";
-		team1_text+="Score: "+gameState.getTeamScores()[0]+"\n";
-		team2_text+="Score: "+gameState.getTeamScores()[1]+"\n";
+		float min = 0.2f;
+		float team1_ratio = ((gameState.getTeamScores()[0]+0.001f)/(gameState.getTeamScores()[1]+0.001f))/2.0f;
+		if(team1_ratio < min){
+			team1_ratio = min;
+		}
+		else if(team1_ratio > 1.0f-min){
+			team1_ratio = 1.0f-min;
+		}
+		RelativeLayout team1_layout = ((RelativeLayout)findViewById(R.id.team1_holder));
+		RelativeLayout team2_layout = ((RelativeLayout)findViewById(R.id.team2_holder));
+		ResizeAnimation team1_animation = new ResizeAnimation(team1_layout,((LinearLayout.LayoutParams)team1_layout.getLayoutParams()).weight,team1_ratio);
+		ResizeAnimation team2_animation = new ResizeAnimation(team2_layout,((LinearLayout.LayoutParams)team2_layout.getLayoutParams()).weight,1.0f-team1_ratio);
+		team1_layout.startAnimation(team1_animation);
+		team2_layout.startAnimation(team2_animation);
+//		team1_layout.setLayoutParams(new LinearLayout.LayoutParams(0,
+//				LayoutParams.MATCH_PARENT,team1_ratio));
+//		team2_layout.setLayoutParams(new LinearLayout.LayoutParams(0,
+//				LayoutParams.MATCH_PARENT,1.0f-team1_ratio));
+		String team1_text="";
+		String team2_text="";
+		((TextView)findViewById(R.id.team1_state)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/spyagency2_1.ttf"));
+		((TextView)findViewById(R.id.team2_state)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/spyagency2_1.ttf"));
+		team1_text+=gameState.getTeamScores()[0]+"\n";
+		team2_text+=gameState.getTeamScores()[1]+"\n";
 		team1_text+="Flag: "+(gameState.playerWithFlag1.equals("")?"At Base":gameState.playerWithFlag1)+"\n";
 		team2_text+="Flag: "+(gameState.playerWithFlag2.equals("")?"At Base":gameState.playerWithFlag2)+"\n";
 
