@@ -12,6 +12,8 @@ import java.util.Enumeration;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
+import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 
 import com.mau.tdgame.models.Event;
 import com.mau.tdgame.models.GameState;
@@ -167,5 +169,12 @@ public class ServerMain {
 	}
 	public static void main(String[] args) {
 		new ServerMain();
+		 try {
+			UIManager.setLookAndFeel(
+			            UIManager.getCrossPlatformLookAndFeelClassName());
+		} catch (ClassNotFoundException | InstantiationException
+				| IllegalAccessException | UnsupportedLookAndFeelException e) {
+			e.printStackTrace();
+		}
 	}
 }

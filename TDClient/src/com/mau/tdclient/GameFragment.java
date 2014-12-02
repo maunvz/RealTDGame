@@ -86,24 +86,24 @@ public class GameFragment extends Fragment implements ResultHandler{
 			return;
 		}
 		else if(rawResult.getContents().contains("player")){
-			if(ma.getPlayer().getTeam() == 0){
-				if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==0){
-					return;
-				}
-				else if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==1&&
-						!ma.getGameState().getPlayerByQRId(rawResult.getContents()).alive){
-					return;
-				}
-			}
-			else{
-				if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==1){
-					return;
-				}
-				else if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==0&&
-						!ma.getGameState().getPlayerByQRId(rawResult.getContents()).alive){
-					return;
-				}
-			}
+//			if(ma.getPlayer().getTeam() == 0){
+//				if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==0){
+//					return;
+//				}
+//				else if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==1&&
+//						!ma.getGameState().getPlayerByQRId(rawResult.getContents()).alive){
+//					return;
+//				}
+//			}
+//			else{
+//				if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==1){
+//					return;
+//				}
+//				else if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==0&&
+//						!ma.getGameState().getPlayerByQRId(rawResult.getContents()).alive){
+//					return;
+//				}
+//			}
 		}
 		else if(rawResult.getContents().contains("flag")){
 			if(!ma.getGameState().playerWithFlag1.equals("")){

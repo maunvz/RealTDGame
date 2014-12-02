@@ -121,8 +121,8 @@ public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callbac
 //                mCamera.cancelAutoFocus();
                 try{
                 	mCamera.setOneShotPreviewCallback(null);
+                	
                 }catch(Exception e){}
-                mCamera.stopPreview();
             } catch(Exception e) {
                 Log.e(TAG, e.toString(), e);
             }
