@@ -263,7 +263,7 @@ public class MainActivity extends ActionBarActivity {
 //		((TextView)findViewById(R.id.player_who_has_red_blue)).setText("Flag: "+(gameState.playerWithFlag1.equals("")?"At Base":gameState.playerWithFlag1));
 //		((TextView)findViewById(R.id.player_who_has_red_flag)).setText("Flag: "+(gameState.playerWithFlag2.equals("")?"At Base":gameState.playerWithFlag2));
 		((TextView)findViewById(R.id.player_score_textview)).setTypeface(Typeface.createFromAsset(getAssets(), "fonts/LCD Display Grid.ttf"));
-		((TextView)findViewById(R.id.player_score_textview)).setText("Score: "+player.score);
+		((TextView)findViewById(R.id.player_score_textview)).setText(""+player.score);
 	}
 	//called when a new player joins the waiting room adds all the names of the players in gameState to their respective lists
 	public void updateWaitRoom(){

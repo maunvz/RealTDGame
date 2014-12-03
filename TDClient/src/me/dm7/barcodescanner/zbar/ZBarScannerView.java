@@ -67,7 +67,6 @@ public class ZBarScannerView extends BarcodeScannerView {
     		camera.setOneShotPreviewCallback(this);
     	}
     	if(!GameFragment.QREnabled&&MainActivity.screenNo==MainActivity.GAME_SCREEN){
-//    		camera.setOneShotPreviewCallback(this);
         	GameFragment.QREnabled=true;
         	final Animation myFadeOutAnimation = AnimationUtils.loadAnimation(GameFragment.ma, R.anim.fade_out);
     		final ImageView v = (ImageView) GameFragment.ma.findViewById(R.id.fader);
@@ -92,22 +91,6 @@ public class ZBarScannerView extends BarcodeScannerView {
     	          	});
     			}
     		});
-//    		v.startAnimation(myFadeOutAnimation);
-//    		
-//    		myFadeOutAnimation.setAnimationListener(new AnimationListener(){
-//
-//    			@Override
-//    			public void onAnimationEnd(Animation animation) {
-//    				v.setBackgroundColor(Color.TRANSPARENT);
-//    			}
-//
-//    			@Override
-//    			public void onAnimationRepeat(Animation animation) {}
-//
-//    			@Override
-//    			public void onAnimationStart(Animation animation) {}
-//          		
-//          	});
         }
     }
 }

@@ -11,15 +11,17 @@
         ></View>
 	<TextView
 		android:id="@+id/player_score_textview"
-	    android:layout_width="match_parent"
+	    android:layout_width="wrap_content"
 	    android:layout_height="wrap_content"
 	    android:textColor="@color/white"
-		android:gravity="center"
+		android:layout_centerHorizontal="true"
 			    	    android:shadowColor = "#000000"
 	    android:shadowDx = "1"
 	    android:shadowDy = "1"
 	    android:shadowRadius = "9"
-	    android:textAppearance="@android:style/TextAppearance.Medium"/>
+	    android:padding = "5dp"
+	    android:background = "#C8000000"
+	    android:textAppearance="@android:style/TextAppearance.Large"/>
 	<LinearLayout
 	    android:id="@+id/powerup_button_holder"
 	    android:orientation="horizontal"
