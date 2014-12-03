@@ -31,6 +31,7 @@ public class GameState {
 	public Team team2;
 	public String playerWithFlag1;
 	public String playerWithFlag2;
+	public int activePlayers;
 	
 	public GameState(){
 		team1 = new Team(Team.TEAM_1);
@@ -58,6 +59,8 @@ public class GameState {
 		Player player1 = getPlayerByName(event.player1);
 		message = "";
 		switch(event.getType()){
+		case Event.START_GAME:
+			startGame();
 		case Event.DIED:
 			playerDies(player1);
 			break;
@@ -198,14 +201,28 @@ public class GameState {
 	}
 	
 	public void addPlayer(Player player){
+		activePlayers++;
 		players.add(player);
 		if(player.getTeam()==Team.TEAM_1)team1.addPlayer(player.getName());
 		if(player.getTeam()==Team.TEAM_2)team2.addPlayer(player.getName());
 	}
 	public void removePlayer(Player player){
+		activePlayers--;
+		if(playerWithFlag1.equals(player.getName()))playerWithFlag1="";
+		if(playerWithFlag2.equals(player.getName()))playerWithFlag2="";
 		players.remove(player);
 		team1.removePlayer(player.getName());
 		team2.removePlayer(player.getName());
+	}
+	public void disconnectPlayer(Player player){
+		player.connected = false;
+		if(playerWithFlag1.equals(player.getName()))playerWithFlag1="";
+		if(playerWithFlag2.equals(player.getName()))playerWithFlag2="";
+		activePlayers--;
+	}
+	public void reconnectPlayer(Player player){
+		activePlayers++;
+		player.connected=true;
 	}
 	public String[][] listPlayers(){
 		String[][] playerList = new String[2][];

@@ -20,21 +20,18 @@ import com.mau.tdgame.models.Constants;
 
 public class ServerMain {
 	private int initialPort = Constants.INITIAL_PORT;
-	private Console console;
-	private GlobalOptionsPanel gop;
-	private PlayerOptionsPanel pop;
+	Console console;
+	PlayerOptionsPanel pop;
 	private ArrayList<GameSession> sessions;
-	
+	private SessionOptionsPanel sop;
 	Random rand;
-	
+	int selectedSession;
 	public ServerMain(){
 		sessions = new ArrayList<GameSession>();
 		rand = new Random();
 		createUI().setVisible(true);
 		startListening();
-	}
-	public void print(String str){
-		console.print(str);
+		selectedSession = -1;
 	}
 	public JFrame createUI(){
 		JFrame frame = new JFrame();
@@ -42,10 +39,11 @@ public class ServerMain {
 		panel.setLayout(new BorderLayout());
 		
 		console = new Console();
-		gop = new GlobalOptionsPanel(this);
+		
+		sop = new SessionOptionsPanel(this);
 		pop = new PlayerOptionsPanel(this);
 		
-		panel.add(gop, BorderLayout.WEST);
+		panel.add(sop, BorderLayout.WEST);
 		panel.add(console, BorderLayout.CENTER);
 		panel.add(pop, BorderLayout.EAST);
 		
@@ -82,6 +80,35 @@ public class ServerMain {
 		}
 		return port;
 	}
+	public String[] getSessionNames(){
+		String[] sessionNames = new String[sessions.size()];
+		for(int i=0; i<sessions.size(); i++){
+			sessionNames[i] = sessions.get(i).getName() + " " + sessions.get(i).getPort();
+		}
+		return sessionNames;
+	}
+	public void setSelectedSession(int index){
+		if(index<0||index>=sessions.size())return;
+		pop.setSession(sessions.get(index));
+		pop.playerList.updateLists();
+		console.setSession(sessions.get(index));
+		selectedSession = sessions.get(index).getPort();
+	}
+	public void killSelectedSession(){
+		getSessionByPort(selectedSession).killGame();
+	}
+	public void killSession(int port){
+		GameSession session = getSessionByPort(port);
+		if(session==null)return;
+		sessions.remove(getSessionByPort(port));
+		sop.sessionList.updateLists();
+	}
+	public GameSession getSessionByPort(int port){
+		for(GameSession session:sessions){
+			if(session.getPort()==port)return session;
+		}
+		return null;
+	}
 	public static void main(String[] args) {
 		new ServerMain();
 	}
@@ -107,10 +134,10 @@ public class ServerMain {
 					String name = br.readLine();
 					int maxScore = Integer.parseInt(br.readLine());
 					int port = getUnusedPort();
-					GameSession session = new GameSession(name, port);
+					GameSession session = new GameSession(name, port, ServerMain.this);
 					session.getGameState().maxScore = maxScore;
 					sessions.add(session);
-					print("Created game session "+name+" on port "+port);
+					sop.sessionList.updateLists();
 					pw.println(session.toJSON().toString());
 				}
 			} catch (IOException e) {

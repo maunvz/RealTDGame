@@ -16,9 +16,10 @@ import com.mau.tdgame.models.Player;
 public class PlayerOptionsPanel extends JPanel{
 	private static final long serialVersionUID = 1L;
 	Player player;
-	JLabel playerLabel;
 	PlayerList playerList;
 	ServerMain main;
+	GameSession session;
+	JLabel playerLabel;
 	public PlayerOptionsPanel(final ServerMain main){
 		super();
 		this.main=main;
@@ -32,45 +33,42 @@ public class PlayerOptionsPanel extends JPanel{
 		kickButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {	
-				//main.kickPlayer(playerList.getSelectedPlayer());
+				if(session==null)return;
+				session.kickPlayer(playerList.getSelectedPlayer());
 			}
 		});
 		JButton killButton = new JButton("Kill");
 		killButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {	
-				//main.killPlayer(playerList.getSelectedPlayer());
+				if(session==null)return;
+				session.killPlayer(playerList.getSelectedPlayer());
 			}
 		});
 		JButton respawnButton = new JButton("Respawn");
 		respawnButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {	
-				//main.respawnPlayer(playerList.getSelectedPlayer());
+				if(session==null)return;
+				session.respawnPlayer(playerList.getSelectedPlayer());
 			}
 		});
 		JButton givePowerButton = new JButton("Power");
 		givePowerButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
+				if(session==null)return;
 				int pow = Integer.parseInt(JOptionPane.showInputDialog("What power to give?"));
-				//main.powerPlayer(playerList.getSelectedPlayer(), pow);
+				session.powerPlayer(playerList.getSelectedPlayer(), pow);
 			}
 		});
 		JButton sendMessageButton = new JButton("Message");
 		sendMessageButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {	
+				if(session==null)return;
 				String message = JOptionPane.showInputDialog("What message to send?");
-				//main.messagePlayer(playerList.getSelectedPlayer(), message);
-			}
-		});
-		JButton setSensitivityButton = new JButton("Sensitivity");
-		setSensitivityButton.addActionListener(new ActionListener(){
-			@Override
-			public void actionPerformed(ActionEvent e) {	
-				float sens = Float.parseFloat(JOptionPane.showInputDialog("What player sensitivity?"));
-				//main.setPlayerSensitivity(playerList.getSelectedPlayer(), sens);
+				session.messagePlayer(playerList.getSelectedPlayer(), message);
 			}
 		});
 		buttonPanel.add(kickButton);
@@ -78,7 +76,6 @@ public class PlayerOptionsPanel extends JPanel{
 		buttonPanel.add(respawnButton);
 		buttonPanel.add(givePowerButton);
 		buttonPanel.add(sendMessageButton);
-		buttonPanel.add(setSensitivityButton);
 		
 		playerLabel = new JLabel();
 		playerLabel.setPreferredSize(new Dimension(100,100));
@@ -94,5 +91,9 @@ public class PlayerOptionsPanel extends JPanel{
 	public void updatePlayerInfo(){
 		String text = player.getName()+"\n";
 		playerLabel.setText(text);
+	}
+	public void setSession(GameSession session){
+		this.session = session;
+		playerList.setSession(session);
 	}
 }

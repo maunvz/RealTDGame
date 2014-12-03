@@ -14,8 +14,8 @@ public class Console extends JPanel{
 		JScrollPane pane = new JScrollPane(textArea);
 		add(pane);
 	}
-	public synchronized void print(String str){
-		textArea.append(str+"\n");
+	public synchronized void setSession(GameSession session){
+		textArea.setText(session.consoleText.toString());
 		textArea.setCaretPosition(textArea.getDocument().getLength());
 	}
 }

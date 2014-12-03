@@ -54,9 +54,8 @@ public class MainActivity extends ActionBarActivity {
 	private MediaPlayer mplayer;
 	private NetworkConnection nc;
 	private int port;
-	public boolean owner;
 	public static int screenNo;
-
+	public static boolean destroyed;
 	//Game state variables
 	private String QRId;
 	private boolean gameStarted;
@@ -359,8 +358,8 @@ public class MainActivity extends ActionBarActivity {
 		getFragmentManager().beginTransaction().add(R.id.fragment_holder, new HomeScreenFragment(this)).commit();
 		
 		gameStarted=false;
-		owner=false;
 		screenNo=HOME_SCREEN;
+		destroyed=false;
 		createButtons();
 	}
 	//when the home screen's join game button is pressed
@@ -378,9 +377,13 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void onConnectClicked(View view){
 		//Hide keyboard
-		InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
-		inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
-        //Opens a connection based on the input
+		try{
+			InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
+			inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+		} catch (Exception e){
+			e.printStackTrace();
+		}
+		//Opens a connection based on the input
 		String ip = Constants.host;
         String username = ((EditText)findViewById(R.id.username_edit_text)).getEditableText().toString();
         int selectedId = ((RadioGroup)findViewById(R.id.team_radio_group)).getCheckedRadioButtonId();
@@ -409,6 +412,7 @@ public class MainActivity extends ActionBarActivity {
 	public void onDestroy(){
 		super.onDestroy();
 		if(gameStarted)mplayer.release();
+		destroyed=true;
 	}
 	public void prepareAudio(){
 	    try {
@@ -430,7 +434,10 @@ public class MainActivity extends ActionBarActivity {
 		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new GameFragment(this)).commit();
 	}
 	public void reset(){
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new JoinGameFragment(this)).commit();
+		if(destroyed)return;
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new HomeScreenFragment(this)).commit();
+		screenNo = HOME_SCREEN;
+		port = -1;
 	}
 	//creates a popup dialog box that tells the player message
 	public void alertUser(String title, String message){

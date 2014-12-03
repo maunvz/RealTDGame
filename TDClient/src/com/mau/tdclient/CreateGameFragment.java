@@ -84,7 +84,6 @@ public class CreateGameFragment extends Fragment{
 				JSONObject session = new JSONObject(result);
 				int port = session.getInt("port");
 				ma.joinGame(port);
-				ma.owner=true;
 			} catch (JSONException e) {
 				e.printStackTrace();
 			}

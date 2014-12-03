@@ -19,11 +19,16 @@ public class GameSession {
 	private ArrayList<ClientThread> clients;
 	private ServerSocket socket;
 	private GameState gameState;
-
-	public GameSession(String name, int sessionPort){
+	StringBuffer consoleText;
+	private boolean active;
+	ServerMain main;
+	public GameSession(String name, int sessionPort, ServerMain main){
 		clients = new ArrayList<ClientThread>();
 		this.sessionPort = sessionPort;
 		this.name = name;
+		this.main=main;
+		active=true;
+		consoleText = new StringBuffer();
 		print("Listening on port: "+sessionPort);
 		startListening();
 	}
@@ -33,7 +38,7 @@ public class GameSession {
 			public void run(){
 				try {
 					socket = new ServerSocket(sessionPort);
-					while(true){
+					while(active){
 						Socket client = socket.accept();
 						ClientThread thread = new ClientThread(client, GameSession.this);
 						thread.execute();
@@ -48,25 +53,29 @@ public class GameSession {
 		listenThread.start();
 		print("Waiting for players to connect.");
 	}
-	public void print(String str){
-		
+	public synchronized void print(String str){
+		consoleText.append(str+"\n");
+		if(main.selectedSession==sessionPort)main.console.setSession(this);
 	}
 	public synchronized GameState getGameState(){
 		return gameState;
 	}
 	public void kickPlayer(Player player){
 		gameState.removePlayer(player);
-		//pop.playerList.updateLists();
+		if(main.selectedSession==sessionPort)main.pop.playerList.updateLists();
 		for(ClientThread client:clients){
 			if(client.player==null)continue;
 			if(client.player.equals(player)){
-				client.closeConnection();
-				client.cancel(true);
-				clients.remove(client);
+				removeClient(client);
 				return;
 			}
 		}
 		broadcastGameState();
+	}
+	public void removeClient(ClientThread client){
+		client.closeConnection();
+		client.cancel(true);
+		clients.remove(client);
 	}
 	public void killPlayer(Player player){
 		gameState.playerDies(player);
@@ -120,10 +129,18 @@ public class GameSession {
 		print("Ending Game.");
 		gameState.endGame();
 		broadcastGameState();
+		killGame();
+	}
+	public void killGame(){
+		active=false;
+		for(ClientThread client:clients){
+			client.kill();
+		}
+		main.killSession(sessionPort);
 	}
 	public synchronized void addPlayer(Player player){
 		gameState.addPlayer(player);
-		//pop.playerList.updateLists();
+		main.pop.playerList.updateLists();
 	}
 	public int getPort(){
 		return sessionPort;

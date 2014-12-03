@@ -13,6 +13,7 @@ public class Player {
 	public static final int RESPAWN_ANYWHERE = 3;//click the button to respawn
 	public static final String[] POWER_UP_NAMES = {"NUKE","SNIPER","STRONGER","RESPAWN"};
 	public boolean alive;
+	public boolean connected;
 	public int score;
 	private int deaths;
 	private int kills;
@@ -36,6 +37,7 @@ public class Player {
 		stronger=false;
 		powerups = new ArrayList<Integer>();
 		killCount=0;
+		connected = true;
 	}
 	public String getName(){
 		return name;

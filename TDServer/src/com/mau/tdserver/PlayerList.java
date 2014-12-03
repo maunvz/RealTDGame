@@ -17,6 +17,7 @@ public class PlayerList extends JPanel{
 	DefaultListModel<String> lm1;
 	ServerMain main;
 	PlayerOptionsPanel pop;
+	GameSession session;
 	public PlayerList(ServerMain main, PlayerOptionsPanel pop){
 		super();
 		this.pop=pop;
@@ -36,14 +37,18 @@ public class PlayerList extends JPanel{
 				
 			}
 		});
-		//updateLists();
+		updateLists();
 	}
-	/*
+	public void setSession(GameSession session){
+		this.session = session;
+		updateLists();
+	}
 	public void updateLists(){
 		lm1.addElement(" ");
-		if(main.getGameState()==null)return;
+		if(session==null)return;
+		if(session.getGameState()==null)return;
 		lm1.removeAllElements();
-		String[][] players = main.getGameState().listPlayers();
+		String[][] players = session.getGameState().listPlayers();
 		for(int i=0; i<players[0].length; i++){
 			lm1.addElement(players[0][i]);
 		}
@@ -53,6 +58,6 @@ public class PlayerList extends JPanel{
 		if(lm1.isEmpty())lm1.addElement(" ");
 	}
 	public Player getSelectedPlayer(){
-		return main.getGameState().getPlayerByName(team1List.getSelectedValue());
-	}*/
+		return session.getGameState().getPlayerByName(team1List.getSelectedValue());
+	}
 }
