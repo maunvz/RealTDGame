@@ -55,6 +55,7 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 				JSONObject gameStateJSON = new JSONObject(br.readLine());
 				ma.joinGame(Player.fromJSON(playerJSON), GameState.fromJSON(gameStateJSON));
 			} catch (JSONException e){
+				
 				socket.close();
 				publishProgress();
 				return null;
@@ -67,12 +68,13 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 					GameState state = GameState.fromJSON(new JSONObject(str));
 					publishProgress(state);
 				} catch (JSONException e) {
-					e.printStackTrace();
+					//e.printStackTrace();
 				}
 			}
 			socket.close();
 		} catch (IOException e) {
-			e.printStackTrace();
+			System.out.println("DIED");
+			//e.printStackTrace();
 		}
 		return null;
 	}
@@ -90,6 +92,6 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 		}
 	}
 	protected void onPostExecute(Void result){
-		ma.reset();
+//		ma.reset();
 	}
 }

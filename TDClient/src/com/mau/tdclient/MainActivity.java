@@ -71,7 +71,8 @@ public class MainActivity extends ActionBarActivity {
 		}
 		gameState = newGameState;
 		if(screenNo==GAME_SCREEN&&!newGameState.gameStarted()){//game ended
-			reset(); return;
+			reset(); 
+			return;
 		}
 		if(!gameState.gameStarted()){
 			updateWaitRoom();return;

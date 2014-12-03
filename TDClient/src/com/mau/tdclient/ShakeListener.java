@@ -1,10 +1,14 @@
 package com.mau.tdclient;
 
+import android.content.Context;
 import android.graphics.Color;
+import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
+import android.os.Handler;
+import android.os.HandlerThread;
 import android.util.FloatMath;
 import android.widget.TextView;
 
@@ -20,6 +24,9 @@ public class ShakeListener implements SensorEventListener{
 	static private boolean listenerOn = true;
 	public ShakeListener(MainActivity ma){
 		this.ma=ma;
+		SensorManager sm=(SensorManager)ma.getSystemService(Context.SENSOR_SERVICE);
+		Sensor s=sm.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0); 
+		sm.registerListener(this,s, SensorManager.SENSOR_DELAY_GAME);
 	}
 	@Override
 	public void onSensorChanged(SensorEvent event) {
