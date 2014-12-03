@@ -90,24 +90,16 @@ public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callbac
                 	setupCameraParameters();
                 }catch(Exception e){}
 //                	mCamera.setPreviewCallback(mPreviewCallback);
-//                	mCamera.setOneShotPreviewCallback(mPreviewCallback);
-                
-                
+//                	mCamera.setOneShotPreviewCallback(mPreviewCallback); 
                 mCamera.setPreviewDisplay(getHolder());
                 mCamera.setDisplayOrientation(getDisplayOrientation());
                 mCamera.setOneShotPreviewCallback(mPreviewCallback);
                 Thread t = new Thread(){
                 	public void run(){
                 		mCamera.startPreview();
-
                 	}
                 };
-                
                 t.start();
-//                mCamera.startPreview();
-                if(mAutoFocus) {
-                    //mCamera.autoFocus(null);
-                }
             } catch (Exception e) {
                 Log.e(TAG, e.toString(), e);
             }
@@ -118,7 +110,6 @@ public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callbac
         if(mCamera != null) {
             try {
                 mPreviewing = false;
-//                mCamera.cancelAutoFocus();
                 try{
                 	mCamera.setPreviewCallbackWithBuffer(null);
                 	
@@ -133,7 +124,7 @@ public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callbac
         Camera.Size optimalSize = getOptimalPreviewSize();
         Camera.Parameters parameters = mCamera.getParameters();
         parameters.setPreviewSize(optimalSize.width, optimalSize.height);
-        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_AUTO);
+        parameters.setFocusMode(Camera.Parameters.FOCUS_MODE_CONTINUOUS_PICTURE);
         parameters.setRecordingHint(true);
         mCamera.setParameters(parameters);
         alreadySetUp = true;
@@ -225,7 +216,7 @@ public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callbac
 
     private Runnable doAutoFocus = new Runnable() {
         public void run() {
-            if(mCamera != null && mPreviewing && mAutoFocus && mSurfaceCreated) {
+            if(mCamera != null && mPreviewing  && mSurfaceCreated) {
                 mCamera.autoFocus(autoFocusCB);
             }
         }
@@ -235,6 +226,7 @@ public class CameraPreviewT extends SurfaceView implements SurfaceHolder.Callbac
     Camera.AutoFocusCallback autoFocusCB = new Camera.AutoFocusCallback() {
         public void onAutoFocus(boolean success, Camera camera) {
             mAutoFocusHandler.postDelayed(doAutoFocus, 1000);
+            System.out.println("HI");
         }
     };
 }
