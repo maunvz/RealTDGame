@@ -12,10 +12,10 @@ import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.Bundle;
+import android.os.Vibrator;
 import android.support.v7.app.ActionBarActivity;
 import android.view.View;
 import android.view.View.OnClickListener;
-import android.view.ViewGroup.LayoutParams;
 import android.view.Window;
 import android.view.WindowManager;
 import android.view.animation.Animation;
@@ -32,6 +32,7 @@ import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.mau.tdgame.models.Constants;
 import com.mau.tdgame.models.Event;
 import com.mau.tdgame.models.GameState;
 import com.mau.tdgame.models.Player;
@@ -41,6 +42,10 @@ public class MainActivity extends ActionBarActivity {
 	public static final int JOIN_SCREEN=0;
 	public static final int WAIT_SCREEN=1;
 	public static final int GAME_SCREEN=2;
+	public static final int GAME_OVER_SCREEN=3;
+	public static final int HOME_SCREEN=4;
+	public static final int CREATE_GAME_SCREEN=5;
+	public static final int GAME_LIST_SCREEN=6;
 	
 	//Technical stuff
 	private SensorManager mSensorManager;
@@ -48,8 +53,10 @@ public class MainActivity extends ActionBarActivity {
 	private ShakeListener listener;
 	private MediaPlayer mplayer;
 	private NetworkConnection nc;
+	private int port;
+	public boolean owner;
 	public static int screenNo;
-	
+
 	//Game state variables
 	private String QRId;
 	private boolean gameStarted;
@@ -127,6 +134,7 @@ public class MainActivity extends ActionBarActivity {
 				actualMessage = actualMessage.substring(0,1).toUpperCase() + actualMessage.substring(1).toLowerCase();
 				tvToChange.setText(actualMessage+" Go respawn.");
 				mplayer.start();
+				vibrate();
 				animateStatus(tvToChange);
 			}
 			else if(gameState.getMessage().contains("died")&&gameState.getMessage().contains(player.getName())){
@@ -135,6 +143,7 @@ public class MainActivity extends ActionBarActivity {
 				tvToChange.setVisibility(View.VISIBLE);
 				tvToChange.setText("You died."+" Go respawn.");
 				mplayer.start();
+				vibrate();
 				animateStatus(tvToChange);
 			}
 		}
@@ -281,6 +290,14 @@ public class MainActivity extends ActionBarActivity {
 		((TextView)findViewById(R.id.team1_list)).setText(team1);
 		((TextView)findViewById(R.id.team2_list)).setText(team2);
 	}
+	public void updateGameOverScreen(){
+		if(screenNo!=GAME_OVER_SCREEN){
+			
+		}
+	}
+	public void onStartGameClick(View v) {
+		nc.sendEvent(new Event(Event.START_GAME, "", "", 0));
+	}
 	public synchronized void setQRId(final String id){
 		runOnUiThread(new Runnable(){
 			@Override
@@ -296,6 +313,7 @@ public class MainActivity extends ActionBarActivity {
 					playerNumber = playerNumber.replace("player_","");
 					RadioButton team1button = (RadioButton)findViewById(R.id.team1_button);
 					RadioButton team2button = (RadioButton)findViewById(R.id.team2_button);
+					if(team1button==null||team2button==null)return;
 					if(Integer.parseInt(playerNumber)>=8&&team1button.isChecked()){
 						team1button.setChecked(false);
 						team2button.setChecked(true);
@@ -315,13 +333,6 @@ public class MainActivity extends ActionBarActivity {
 				Toast.makeText(GameFragment.ma, message, Toast.LENGTH_SHORT).show();
 			}
 		});
-	}
-	public void setScanEnabled(boolean enabled){
-		Button scanButton = ((Button)findViewById(R.id.scan_button));
-		Button connectButton = ((Button)findViewById(R.id.connect_button));
-		if(scanButton==null)return;
-		scanButton.setEnabled(enabled);
-		connectButton.setEnabled(enabled);
 	}
 	public synchronized String getQRId(){
 		return QRId;
@@ -344,23 +355,33 @@ public class MainActivity extends ActionBarActivity {
 		getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);		
-		JoinGameFragment jgFrag = new JoinGameFragment(this);
-		getFragmentManager().beginTransaction().add(R.id.fragment_holder, jgFrag).commit();
+
+		getFragmentManager().beginTransaction().add(R.id.fragment_holder, new HomeScreenFragment(this)).commit();
+		
 		gameStarted=false;
-		screenNo=JOIN_SCREEN;
+		owner=false;
+		screenNo=HOME_SCREEN;
 		createButtons();
 	}
-	public void foundServer(String ip){
-		if(screenNo==JOIN_SCREEN){
-			((EditText)findViewById(R.id.ip_edit_text)).setText(ip);
-		}
+	//when the home screen's join game button is pressed
+	public void onJoinClicked(View view){
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new GameListFragment(this)).commit();		
+	}
+	//when the home screen's create game button is pressed
+	public void onCreateClicked(View view){
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new CreateGameFragment(this)).commit();
+	}
+	//when the join screen's join button is pressed
+	public void joinGame(int port){
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new JoinGameFragment(this)).commit();
+		this.port = port;
 	}
 	public void onConnectClicked(View view){
 		//Hide keyboard
 		InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(Activity.INPUT_METHOD_SERVICE);
 		inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
         //Opens a connection based on the input
-		String ip = ((EditText)findViewById(R.id.ip_edit_text)).getEditableText().toString();
+		String ip = Constants.host;
         String username = ((EditText)findViewById(R.id.username_edit_text)).getEditableText().toString();
         int selectedId = ((RadioGroup)findViewById(R.id.team_radio_group)).getCheckedRadioButtonId();
         int teamNo = selectedId==R.id.team1_button?Team.TEAM_1:Team.TEAM_2;
@@ -368,13 +389,12 @@ public class MainActivity extends ActionBarActivity {
         	alertUser("Error","Make sure you have an IP, username, and QR id.");
         	return;
         }
-        nc = new NetworkConnection(ip, username, getQRId(), teamNo, MainActivity.this);
+        nc = new NetworkConnection(port, username, getQRId(), teamNo, MainActivity.this);
         nc.execute();
         System.out.println("Connecting...");
 	}
-	public void onScanClicked(View view){
-		new ServerScanner(this).execute();
-		setScanEnabled(false);
+	public void vibrate(){
+		((Vibrator)getSystemService(VIBRATOR_SERVICE)).vibrate(150);
 	}
 	public void onPause(){
 		super.onPause();

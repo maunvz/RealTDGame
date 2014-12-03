@@ -13,8 +13,8 @@ import android.view.View;
 import android.view.View.OnTouchListener;
 import android.view.ViewGroup;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -31,7 +31,7 @@ public class GameFragment extends Fragment implements ResultHandler{
 	private ZBarScannerView mScannerView;
 	public GameFragment(MainActivity ma){
 		super();
-		this.ma=ma;
+		GameFragment.ma=ma;
 		QREnabled=false;
 	}
 	public void onPause(){
@@ -69,8 +69,7 @@ public class GameFragment extends Fragment implements ResultHandler{
 		else if(rawResult.getContents().equals("base_0")&&ma.getPlayer().getTeam()==Team.TEAM_1){
 			if(ma.getPlayer().alive&&!(ma.getGameState().playerWithFlag2.equals(ma.getPlayer().getName())||
 					ma.getGameState().playerWithFlag1.equals(ma.getPlayer().getName()))){
-//				Toast.makeText(getActivity(), "You already got the flag",Toast.LENGTH_SHORT).show();
-				
+//				Toast.makeText(getActivity(), "You already got the flag",Toast.LENGTH_SHORT).show();			
 				return;
 			}
 		}
@@ -168,7 +167,10 @@ public class GameFragment extends Fragment implements ResultHandler{
         }.start();
 	}
 	public synchronized void disableQR(){
-	
+		if(this.getActivity()==null){
+			stopQRAfterAnimation();
+			return;
+		}
 		myFadeOutAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.fade_in);
 		final ImageView v = (ImageView) ma.findViewById(R.id.fader);
 		v.setBackgroundColor(Color.BLACK);
@@ -177,17 +179,7 @@ public class GameFragment extends Fragment implements ResultHandler{
 
 			@Override
 			public void onAnimationEnd(Animation animation){
-				if(!QREnabled)return;
-				Thread t = new Thread(){
-					public void run(){
-						if(mScannerView != null){
-							mScannerView.stopCamera();
-							QREnabled=false;
-						}
-
-					}
-				};
-				t.start();
+				stopQRAfterAnimation();
 			}
 
 			@Override
@@ -197,7 +189,18 @@ public class GameFragment extends Fragment implements ResultHandler{
 			public void onAnimationStart(Animation animation) {}
       		
       	});
-		
-		
+	}
+	public synchronized void stopQRAfterAnimation(){
+		if(!QREnabled)return;
+		Thread t = new Thread(){
+			public void run(){
+				if(mScannerView != null){
+					mScannerView.stopCamera();
+					QREnabled=false;
+				}
+
+			}
+		};
+		t.start();		
 	}
 }

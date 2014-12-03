@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class WaitingRoomFragment extends Fragment{
+public class GameEndedFragment extends Fragment{
 	MainActivity ma;
-	public WaitingRoomFragment(MainActivity ma){
+	public GameEndedFragment(MainActivity ma){
 		super();
 		this.ma=ma;
 	}
@@ -20,11 +20,10 @@ public class WaitingRoomFragment extends Fragment{
 	}
 	public void onResume(){
 		super.onResume();
-		MainActivity.screenNo=MainActivity.WAIT_SCREEN;
-		ma.updateWaitRoom();
+		MainActivity.screenNo=MainActivity.GAME_OVER_SCREEN;
+		ma.updateGameOverScreen();
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.waiting_room_fragment, container, false);    	
-        return view;
+        return inflater.inflate(R.layout.game_list_fragment, container, false);
 	}
 }

@@ -36,8 +36,9 @@ public class PlayerList extends JPanel{
 				
 			}
 		});
-		updateLists();
+		//updateLists();
 	}
+	/*
 	public void updateLists(){
 		lm1.addElement(" ");
 		if(main.getGameState()==null)return;
@@ -53,5 +54,5 @@ public class PlayerList extends JPanel{
 	}
 	public Player getSelectedPlayer(){
 		return main.getGameState().getPlayerByName(team1List.getSelectedValue());
-	}
+	}*/
 }

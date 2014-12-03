@@ -40,14 +40,14 @@ public class GlobalOptionsPanel extends JPanel{
 		startGameButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				 main.startGame();
+				 //main.startGame();
 			}
 		});
 		endGameButton = new JButton("End Game");
 		endGameButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {
-				 main.endGame();
+				 //main.endGame();
 			}
 		});
 		
@@ -64,7 +64,7 @@ public class GlobalOptionsPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {	
 				String message = JOptionPane.showInputDialog("What message to send?");
-				main.messageAll(message);
+				//main.messageAll(message);
 			}
 		});
 		preGamePanel.add(messageAllButton);

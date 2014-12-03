@@ -13,24 +13,25 @@ import org.json.JSONObject;
 
 import android.os.AsyncTask;
 
+import com.mau.tdgame.models.Constants;
 import com.mau.tdgame.models.Event;
 import com.mau.tdgame.models.GameState;
 import com.mau.tdgame.models.Player;
 
 public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 	private Socket socket;
-	private String host;
 	private String username;
 	private String QRId;
 	private int teamNo;
+	private int port;
 
 	private PrintWriter pw;
 	private BufferedReader br;
 	private MainActivity ma;
 	
-	public NetworkConnection(String host, String username, String QRId, int teamNo, MainActivity ma){
+	public NetworkConnection(int port, String username, String QRId, int teamNo, MainActivity ma){
 		super();
-		this.host = host;
+		this.port=port;
 		this.ma=ma;
 		this.username = username;
 		this.teamNo = teamNo;
@@ -40,7 +41,7 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 	protected Void doInBackground(Void... params) {
 		try {
 			socket = new Socket();
-			SocketAddress address = new InetSocketAddress(host, 1726);
+			SocketAddress address = new InetSocketAddress(Constants.host, port);
 			socket.connect(address);
 			
 			br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
@@ -68,13 +69,12 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 					GameState state = GameState.fromJSON(new JSONObject(str));
 					publishProgress(state);
 				} catch (JSONException e) {
-					//e.printStackTrace();
+					 e.printStackTrace();
 				}
 			}
 			socket.close();
 		} catch (IOException e) {
-			System.out.println("DIED");
-			//e.printStackTrace();
+			e.printStackTrace();
 		}
 		return null;
 	}

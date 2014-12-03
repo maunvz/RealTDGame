@@ -6,9 +6,9 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-public class WaitingRoomFragment extends Fragment{
+public class HomeScreenFragment extends Fragment{
 	MainActivity ma;
-	public WaitingRoomFragment(MainActivity ma){
+	public HomeScreenFragment(MainActivity ma){
 		super();
 		this.ma=ma;
 	}
@@ -20,11 +20,9 @@ public class WaitingRoomFragment extends Fragment{
 	}
 	public void onResume(){
 		super.onResume();
-		MainActivity.screenNo=MainActivity.WAIT_SCREEN;
-		ma.updateWaitRoom();
+		MainActivity.screenNo=MainActivity.HOME_SCREEN;
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        View view = inflater.inflate(R.layout.waiting_room_fragment, container, false);    	
-        return view;
+		return inflater.inflate(R.layout.home_screen_fragment, container, false); 
 	}
 }

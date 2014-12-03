@@ -1,112 +1,37 @@
 package com.mau.tdserver;
 
 import java.awt.BorderLayout;
+import java.io.BufferedReader;
 import java.io.IOException;
-import java.net.InetAddress;
-import java.net.NetworkInterface;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
 import java.net.ServerSocket;
 import java.net.Socket;
-import java.net.SocketException;
 import java.util.ArrayList;
-import java.util.Enumeration;
+import java.util.Random;
 
 import javax.swing.JFrame;
 import javax.swing.JPanel;
-import javax.swing.UIManager;
-import javax.swing.UnsupportedLookAndFeelException;
 
-import com.mau.tdgame.models.Event;
-import com.mau.tdgame.models.GameState;
-import com.mau.tdgame.models.Player;
+import org.json.JSONArray;
+import org.json.JSONObject;
+
+import com.mau.tdgame.models.Constants;
 
 public class ServerMain {
-	private ArrayList<ClientThread> clients;
-	private ServerSocket socket;
-	private int port;
-	private GameState gameState;
-	
+	private int initialPort = Constants.INITIAL_PORT;
 	private Console console;
 	private GlobalOptionsPanel gop;
 	private PlayerOptionsPanel pop;
+	private ArrayList<GameSession> sessions;
+	
+	Random rand;
 	
 	public ServerMain(){
-		port = 1726;
+		sessions = new ArrayList<GameSession>();
+		rand = new Random();
 		createUI().setVisible(true);
-		clients = new ArrayList<ClientThread>();
-		print("Server ip: "+getIp().getHostAddress());
 		startListening();
-	}
-	public synchronized void updateGameState(Event event){
-		print(event.toString());
-		gameState.processEvent(event);
-		broadcastGameState();
-		if(!gameState.getMessage().equals(""))print(gameState.getMessage());
-	}
-	public void startGame(){
-		print("Starting Game.");
-		gameState.startGame();
-		gameState.gameSensitivity=(Integer)gop.sensitivitySpinner.getValue();
-		gameState.maxScore=Integer.parseInt(gop.maxScoreField.getText());
-		broadcastGameState();
-	}
-	public void endGame(){
-		print("Ending Game.");
-		gameState.endGame();
-		broadcastGameState();
-	}
-	public synchronized void addPlayer(Player player){
-		gameState.addPlayer(player);
-		pop.playerList.updateLists();
-	}
-	public void kickPlayer(Player player){
-		gameState.removePlayer(player);
-		pop.playerList.updateLists();
-		for(ClientThread client:clients){
-			if(client.player==null)continue;
-			if(client.player.equals(player)){
-				client.closeConnection();
-				client.cancel(true);
-				clients.remove(client);
-				return;
-			}
-		}
-		broadcastGameState();
-	}
-	public void killPlayer(Player player){
-		gameState.playerDies(player);
-		broadcastGameState();
-	}
-	public void respawnPlayer(Player player){
-		gameState.playerRespawns(player);
-		broadcastGameState();
-	}
-	public void powerPlayer(Player player, int power){
-		player.powerups.add(power);
-		broadcastGameState();
-	}
-	public void setPlayerSensitivity(Player player, float sensitivity){
-		player.setSensitivity(sensitivity);
-		broadcastGameState();
-	}
-	public void messagePlayer(Player player, String message){
-		if(player==null)return;
-		gameState.playerMessage = player.getName()+"`"+message;
-		broadcastGameState();
-	}
-	public void messageAll(String message){
-		gameState.globalMessage=message;
-		broadcastGameState();
-	}
-	public synchronized void broadcastGameState(){
-		for(ClientThread client:clients){
-			client.sendGameState();
-		}
-		gameState.clearMessage();
-		gameState.globalMessage="";
-		gameState.playerMessage="";
-	}
-	public synchronized GameState getGameState(){
-		return gameState;
 	}
 	public void print(String str){
 		console.print(str);
@@ -130,16 +55,14 @@ public class ServerMain {
 		return frame;
 	}
 	public void startListening(){
-		gameState = new GameState();
 		Thread listenThread = new Thread(){
 			public void run(){
 				try {
-					socket = new ServerSocket(port);
+					@SuppressWarnings("resource")
+					ServerSocket socket = new ServerSocket(initialPort);
 					while(true){
 						Socket client = socket.accept();
-						ClientThread thread = new ClientThread(client, ServerMain.this);
-						thread.execute();
-						clients.add(thread);
+						new ConnectionThread(client).start();
 					}
 				} catch (IOException e) {
 					e.printStackTrace();
@@ -148,33 +71,51 @@ public class ServerMain {
 			}
 		};
 		listenThread.start();
-		print("Waiting for players to connect.");
 	}
-	public static InetAddress getIp(){
+	public int getUnusedPort(){
+		int port = 1727+rand.nextInt(256); 
 		try {
-			Enumeration<NetworkInterface> e = NetworkInterface.getNetworkInterfaces();
-			while(e.hasMoreElements()){
-				NetworkInterface ni = e.nextElement();
-				Enumeration<InetAddress> a = ni.getInetAddresses();
-				while(a.hasMoreElements()){
-					InetAddress ia = a.nextElement();
-					if(ia.isSiteLocalAddress())
-						return ia;
-				}
-			}
-		} catch (SocketException e) {
-			e.printStackTrace();
+			ServerSocket socket = new ServerSocket(port);
+			socket.close();
+		} catch (IOException e) {
+			return getUnusedPort();
 		}
-		return null;
+		return port;
 	}
 	public static void main(String[] args) {
 		new ServerMain();
-		 try {
-			UIManager.setLookAndFeel(
-			            UIManager.getCrossPlatformLookAndFeelClassName());
-		} catch (ClassNotFoundException | InstantiationException
-				| IllegalAccessException | UnsupportedLookAndFeelException e) {
-			e.printStackTrace();
+	}
+	public class ConnectionThread extends Thread{
+		Socket socket;
+		public ConnectionThread(Socket socket){
+			this.socket = socket;
+		}
+		public void run(){
+			try {
+				PrintWriter pw = new PrintWriter(socket.getOutputStream(), true);
+				BufferedReader br = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+				
+				String action = br.readLine();
+				if(action.equals(Constants.JOIN_ROOM)){
+					JSONArray sessionArray = new JSONArray();
+					for(GameSession session:sessions){
+						JSONObject sessionJSON = session.toJSON();
+						sessionArray.put(sessionJSON);
+					}
+					pw.println(sessionArray.toString());
+				} else if(action.equals(Constants.CREATE_ROOM)){
+					String name = br.readLine();
+					int maxScore = Integer.parseInt(br.readLine());
+					int port = getUnusedPort();
+					GameSession session = new GameSession(name, port);
+					session.getGameState().maxScore = maxScore;
+					sessions.add(session);
+					print("Created game session "+name+" on port "+port);
+					pw.println(session.toJSON().toString());
+				}
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 }

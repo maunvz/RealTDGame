@@ -7,6 +7,7 @@ public class Event {
 	public static final int DIED = 0;
 	public static final int QR_EVENT = 1;
 	public static final int POWERUP_USED = 2;
+	public static final int START_GAME = 3;
 	
 	int type;
 	String player1;

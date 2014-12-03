@@ -32,21 +32,21 @@ public class PlayerOptionsPanel extends JPanel{
 		kickButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {	
-				main.kickPlayer(playerList.getSelectedPlayer());
+				//main.kickPlayer(playerList.getSelectedPlayer());
 			}
 		});
 		JButton killButton = new JButton("Kill");
 		killButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {	
-				main.killPlayer(playerList.getSelectedPlayer());
+				//main.killPlayer(playerList.getSelectedPlayer());
 			}
 		});
 		JButton respawnButton = new JButton("Respawn");
 		respawnButton.addActionListener(new ActionListener(){
 			@Override
 			public void actionPerformed(ActionEvent e) {	
-				main.respawnPlayer(playerList.getSelectedPlayer());
+				//main.respawnPlayer(playerList.getSelectedPlayer());
 			}
 		});
 		JButton givePowerButton = new JButton("Power");
@@ -54,7 +54,7 @@ public class PlayerOptionsPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {
 				int pow = Integer.parseInt(JOptionPane.showInputDialog("What power to give?"));
-				main.powerPlayer(playerList.getSelectedPlayer(), pow);
+				//main.powerPlayer(playerList.getSelectedPlayer(), pow);
 			}
 		});
 		JButton sendMessageButton = new JButton("Message");
@@ -62,7 +62,7 @@ public class PlayerOptionsPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {	
 				String message = JOptionPane.showInputDialog("What message to send?");
-				main.messagePlayer(playerList.getSelectedPlayer(), message);
+				//main.messagePlayer(playerList.getSelectedPlayer(), message);
 			}
 		});
 		JButton setSensitivityButton = new JButton("Sensitivity");
@@ -70,7 +70,7 @@ public class PlayerOptionsPanel extends JPanel{
 			@Override
 			public void actionPerformed(ActionEvent e) {	
 				float sens = Float.parseFloat(JOptionPane.showInputDialog("What player sensitivity?"));
-				main.setPlayerSensitivity(playerList.getSelectedPlayer(), sens);
+				//main.setPlayerSensitivity(playerList.getSelectedPlayer(), sens);
 			}
 		});
 		buttonPanel.add(kickButton);
