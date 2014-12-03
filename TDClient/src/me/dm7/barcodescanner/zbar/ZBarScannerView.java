@@ -15,6 +15,8 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
 import android.widget.ImageView;
+import android.widget.RadioButton;
+import android.widget.TextView;
 
 public class ZBarScannerView extends BarcodeScannerView {
 	static int result = 0;
@@ -56,31 +58,56 @@ public class ZBarScannerView extends BarcodeScannerView {
 			lst = new LiveScanThread(data,camera,getContext());
 	    	lst.start();
     	}
-    	if(MainActivity.screenNo == MainActivity.JOIN_SCREEN)
+    	if(MainActivity.screenNo == MainActivity.JOIN_SCREEN){
+    		camera.setPreviewCallbackWithBuffer(this);
     		camera.setOneShotPreviewCallback(this);
-    	if(MainActivity.screenNo == MainActivity.GAME_SCREEN)
+    	}
+    	if(MainActivity.screenNo == MainActivity.GAME_SCREEN){
+    		camera.setPreviewCallbackWithBuffer(this);
     		camera.setOneShotPreviewCallback(this);
+    	}
     	if(!GameFragment.QREnabled&&MainActivity.screenNo==MainActivity.GAME_SCREEN){
 //    		camera.setOneShotPreviewCallback(this);
         	GameFragment.QREnabled=true;
-        	Animation myFadeOutAnimation = AnimationUtils.loadAnimation(GameFragment.ma, R.anim.fade_out);
+        	final Animation myFadeOutAnimation = AnimationUtils.loadAnimation(GameFragment.ma, R.anim.fade_out);
     		final ImageView v = (ImageView) GameFragment.ma.findViewById(R.id.fader);
-    		v.startAnimation(myFadeOutAnimation);
-    		
-    		myFadeOutAnimation.setAnimationListener(new AnimationListener(){
-
+    		GameFragment.ma.runOnUiThread(new Runnable(){
     			@Override
-    			public void onAnimationEnd(Animation animation) {
-    				v.setBackgroundColor(Color.TRANSPARENT);
+    			public void run() {
+    	    		v.startAnimation(myFadeOutAnimation);
+    	    		
+    	    		myFadeOutAnimation.setAnimationListener(new AnimationListener(){
+    	
+    	    			@Override
+    	    			public void onAnimationEnd(Animation animation) {
+    	    				v.setBackgroundColor(Color.TRANSPARENT);
+    	    			}
+    	
+    	    			@Override
+    	    			public void onAnimationRepeat(Animation animation) {}
+    	
+    	    			@Override
+    	    			public void onAnimationStart(Animation animation) {}
+    	          		
+    	          	});
     			}
-
-    			@Override
-    			public void onAnimationRepeat(Animation animation) {}
-
-    			@Override
-    			public void onAnimationStart(Animation animation) {}
-          		
-          	});
+    		});
+//    		v.startAnimation(myFadeOutAnimation);
+//    		
+//    		myFadeOutAnimation.setAnimationListener(new AnimationListener(){
+//
+//    			@Override
+//    			public void onAnimationEnd(Animation animation) {
+//    				v.setBackgroundColor(Color.TRANSPARENT);
+//    			}
+//
+//    			@Override
+//    			public void onAnimationRepeat(Animation animation) {}
+//
+//    			@Override
+//    			public void onAnimationStart(Animation animation) {}
+//          		
+//          	});
         }
     }
 }

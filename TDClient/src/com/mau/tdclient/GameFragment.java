@@ -146,25 +146,6 @@ public class GameFragment extends Fragment implements ResultHandler{
 		if(!animationCancelled){
 			mScannerView.setResultHandler(this); // Register ourselves as a handler for scan results.
 			mScannerView.startCamera();
-	//        QREnabled = true;
-	//        Animation myFadeOutAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.fade_out);
-	//		final ImageView v = (ImageView) ma.findViewById(R.id.fader);
-	//		v.startAnimation(myFadeOutAnimation);
-	//		
-	//		myFadeOutAnimation.setAnimationListener(new AnimationListener(){
-	//
-	//			@Override
-	//			public void onAnimationEnd(Animation animation) {
-	//				v.setBackgroundColor(Color.TRANSPARENT);
-	//			}
-	//
-	//			@Override
-	//			public void onAnimationRepeat(Animation animation) {}
-	//
-	//			@Override
-	//			public void onAnimationStart(Animation animation) {}
-	//      		
-	//      	});
 		}
 		animationCancelled = false;
         new Thread(){
