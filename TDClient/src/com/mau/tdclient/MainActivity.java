@@ -4,7 +4,6 @@ import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
-import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
@@ -48,13 +47,21 @@ public class MainActivity extends ActionBarActivity {
 	public static final int CREATE_GAME_SCREEN=5;
 	public static final int GAME_LIST_SCREEN=6;
 	
+	//Fragments
+	private CreateGameFragment createGameFrag;
+	private GameEndedFragment gameEndedFrag;
+	private HomeScreenFragment homeScreenFrag;
+	private GameFragment gameFrag;
+	private WaitingRoomFragment waitingRoomFrag;
+	private GameListFragment gameListFrag;
+	private JoinGameFragment joinGameFrag;
+	
 	//Technical stuff
 	private SensorManager mSensorManager;
 	private Sensor mSensor;
 	private ShakeListener listener;
 	private MediaPlayer mplayer;
 	private NetworkConnection nc;
-	private static GameFragment gf;
 	private int port;
 	public static int screenNo;
 	public static boolean destroyed;
@@ -70,18 +77,16 @@ public class MainActivity extends ActionBarActivity {
 	//Called when the phone shakes too much
 	public void youDie(){
 		nc.sendEvent(new Event(Event.DIED, player.getName(), null, 0));
-		System.out.println(getNC().port);
 	}
 	//Called when the server sends an updated GameState
 	public void updateGameState(GameState newGameState){
 		//Before game starts GameState management
 		if(newGameState==null){
-			alertUser("Error","That username is taken for this server.");return;
+			alertUser("Error","That username or QR is taken for this server.");return;
 		}
 		gameState = newGameState;
-		if(screenNo==GAME_SCREEN&&!newGameState.gameStarted()){//game ended
-			Toast.makeText(this, "Game is finished", Toast.LENGTH_SHORT).show();
-			reset(); 
+		if(screenNo==GAME_SCREEN&&!newGameState.gameStarted()){
+			endGame();
 			return;
 		}
 		if(!gameState.gameStarted()){
@@ -346,7 +351,7 @@ public class MainActivity extends ActionBarActivity {
 		this.player = player;
 		this.gameState = gameState;
 		
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new WaitingRoomFragment(this)).commit();
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, waitingRoomFrag).commit();
 		
 	}
 	//Technical stuff below here, manages UI, sensors, sound, networking, etc.
@@ -360,7 +365,16 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);		
 
-		getFragmentManager().beginTransaction().add(R.id.fragment_holder, new HomeScreenFragment(this)).commit();
+		//TODO create all the frags
+		homeScreenFrag = new HomeScreenFragment(this);
+		createGameFrag = new CreateGameFragment(this);
+		gameEndedFrag = new GameEndedFragment(this);
+		gameFrag = new GameFragment(this);
+		waitingRoomFrag = new WaitingRoomFragment(this);
+		gameListFrag = new GameListFragment(this);
+		joinGameFrag = new JoinGameFragment(this);
+
+		getFragmentManager().beginTransaction().add(R.id.fragment_holder, homeScreenFrag).commit();
 		
 		gameStarted=false;
 		screenNo=HOME_SCREEN;
@@ -369,15 +383,15 @@ public class MainActivity extends ActionBarActivity {
 	}
 	//when the home screen's join game button is pressed
 	public void onJoinClicked(View view){
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new GameListFragment(this)).commit();		
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, gameListFrag).commit();		
 	}
 	//when the home screen's create game button is pressed
 	public void onCreateClicked(View view){
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new CreateGameFragment(this)).commit();
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, createGameFrag).commit();
 	}
 	//when the join screen's join button is pressed
 	public void joinGame(int port){
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new JoinGameFragment(this)).commit();
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, joinGameFrag).commit();
 		this.port = port;
 	}
 	public void onConnectClicked(View view){
@@ -431,20 +445,17 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void startGame(){
 		prepareAudio();
-		if(gf == null){
-			gf = new GameFragment(this);
-		}
+		if(gameFrag == null)gameFrag = new GameFragment(this);
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		listener = new ShakeListener(this);
 		mSensorManager.registerListener(listener, mSensor, SensorManager.SENSOR_DELAY_GAME);
 		gameStarted=true;
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, gf).commit();
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, gameFrag).commit();
 	}
 	public void reset(){
 		if(destroyed)return;
-		FragmentTransaction transaction = getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new HomeScreenFragment(this));
-		transaction.addToBackStack(null);
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, homeScreenFrag).commit();
 //		GameFragment.resetAllStatic();
 //		ShakeListener.resetAllStatic();
 //		CameraPreviewT.resetAllStatic();
@@ -453,9 +464,8 @@ public class MainActivity extends ActionBarActivity {
 		screenNo = HOME_SCREEN;
 		port = -1;
 		System.out.println("Everything Gone.");
-		transaction.commit();
 		destroyed = true;
-		gf = null;
+		gameFrag = null;
 		player = null;
 		gameState = null;
 //		System.out.println("This thing destroyed yet? "+getFragmentManager().isDestroyed());
@@ -493,5 +503,8 @@ public class MainActivity extends ActionBarActivity {
 				}
 			});
 		}
+	}
+	public void endGame(){
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, gameEndedFrag).commit();
 	}
 }

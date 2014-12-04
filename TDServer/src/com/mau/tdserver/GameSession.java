@@ -22,6 +22,7 @@ public class GameSession {
 	StringBuffer consoleText;
 	private boolean active;
 	ServerMain main;
+	Thread killThread;
 	public GameSession(String name, int sessionPort, ServerMain main){
 		clients = new ArrayList<ClientThread>();
 		this.sessionPort = sessionPort;
@@ -31,6 +32,24 @@ public class GameSession {
 		consoleText = new StringBuffer();
 		print("Listening on port: "+sessionPort);
 		startListening();
+		startKillThread();
+	}
+	public void startKillThread(){
+		killThread = new Thread(){
+			public void run(){
+				try {
+					Thread.sleep(1000*60*10);
+					killGame();
+				} catch (InterruptedException e) {
+					//e.printStackTrace();
+				}
+			}
+		};
+		killThread.start();
+	}
+	public void restartKillThread(){
+		if(killThread!=null)killThread.interrupt();
+		startKillThread();
 	}
 	public void startListening(){
 		gameState = new GameState();

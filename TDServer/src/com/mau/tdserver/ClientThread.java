@@ -82,6 +82,7 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 					}
 				};
 				killThread.start();
+				session.restartKillThread();
 			}
 			session.print(username+" is gone.");
 			session.disconnectPlayer(player);

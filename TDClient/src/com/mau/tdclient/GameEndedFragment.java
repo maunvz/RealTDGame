@@ -24,6 +24,6 @@ public class GameEndedFragment extends Fragment{
 		ma.updateGameOverScreen();
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-        return inflater.inflate(R.layout.game_list_fragment, container, false);
+        return inflater.inflate(R.layout.game_ended_fragment, container, false);
 	}
 }

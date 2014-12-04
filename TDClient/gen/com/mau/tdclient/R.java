@@ -1804,15 +1804,16 @@ containing a value of this type.
         public static final int abc_simple_dropdown_hint=0x7f030016;
         public static final int activity_main=0x7f030017;
         public static final int create_game_fragment=0x7f030018;
-        public static final int game_fragment=0x7f030019;
-        public static final int game_list_fragment=0x7f03001a;
-        public static final int game_state_display_fragment=0x7f03001b;
-        public static final int home_screen_fragment=0x7f03001c;
-        public static final int join_game_fragment=0x7f03001d;
-        public static final int merge_camera_preview_view_finder=0x7f03001e;
-        public static final int player_state_display_fragment=0x7f03001f;
-        public static final int support_simple_spinner_dropdown_item=0x7f030020;
-        public static final int waiting_room_fragment=0x7f030021;
+        public static final int game_ended_fragment=0x7f030019;
+        public static final int game_fragment=0x7f03001a;
+        public static final int game_list_fragment=0x7f03001b;
+        public static final int game_state_display_fragment=0x7f03001c;
+        public static final int home_screen_fragment=0x7f03001d;
+        public static final int join_game_fragment=0x7f03001e;
+        public static final int merge_camera_preview_view_finder=0x7f03001f;
+        public static final int player_state_display_fragment=0x7f030020;
+        public static final int support_simple_spinner_dropdown_item=0x7f030021;
+        public static final int waiting_room_fragment=0x7f030022;
     }
     public static final class string {
         /**  Content description for the action bar "home" affordance. [CHAR LIMIT=NONE] 
@@ -1870,15 +1871,17 @@ containing a value of this type.
         public static final int abc_shareactionprovider_share_with_application=0x7f0a000d;
         public static final int app_name=0x7f0a000f;
         public static final int connect_button=0x7f0a0013;
-        public static final int create_game_button_text=0x7f0a001a;
-        public static final int game_name_hint=0x7f0a001b;
+        public static final int create_game_button_text=0x7f0a001c;
+        public static final int done_button_text=0x7f0a001b;
+        public static final int game_ended_text=0x7f0a001a;
+        public static final int game_name_hint=0x7f0a001d;
         public static final int ip_hint=0x7f0a0010;
         public static final int join_game_button_text=0x7f0a0019;
-        public static final int max_score_hint=0x7f0a001c;
+        public static final int max_score_hint=0x7f0a001e;
         public static final int qr_id_text=0x7f0a0018;
         public static final int qrid_hint=0x7f0a0012;
         public static final int scan_button=0x7f0a0014;
-        public static final int start_game_button_text=0x7f0a001d;
+        public static final int start_game_button_text=0x7f0a001f;
         public static final int team1=0x7f0a0016;
         public static final int team2=0x7f0a0017;
         public static final int username_hint=0x7f0a0011;

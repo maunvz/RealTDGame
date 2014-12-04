@@ -13,6 +13,8 @@
     <string name="qr_id_text">Scan your identity QR</string>
     
     <string name="join_game_button_text">Join Game</string>
+    <string name="game_ended_text">Game Ended</string>
+    <string name="done_button_text">Done</string>
     <string name="create_game_button_text">Create Game</string>
     <string name="game_name_hint">Enter Game Name</string>
     <string name="max_score_hint">Enter Max Score</string>
