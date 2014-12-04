@@ -4,6 +4,8 @@ import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.Fragment;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
@@ -353,7 +355,7 @@ public class MainActivity extends ActionBarActivity {
 		this.player = player;
 		this.gameState = gameState;
 		
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, waitingRoomFrag).commit();		
+		transitionFragments(waitingRoomFrag);
 	}
 	//Technical stuff below here, manages UI, sensors, sound, networking, etc.
 	//------------------------------------------------------------------------
@@ -384,15 +386,15 @@ public class MainActivity extends ActionBarActivity {
 	}
 	//when the home screen's join game button is pressed
 	public void onJoinClicked(View view){
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, gameListFrag).commit();		
+		transitionFragments(gameListFrag);
 	}
 	//when the home screen's create game button is pressed
 	public void onCreateClicked(View view){
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, createGameFrag).commit();
+		transitionFragments(createGameFrag);
 	}
 	//when the join screen's join button is pressed
 	public void joinGame(int port){
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, joinGameFrag).commit();
+		transitionFragments(joinGameFrag);
 		this.port = port;
 	}
 	public void onConnectClicked(View view){
@@ -452,11 +454,11 @@ public class MainActivity extends ActionBarActivity {
 		listener = new ShakeListener(this);
 		mSensorManager.registerListener(listener, mSensor, SensorManager.SENSOR_DELAY_GAME);
 		gameStarted=true;
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, gameFrag).commit();
+		transitionFragments(gameFrag);
 	}
 	public void reset(){
 		if(destroyed)return;
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, homeScreenFrag).commit();
+		transitionFragments(homeScreenFrag);
 //		GameFragment.resetAllStatic();
 //		ShakeListener.resetAllStatic();
 //		CameraPreviewT.resetAllStatic();
@@ -507,11 +509,18 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 	public void endGame(){
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, gameEndedFrag).commit();
+		transitionFragments(gameEndedFrag);
 		gameEndedFrag.update();
 		screenNo = GAME_OVER_SCREEN;
 	}
 	public void onDoneClicked(View view){
 		reset();
+	}
+	public void transitionFragments(Fragment frag){
+		FragmentTransaction ft = getFragmentManager().beginTransaction();
+		ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
+		ft.replace(R.id.fragment_holder, frag);
+		System.out.println("transitionig");
+		ft.commit();
 	}
 }

@@ -78,6 +78,9 @@ public class ShakeListener implements SensorEventListener{
 		SensorManager sm=(SensorManager)ma.getSystemService(Context.SENSOR_SERVICE);
 		sm.unregisterListener(this);
 		listenerOn=false;
+		ShakeMeter meter = ((ShakeMeter)ma.findViewById(R.id.shake_meter_1));
+		if(meter==null)return;
+		meter.updateValue(0.4f, ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity(),Color.RED,255);
 	}
 	public void turnOnListener(){
 		if(listenerOn)return;
