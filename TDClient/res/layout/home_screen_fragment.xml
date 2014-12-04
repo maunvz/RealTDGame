@@ -1,20 +1,39 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    <Button
-        android:id="@+id/join_game_button"
- 		android:text="@string/join_game_button_text"
- 		android:layout_width="wrap_content"
- 		android:layout_height="wrap_content"
- 		android:onClick="onJoinClicked"
-        />
-    <Button
-        android:id="@+id/create_game_button"
- 		android:text="@string/create_game_button_text"
- 		android:layout_width="wrap_content"
- 		android:layout_height="wrap_content"
- 		android:onClick="onCreateClicked"
-        />
-</LinearLayout>
+    android:orientation="vertical"
+    android:background = "#000000" >
+    <com.mau.tdclient.SetupScreenBackgroundView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        ></com.mau.tdclient.SetupScreenBackgroundView>
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation = "vertical"
+	    >
+
+	    <com.mau.tdclient.AutoResizeTextView
+	        android:layout_width="match_parent"
+	        android:layout_height="0dp"
+	        android:layout_weight="0.2"
+	        android:text="SpyDroid"
+	        android:textColor="#ffffff" 
+	        >
+</com.mau.tdclient.AutoResizeTextView>
+	    <Button
+	        android:id="@+id/join_game_button"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:onClick="onJoinClicked"
+	        android:text="@string/join_game_button_text" />
+	
+	    <Button
+	        android:id="@+id/create_game_button"
+	        android:layout_width="wrap_content"
+	        android:layout_height="wrap_content"
+	        android:onClick="onCreateClicked"
+	        android:text="@string/create_game_button_text" />
+	</LinearLayout>
+</RelativeLayout>
