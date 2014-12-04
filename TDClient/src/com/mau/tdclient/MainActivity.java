@@ -5,6 +5,7 @@ import java.io.IOException;
 import android.app.Activity;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
@@ -80,6 +81,7 @@ public class MainActivity extends ActionBarActivity {
 	
 	//Called when the phone shakes too much
 	public void youDie(){
+		if(nc==null)return;
 		nc.sendEvent(new Event(Event.DIED, player.getName(), null, 0));
 	}
 	//Called when the server sends an updated GameState
@@ -432,7 +434,7 @@ public class MainActivity extends ActionBarActivity {
 			mSensorManager.registerListener(listener, mSensor, SensorManager.SENSOR_DELAY_GAME);
 	}
 	public void onDestroy(){
-		super.onDestroy();
+		super.onDestroy();nc.closeConnection(); nc=null;
 		if(gameStarted)mplayer.release();
 		destroyed=true;
 	}
@@ -520,7 +522,15 @@ public class MainActivity extends ActionBarActivity {
 		FragmentTransaction ft = getFragmentManager().beginTransaction();
 		ft.setCustomAnimations(android.R.animator.fade_in, android.R.animator.fade_out);
 		ft.replace(R.id.fragment_holder, frag);
-		System.out.println("transitionig");
+		ft.addToBackStack("");
 		ft.commit();
+	}
+	@Override
+	public void onBackPressed() {
+		if(screenNo==GAME_SCREEN)return;
+        if (!getFragmentManager().popBackStackImmediate()) {
+	        super.onBackPressed();
+	    }
+        System.out.println(screenNo);
 	}
 }
