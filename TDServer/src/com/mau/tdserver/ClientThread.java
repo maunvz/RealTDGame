@@ -76,7 +76,7 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 				killThread = new Thread(){
 					public void run(){
 						try {
-							Thread.sleep(1000*120);
+							Thread.sleep(1000*60*6);
 							closeConnection();
 						} catch (InterruptedException e) {}
 					}
