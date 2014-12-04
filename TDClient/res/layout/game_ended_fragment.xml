@@ -2,13 +2,29 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
+    android:orientation="vertical"
+    android:background="@color/black" >
 
     <TextView
+        android:id="@+id/who_won_textview"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/game_ended_text"
+        android:layout_height="0dp"
+        android:layout_weight="0.2"
         android:gravity="center"
+		/>
+    <TextView
+        android:id="@+id/red_team_scores_textview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        android:background="@color/red"
+		/>
+	<TextView
+        android:id="@+id/blue_team_scores_textview"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="0.4"
+        android:background="@color/blue"
 		/>
     <Button
 		android:layout_width="match_parent"
