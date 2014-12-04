@@ -32,6 +32,7 @@ public class GameState {
 	public String playerWithFlag1;
 	public String playerWithFlag2;
 	public int activePlayers;
+	public boolean gameEnded;
 	
 	public GameState(){
 		team1 = new Team(Team.TEAM_1);
@@ -46,6 +47,7 @@ public class GameState {
 		maxScore = DEFAULT_MAX_SCORE;
 		gameSensitivity=DEFAULT_SENSITIVITY;
 		activePlayers=0;
+		gameEnded = false;
 	}
 	public boolean gameStarted(){
 		return gameStarted;
@@ -55,6 +57,7 @@ public class GameState {
 	}
 	public void endGame(){
 		gameStarted=false;
+		gameEnded=true;
 	}
 	public void processEvent(Event event){
 		Player player1 = getPlayerByName(event.player1);
