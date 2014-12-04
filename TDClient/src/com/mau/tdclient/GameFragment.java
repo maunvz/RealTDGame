@@ -19,6 +19,7 @@ import android.widget.ImageView;
 import android.widget.Toast;
 
 import com.mau.tdgame.models.Event;
+import com.mau.tdgame.models.Player;
 import com.mau.tdgame.models.Team;
 
 public class GameFragment extends Fragment implements ResultHandler{
@@ -72,80 +73,35 @@ public class GameFragment extends Fragment implements ResultHandler{
 	}
 	@Override
 	public void handleResult(Result rawResult) {
-		if(!rawResult.getContents().contains("player")&&!rawResult.getContents().contains("flag")&&
-				!rawResult.getContents().contains("base")&&!rawResult.getContents().contains("power")){
-			return;
-		}
-		else if(rawResult.getContents().equals("base_0")&&ma.getPlayer().getTeam()==Team.TEAM_1){
-			if(ma.getPlayer().alive&&!(ma.getGameState().playerWithFlag2.equals(ma.getPlayer().getName())||
-					ma.getGameState().playerWithFlag1.equals(ma.getPlayer().getName()))){
-//				Toast.makeText(getActivity(), "You already got the flag",Toast.LENGTH_SHORT).show();			
-				return;
-			}
-		}
-		else if(rawResult.getContents().equals("base_0")&&ma.getPlayer().getTeam()==2){
-			return;
-		}
-		else if(rawResult.getContents().equals("base_1")&&ma.getPlayer().getTeam()==Team.TEAM_2){
-			if(ma.getPlayer().alive&&!(ma.getGameState().playerWithFlag1.equals(ma.getPlayer().getName())||
-					ma.getGameState().playerWithFlag1.equals(ma.getPlayer().getName()))){
-//				Toast.makeText(getActivity(), "You already got the flag",Toast.LENGTH_SHORT).show();
-				return;
-			}
-		}
-		else if(rawResult.getContents().equals("base_1")&&ma.getPlayer().getTeam()==Team.TEAM_1){
-			return;
-		}
-		else if(rawResult.getContents().contains("player")){
-			if(ma.getPlayer().getTeam() == Team.TEAM_1){
-				if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==Team.TEAM_1){
+		String qr = rawResult.getContents();
+		//prevent from sending random QRs
+		if(!qr.contains("player")&&!qr.contains("flag")&&!qr.contains("base")&&!qr.contains("power"))return;
+		
+		//prevent from sending when player scans other teams's base
+		if(qr.equals("base_0")&&ma.getPlayer().getTeam()==Team.TEAM_2||qr.equals("base_1")&&ma.getPlayer().getTeam()==Team.TEAM_1)return;
+		
+		//prevent from sending when at own base without flag and alive
+		if((qr.equals("base_0")&&ma.getPlayer().getTeam()==Team.TEAM_1)&&
+			(ma.getPlayer().alive&&!(ma.getGameState().playerWithFlag2.equals(ma.getPlayer().getName())||
+				ma.getGameState().playerWithFlag1.equals(ma.getPlayer().getName()))))
 					return;
-				}
-				else if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==Team.TEAM_2&&
-						!ma.getGameState().getPlayerByQRId(rawResult.getContents()).alive){
+		if((qr.equals("base_1")&&ma.getPlayer().getTeam()==Team.TEAM_2)&&
+			(ma.getPlayer().alive&&!(ma.getGameState().playerWithFlag1.equals(ma.getPlayer().getName())||
+				ma.getGameState().playerWithFlag1.equals(ma.getPlayer().getName()))))
 					return;
-				}
-			}
-			else{
-				if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==Team.TEAM_2){
-					return;
-				}
-				else if(ma.getGameState().getPlayerByQRId(rawResult.getContents()).getTeam()==Team.TEAM_1&&
-						!ma.getGameState().getPlayerByQRId(rawResult.getContents()).alive){
-					return;
-				}
-			}
+		//prevent dead players from scanning anything but their flag
+		if(!ma.getPlayer().alive&&!qr.contains("base"))return;
+		//prevent from sending qrs of dead players or players on the same team
+		if(qr.contains("player")){
+			Player QRPlayer = ma.getGameState().getPlayerByQRId(qr); 
+			if(QRPlayer==null)return;if(!QRPlayer.alive)return;
+			if(ma.getPlayer().getTeam()==QRPlayer.getTeam())return;
 		}
-		else if(rawResult.getContents().contains("flag")){
-			if(!ma.getGameState().playerWithFlag1.equals("")){
-//				String actualMessage = ma.getGameState().playerWithFlag1.replaceAll(ma.getPlayer().getName(), "you");
-//				actualMessage = actualMessage.substring(0,1).toUpperCase() + actualMessage.substring(1).toLowerCase();
-//				if(actualMessage.toLowerCase().contains("you"))
-//					actualMessage += " already have the flag";
-//				else
-//					actualMessage += " has the flag.";
-//				ma.makeAToast(actualMessage);
-				return;
-			}
-			else if(!ma.getGameState().playerWithFlag2.equals("")){
-//				String actualMessage = ma.getGameState().playerWithFlag1.replaceAll(ma.getPlayer().getName(), "you");
-//				actualMessage = actualMessage.substring(0,1).toUpperCase() + actualMessage.substring(1).toLowerCase();
-//				if(actualMessage.toLowerCase().contains("you"))
-//					actualMessage += " already have the flag";
-//				else
-//					actualMessage += " has the flag.";
-//				ma.makeAToast(actualMessage);
-				return;
-			}
-			else if(rawResult.getContents().contains("0")&&ma.getPlayer().getTeam()==Team.TEAM_1){
-				return;
-			}
-			else if(rawResult.getContents().contains("1")&&ma.getPlayer().getTeam()==Team.TEAM_2){
-				return;
-			}
-		}
-		ma.getNC().sendEvent(new Event(Event.QR_EVENT, ma.getPlayer().getName(), rawResult.getContents(), 0));
-		System.out.println(ma.getNC().port);
+		//prevent from scanning a flag is already captured, or scanning your own flag
+		if(qr.contains("flag_0")&&(!ma.getGameState().playerWithFlag1.equals("")||ma.getPlayer().getTeam()==Team.TEAM_1))return;
+		if(qr.contains("flag_1")&&(!ma.getGameState().playerWithFlag2.equals("")||ma.getPlayer().getTeam()==Team.TEAM_2))return;
+		//send event
+		ma.getNC().sendEvent(new Event(Event.QR_EVENT, ma.getPlayer().getName(), qr, 0));
 	}
 	public void onResume(){
 		super.onResume();

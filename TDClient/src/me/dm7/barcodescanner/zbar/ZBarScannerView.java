@@ -2,21 +2,19 @@ package me.dm7.barcodescanner.zbar;
 
 import java.util.List;
 
-import com.mau.tdclient.GameFragment;
-import com.mau.tdclient.MainActivity;
-import com.mau.tdclient.R;
-
 import me.dm7.barcodescanner.core.BarcodeScannerView;
 import android.content.Context;
 import android.graphics.Color;
 import android.hardware.Camera;
 import android.util.AttributeSet;
 import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
 import android.view.animation.Animation.AnimationListener;
+import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
-import android.widget.RadioButton;
-import android.widget.TextView;
+
+import com.mau.tdclient.GameFragment;
+import com.mau.tdclient.MainActivity;
+import com.mau.tdclient.R;
 
 public class ZBarScannerView extends BarcodeScannerView {
 	static int result = 0;

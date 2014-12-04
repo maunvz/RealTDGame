@@ -456,6 +456,8 @@ public class MainActivity extends ActionBarActivity {
 		transaction.commit();
 		destroyed = true;
 		gf = null;
+		player = null;
+		gameState = null;
 //		System.out.println("This thing destroyed yet? "+getFragmentManager().isDestroyed());
 	}
 	//creates a popup dialog box that tells the player message
