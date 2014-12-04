@@ -92,6 +92,7 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 		}
 	}
 	protected void onPostExecute(Void result){
+		if(ma.screenNo!=MainActivity.GAME_OVER_SCREEN)
 		ma.reset();
 	}
 }

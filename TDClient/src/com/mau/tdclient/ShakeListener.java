@@ -2,15 +2,11 @@ package com.mau.tdclient;
 
 import android.content.Context;
 import android.graphics.Color;
-import android.hardware.Camera;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.os.Handler;
-import android.os.HandlerThread;
 import android.util.FloatMath;
-import android.widget.TextView;
 
 public class ShakeListener implements SensorEventListener{
 	float x,y,z;
@@ -21,12 +17,10 @@ public class ShakeListener implements SensorEventListener{
 	int timesOverThreshold = 0;
 	boolean wasTriggeredBefore = false;
 	MainActivity ma;
-	static private boolean listenerOn = true;
+	private boolean listenerOn = true;
 	public ShakeListener(MainActivity ma){
 		this.ma=ma;
-		SensorManager sm=(SensorManager)ma.getSystemService(Context.SENSOR_SERVICE);
-		Sensor s=sm.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0); 
-		sm.registerListener(this,s, SensorManager.SENSOR_DELAY_GAME);
+		turnOnListener();
 	}
 	@Override
 	public void onSensorChanged(SensorEvent event) {
@@ -80,10 +74,17 @@ public class ShakeListener implements SensorEventListener{
 		}
 	}
 	public void turnOffListener(){
-		listenerOn = false;
+		if(!listenerOn)return;
+		SensorManager sm=(SensorManager)ma.getSystemService(Context.SENSOR_SERVICE);
+		sm.unregisterListener(this);
+		listenerOn=false;
 	}
 	public void turnOnListener(){
-		listenerOn = true;
+		if(listenerOn)return;
+		SensorManager sm=(SensorManager)ma.getSystemService(Context.SENSOR_SERVICE);
+		Sensor s=sm.getSensorList(Sensor.TYPE_ACCELEROMETER).get(0); 
+		sm.registerListener(this,s, SensorManager.SENSOR_DELAY_GAME);
+		listenerOn=true;
 	}
 	@Override
 	public void onAccuracyChanged(Sensor sensor, int accuracy) {}

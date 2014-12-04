@@ -150,6 +150,8 @@ public class GameSession {
 		gameState.processEvent(event);
 		broadcastGameState();
 		if(!gameState.getMessage().equals(""))print(gameState.getMessage());
+		print("Game ended.");
+		if(gameState.gameEnded)killGame();
 	}
 	public void startGame(){
 		print("Starting Game.");

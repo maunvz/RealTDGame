@@ -351,8 +351,7 @@ public class MainActivity extends ActionBarActivity {
 		this.player = player;
 		this.gameState = gameState;
 		
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, waitingRoomFrag).commit();
-		
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, waitingRoomFrag).commit();		
 	}
 	//Technical stuff below here, manages UI, sensors, sound, networking, etc.
 	//------------------------------------------------------------------------
@@ -416,7 +415,7 @@ public class MainActivity extends ActionBarActivity {
         System.out.println("Connecting...");
 	}
 	public void vibrate(){
-		((Vibrator)getSystemService(VIBRATOR_SERVICE)).vibrate(150);
+		((Vibrator)getSystemService(VIBRATOR_SERVICE)).vibrate(200);
 	}
 	public void onPause(){
 		super.onPause();
@@ -468,6 +467,7 @@ public class MainActivity extends ActionBarActivity {
 		gameFrag = null;
 		player = null;
 		gameState = null;
+		listener.turnOffListener();
 //		System.out.println("This thing destroyed yet? "+getFragmentManager().isDestroyed());
 	}
 	//creates a popup dialog box that tells the player message
@@ -506,5 +506,9 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void endGame(){
 		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, gameEndedFrag).commit();
+		screenNo = GAME_OVER_SCREEN;
+	}
+	public void onDoneClicked(View view){
+		reset();
 	}
 }
