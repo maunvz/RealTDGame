@@ -4,6 +4,7 @@ import java.io.IOException;
 
 import android.app.Activity;
 import android.app.AlertDialog;
+import android.app.FragmentTransaction;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.res.AssetFileDescriptor;
@@ -53,6 +54,7 @@ public class MainActivity extends ActionBarActivity {
 	private ShakeListener listener;
 	private MediaPlayer mplayer;
 	private NetworkConnection nc;
+	private static GameFragment gf;
 	private int port;
 	public static int screenNo;
 	public static boolean destroyed;
@@ -68,6 +70,7 @@ public class MainActivity extends ActionBarActivity {
 	//Called when the phone shakes too much
 	public void youDie(){
 		nc.sendEvent(new Event(Event.DIED, player.getName(), null, 0));
+		System.out.println(getNC().port);
 	}
 	//Called when the server sends an updated GameState
 	public void updateGameState(GameState newGameState){
@@ -77,6 +80,7 @@ public class MainActivity extends ActionBarActivity {
 		}
 		gameState = newGameState;
 		if(screenNo==GAME_SCREEN&&!newGameState.gameStarted()){//game ended
+			Toast.makeText(this, "Game is finished", Toast.LENGTH_SHORT).show();
 			reset(); 
 			return;
 		}
@@ -296,6 +300,7 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void onStartGameClick(View v) {
 		nc.sendEvent(new Event(Event.START_GAME, "", "", 0));
+		startGame();
 	}
 	public synchronized void setQRId(final String id){
 		runOnUiThread(new Runnable(){
@@ -426,18 +431,32 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void startGame(){
 		prepareAudio();
+		if(gf == null){
+			gf = new GameFragment(this);
+		}
 		mSensorManager = (SensorManager) getSystemService(Context.SENSOR_SERVICE);
 		mSensor = mSensorManager.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 		listener = new ShakeListener(this);
 		mSensorManager.registerListener(listener, mSensor, SensorManager.SENSOR_DELAY_GAME);
 		gameStarted=true;
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new GameFragment(this)).commit();
+		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, gf).commit();
 	}
 	public void reset(){
 		if(destroyed)return;
-		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new HomeScreenFragment(this)).commit();
+		FragmentTransaction transaction = getFragmentManager().beginTransaction().replace(R.id.fragment_holder, new HomeScreenFragment(this));
+		transaction.addToBackStack(null);
+//		GameFragment.resetAllStatic();
+//		ShakeListener.resetAllStatic();
+//		CameraPreviewT.resetAllStatic();
+//		CameraUtils.resetAllStatic();
+//		ZBarScannerView.resetAllStatic();
 		screenNo = HOME_SCREEN;
 		port = -1;
+		System.out.println("Everything Gone.");
+		transaction.commit();
+		destroyed = true;
+		gf = null;
+//		System.out.println("This thing destroyed yet? "+getFragmentManager().isDestroyed());
 	}
 	//creates a popup dialog box that tells the player message
 	public void alertUser(String title, String message){

@@ -49,6 +49,7 @@ public class CreateGameFragment extends Fragment{
 			@Override
 			public void onClick(View v) {
 				new CreateGameTask().execute(name.getText().toString(), maxScore.getText().toString());
+				MainActivity.destroyed = false;
 			}        
         });
         maxScore = ((EditText)view.findViewById(R.id.max_score_edittext));

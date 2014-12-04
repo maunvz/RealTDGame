@@ -110,7 +110,7 @@ public class LiveScanThread extends Thread {
 					e.printStackTrace();
 				}
 		      	}
-		} catch(NullPointerException e){
+		} catch(Exception e){
 			
 		}
         isRunning = false;

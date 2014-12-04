@@ -23,8 +23,9 @@ import com.mau.tdgame.models.Team;
 
 public class GameFragment extends Fragment implements ResultHandler{
 	public static boolean QREnabled;
-	public static Animation myFadeOutAnimation;
+//	public static Animation myFadeOutAnimation;
 	public static boolean animationCancelled;
+	public static View view;
 	int QR_time = 5000;
 	
 	public static MainActivity ma;
@@ -42,8 +43,17 @@ public class GameFragment extends Fragment implements ResultHandler{
 		super.onCreate(savedInstanceState);
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
-		View v = inflater.inflate(R.layout.game_fragment,container,false);
-		mScannerView = (ZBarScannerView)(v.findViewById(R.id.zbarscan));
+		if (view != null) {
+	        ViewGroup parent = (ViewGroup) view.getParent();
+	        if (parent != null)
+	            parent.removeView(view);
+	    }
+	    try {
+	        view = inflater.inflate(R.layout.game_fragment, container, false);
+	    } catch (Exception e) {
+	        /* map is already there, just return view as it is */
+	    }
+		mScannerView = (ZBarScannerView)(view.findViewById(R.id.zbarscan));
 		mScannerView.setOnTouchListener(new OnTouchListener(){
 			@Override
 			public boolean onTouch(View v, MotionEvent event) {
@@ -58,7 +68,7 @@ public class GameFragment extends Fragment implements ResultHandler{
 				return false;
 			}	
 		});
-		return v;
+		return view;
 	}
 	@Override
 	public void handleResult(Result rawResult) {
@@ -135,6 +145,7 @@ public class GameFragment extends Fragment implements ResultHandler{
 			}
 		}
 		ma.getNC().sendEvent(new Event(Event.QR_EVENT, ma.getPlayer().getName(), rawResult.getContents(), 0));
+		System.out.println(ma.getNC().port);
 	}
 	public void onResume(){
 		super.onResume();
@@ -167,11 +178,11 @@ public class GameFragment extends Fragment implements ResultHandler{
         }.start();
 	}
 	public synchronized void disableQR(){
-		if(this.getActivity()==null){
+		if(this.getActivity()==null||MainActivity.destroyed){
 			stopQRAfterAnimation();
 			return;
 		}
-		myFadeOutAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.fade_in);
+		final Animation myFadeOutAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.fade_in);
 		final ImageView v = (ImageView) ma.findViewById(R.id.fader);
 		v.setBackgroundColor(Color.BLACK);
 		v.startAnimation(myFadeOutAnimation);

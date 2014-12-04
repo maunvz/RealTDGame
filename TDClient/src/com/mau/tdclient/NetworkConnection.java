@@ -23,7 +23,7 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 	private String username;
 	private String QRId;
 	private int teamNo;
-	private int port;
+	public int port;
 
 	private PrintWriter pw;
 	private BufferedReader br;

@@ -65,7 +65,8 @@ public class ShakeListener implements SensorEventListener{
 //			    	max = ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity();
 //			    	if(ma.getPlayer().stronger)max*=3;
 //			    	((TextView)ma.findViewById(R.id.status_message_textview)).setText(speed+" "+max);
-			    	((ShakeMeter)ma.findViewById(R.id.shake_meter_1)).updateValue(speed, max,Color.GREEN,-1);
+			    	if(((ShakeMeter)ma.findViewById(R.id.shake_meter_1))!=null)
+			    		((ShakeMeter)ma.findViewById(R.id.shake_meter_1)).updateValue(speed, max,Color.GREEN,-1);
 //			    	((ShakeMeter)ma.findViewById(R.id.shake_meter_2)).updateValue(speed, max);
 			    }
 			}
