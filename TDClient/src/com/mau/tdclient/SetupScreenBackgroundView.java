@@ -31,8 +31,8 @@ public class SetupScreenBackgroundView extends View{
 	public void onDraw(Canvas canvas){
 		super.onDraw(canvas);
 		paint.setColor(Color.GREEN);
-		int finalAlpha = 180;
-		screenPercent = 0.1f;
+		int finalAlpha = 80;
+		screenPercent = 0.05f;
 		color = Color.GREEN;
 //		paint.setShader(new LinearGradient(0, 0, screenPercent*getWidth(), 0, Color.GREEN, Color.TRANSPARENT, TileMode.MIRROR));
 		setFramePaint(paint,1,getWidth(),getHeight(),screenPercent,color,finalAlpha);

@@ -8,32 +8,73 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         ></com.mau.tdclient.SetupScreenBackgroundView>
+    <ImageView 
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:layout_alignParentTop = "true"
+        android:src="@drawable/scoreboard_red"
+        android:scaleType="fitStart"
+        ></ImageView>
+    <ImageView 
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:layout_alignParentBottom = "true"
+        android:src="@drawable/scoreboard_blue_flipped"
+        android:scaleType="fitEnd"
+        ></ImageView>
 	<LinearLayout
 	    android:layout_width="match_parent"
 	    android:layout_height="match_parent"
 	    android:orientation = "vertical"
+	    android:weightSum="1.0"
 	    >
-
+		<View 
+		    android:layout_width = "match_parent"
+		    android:layout_height = "0dp"
+		    android:layout_weight = "0.2"/>
 	    <com.mau.tdclient.AutoResizeTextView
 	        android:layout_width="match_parent"
-	        android:layout_height="0dp"
+	        android:layout_height="50dp"
 	        android:layout_weight="0.2"
+	        android:gravity = "center"
 	        android:text="SpyDroid"
 	        android:textColor="#ffffff" 
+	        android:maxLines="1"
+	        android:textSize="100sp"
+	        android:paddingRight = "15dp"
+	        android:paddingLeft = "15dp"
+	        android:id="@+id/title"
+	        />
+	    <LinearLayout
+	        android:layout_width = "match_parent"
+	        android:layout_height = "0dp"
+	        android:layout_weight = "0.4"
+	        android:orientation = "horizontal"
 	        >
-</com.mau.tdclient.AutoResizeTextView>
+		    <Button
+		        android:id="@+id/join_game_button"
+		        android:layout_width="0dp"
+		        android:layout_weight = "0.5"
+		        android:layout_height="wrap_content"
+		        android:onClick="onJoinClicked"
+		        android:text="Join\nGame" />
+		
+		    <Button
+		        android:id="@+id/create_game_button"
+		        android:layout_width="0dp"
+		        android:layout_weight = "0.5"
+		        android:layout_height="wrap_content"
+		        android:onClick="onCreateClicked"
+		        android:textColor = "@color/white"
+		        android:text="Create\nGame" />
+	    </LinearLayout>
 	    <Button
-	        android:id="@+id/join_game_button"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:onClick="onJoinClicked"
-	        android:text="@string/join_game_button_text" />
-	
-	    <Button
-	        android:id="@+id/create_game_button"
-	        android:layout_width="wrap_content"
-	        android:layout_height="wrap_content"
-	        android:onClick="onCreateClicked"
-	        android:text="@string/create_game_button_text" />
+		        android:id="@+id/about_button"
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:onClick="onAboutClicked"
+		        android:layout_gravity="center"
+		        android:textColor = "@color/white"
+		        android:text="About" />
 	</LinearLayout>
 </RelativeLayout>
