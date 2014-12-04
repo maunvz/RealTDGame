@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.TextView;
 
 public class HomeScreenFragment extends Fragment{
@@ -27,6 +28,9 @@ public class HomeScreenFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		View v = inflater.inflate(R.layout.home_screen_fragment, container, false); 
 		((TextView)(v.findViewById(R.id.title))).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
+		((Button)(v.findViewById(R.id.join_game_button))).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
+		((Button)(v.findViewById(R.id.create_game_button))).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
+		((Button)(v.findViewById(R.id.about_button))).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
 		return v;
 	}
 }

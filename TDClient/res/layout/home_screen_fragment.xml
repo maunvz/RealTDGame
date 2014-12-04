@@ -46,27 +46,33 @@
 	        android:id="@+id/title"
 	        />
 	    <LinearLayout
-	        android:layout_width = "match_parent"
+	        android:layout_width = "wrap_content"
 	        android:layout_height = "0dp"
 	        android:layout_weight = "0.4"
+	        android:layout_gravity = "center"
 	        android:orientation = "horizontal"
 	        >
 		    <Button
 		        android:id="@+id/join_game_button"
-		        android:layout_width="0dp"
-		        android:layout_weight = "0.5"
+		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:onClick="onJoinClicked"
-		        android:text="Join\nGame" />
+		        android:textColor = "@color/white"
+		        android:text="Join\nGame"
+		        android:textAppearance="@android:style/TextAppearance.Large"
+		        android:background = "@drawable/button_homescreen"
+		        android:marginRight = "15dp" />
 		
 		    <Button
 		        android:id="@+id/create_game_button"
-		        android:layout_width="0dp"
-		        android:layout_weight = "0.5"
+		        android:marginLeft = "15dp"
+		        android:layout_width="wrap_content"
 		        android:layout_height="wrap_content"
 		        android:onClick="onCreateClicked"
 		        android:textColor = "@color/white"
-		        android:text="Create\nGame" />
+		        android:text="Create\nGame" 
+		        android:textAppearance="@android:style/TextAppearance.Large"
+		        android:background = "@drawable/button_homescreen" />
 	    </LinearLayout>
 	    <Button
 		        android:id="@+id/about_button"
@@ -75,6 +81,8 @@
 		        android:onClick="onAboutClicked"
 		        android:layout_gravity="center"
 		        android:textColor = "@color/white"
-		        android:text="About" />
+		        android:textAppearance="@android:style/TextAppearance.Large"
+		        android:text="About"
+		        android:background = "@drawable/button_homescreen" />
 	</LinearLayout>
 </RelativeLayout>
