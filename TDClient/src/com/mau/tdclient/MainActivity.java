@@ -46,6 +46,7 @@ public class MainActivity extends ActionBarActivity {
 	public static final int HOME_SCREEN=4;
 	public static final int CREATE_GAME_SCREEN=5;
 	public static final int GAME_LIST_SCREEN=6;
+	public static final int ABOUT_SCREEN=7;
 	
 	//Fragments
 	private CreateGameFragment createGameFrag;
@@ -55,6 +56,7 @@ public class MainActivity extends ActionBarActivity {
 	private WaitingRoomFragment waitingRoomFrag;
 	private GameListFragment gameListFrag;
 	private JoinGameFragment joinGameFrag;
+	private AboutScreenFragment aboutScreenFrag;
 	
 	//Technical stuff
 	private SensorManager mSensorManager;
@@ -364,7 +366,6 @@ public class MainActivity extends ActionBarActivity {
 		super.onCreate(savedInstanceState);
 		setContentView(R.layout.activity_main);		
 
-		//TODO create all the frags
 		homeScreenFrag = new HomeScreenFragment(this);
 		createGameFrag = new CreateGameFragment(this);
 		gameEndedFrag = new GameEndedFragment(this);
@@ -372,7 +373,8 @@ public class MainActivity extends ActionBarActivity {
 		waitingRoomFrag = new WaitingRoomFragment(this);
 		gameListFrag = new GameListFragment(this);
 		joinGameFrag = new JoinGameFragment(this);
-
+		aboutScreenFrag = new AboutScreenFragment(this);
+		
 		getFragmentManager().beginTransaction().add(R.id.fragment_holder, homeScreenFrag).commit();
 		
 		gameStarted=false;
