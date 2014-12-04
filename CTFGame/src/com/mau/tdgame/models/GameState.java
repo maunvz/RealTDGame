@@ -45,6 +45,7 @@ public class GameState {
 		playerWithFlag2="";
 		maxScore = DEFAULT_MAX_SCORE;
 		gameSensitivity=DEFAULT_SENSITIVITY;
+		activePlayers=0;
 	}
 	public boolean gameStarted(){
 		return gameStarted;

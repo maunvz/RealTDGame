@@ -22,10 +22,13 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 	Player player;
 	private GameSession session;
 	boolean alive;
+	Thread killThread;
+	boolean closing;
 	public ClientThread(Socket socket, GameSession session){
 		this.socket = socket;
 		this.session = session;
 		alive=true;
+		closing=false;
 	}
 	@Override
 	protected Void doInBackground() throws Exception {
@@ -66,12 +69,23 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 			//Listen for events
 			String str;
 			while((str=br.readLine())!=null){
+				if(killThread!=null)killThread.interrupt();
+				if(str==Constants.CLOSE_CONNECTION)break;
 				Event event = Event.fromJSON(new JSONObject(str));
 				session.updateGameState(event);
+				killThread = new Thread(){
+					public void run(){
+						try {
+							Thread.sleep(1000*120);
+							closeConnection();
+						} catch (InterruptedException e) {}
+					}
+				};
+				killThread.start();
 			}
 			session.print(username+" is gone.");
-			session.getGameState().disconnectPlayer(player);
-			kill();
+			session.disconnectPlayer(player);
+			closeConnection();
 		} catch (IOException e) {}
 		alive=false;
 		return null;
@@ -84,14 +98,14 @@ public class ClientThread extends SwingWorker<Void, Integer>{
 		}
 	}
 	public void closeConnection(){
+		if(closing)return;
+		closing=true;
 		pw.println(Constants.CLOSE_CONNECTION);
 		try {
 			socket.close();
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
-	}
-	public void kill(){
-		closeConnection();
+		session.disconnectPlayer(player);
 	}
 }

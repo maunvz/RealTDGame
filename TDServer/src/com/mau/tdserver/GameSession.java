@@ -67,10 +67,15 @@ public class GameSession {
 			if(client.player==null)continue;
 			if(client.player.equals(player)){
 				removeClient(client);
-				return;
+				break;
 			}
 		}
 		broadcastGameState();
+		print("Active Players: "+gameState.activePlayers);
+		if(gameState.activePlayers<=0){
+			killGame();
+		}
+		print("Kicked "+player.getName());
 	}
 	public void removeClient(ClientThread client){
 		client.closeConnection();
@@ -102,6 +107,12 @@ public class GameSession {
 		gameState.globalMessage=message;
 		broadcastGameState();
 	}
+	public void disconnectPlayer(Player player){
+		gameState.disconnectPlayer(player);
+		if(gameState.activePlayers<=0){
+			killGame();
+		}
+	}
 	public synchronized void broadcastGameState(){
 		for(ClientThread client:clients){
 			client.sendGameState();
@@ -114,6 +125,7 @@ public class GameSession {
 		print(event.toString());
 		if(event.getType()==Event.START_GAME){
 			startGame();
+			broadcastGameState();
 			return;
 		}
 		gameState.processEvent(event);
@@ -134,7 +146,7 @@ public class GameSession {
 	public void killGame(){
 		active=false;
 		for(ClientThread client:clients){
-			client.kill();
+			client.closeConnection();
 		}
 		main.killSession(sessionPort);
 	}

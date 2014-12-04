@@ -98,6 +98,7 @@ public class ServerMain {
 		getSessionByPort(selectedSession).killGame();
 	}
 	public void killSession(int port){
+		System.out.println("Killing Session on port: " + port);
 		GameSession session = getSessionByPort(port);
 		if(session==null)return;
 		sessions.remove(getSessionByPort(port));

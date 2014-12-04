@@ -73,8 +73,9 @@ public class ShakeListener implements SensorEventListener{
 		else{
 			timesOverThreshold = 0;
 			wasTriggeredBefore = false;
-			((ShakeMeter)ma.findViewById(R.id.shake_meter_1)).updateValue(0.4f, ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity(),Color.RED,255);
-//	    	((ShakeMeter)ma.findViewById(R.id.shake_meter_2)).updateValue(0, ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity());
+			ShakeMeter meter = ((ShakeMeter)ma.findViewById(R.id.shake_meter_1));
+			if(meter==null)return;
+			meter.updateValue(0.4f, ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity(),Color.RED,255);
 		}
 	}
 	public void turnOffListener(){
