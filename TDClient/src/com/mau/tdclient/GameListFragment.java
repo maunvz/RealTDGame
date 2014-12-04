@@ -29,20 +29,57 @@ import com.mau.tdgame.models.Constants;
 public class GameListFragment extends Fragment{
 	MainActivity ma;
 	ListView list;
+	Boolean paused;
 	public GameListFragment(MainActivity ma){
 		super();
 		this.ma=ma;
 	}
 	public void onPause(){
 		super.onPause();
+		paused = true;
 	}
+	Thread t = new Thread(){
+		public void run(){
+			while(!paused){
+					new GetGameList().execute();
+					System.out.println("I got a new list!");
+				try {
+					Thread.sleep(1000);
+				} catch (InterruptedException e) {
+					// TODO Auto-generated catch block
+					e.printStackTrace();
+				}
+			}
+		
+		}
+	};
 	public void onCreate(Bundle savedInstanceState){
-		super.onCreate(savedInstanceState);
-		new GetGameList().execute();
+		super.onCreate(savedInstanceState);		
 	}
 	public void onResume(){
 		super.onResume();
 		MainActivity.screenNo=MainActivity.GAME_LIST_SCREEN;
+		paused = false;
+		if(!t.isAlive()){
+			t = new Thread(){
+				public void run(){
+					while(!paused){
+							new GetGameList().execute();
+							System.out.println("I got a new list!");
+						try {
+							Thread.sleep(1000);
+						} catch (InterruptedException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+					}
+				
+				}
+			};
+			t.start();
+		}
+			
+		
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.game_list_fragment, container, false);

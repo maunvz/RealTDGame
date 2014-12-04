@@ -15,9 +15,10 @@ public class GameListAdapter extends BaseAdapter{
 	LayoutInflater inflater;
 	public GameListAdapter(Context cx,ArrayList<String> names){
 		this.names = names;
+		context = cx;
 		inflater = (LayoutInflater) context
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
-		context = cx;
+		
 	}
 	@Override
 	public int getCount() {

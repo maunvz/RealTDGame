@@ -80,7 +80,9 @@ public class ShakeListener implements SensorEventListener{
 		listenerOn=false;
 		ShakeMeter meter = ((ShakeMeter)ma.findViewById(R.id.shake_meter_1));
 		if(meter==null)return;
-		meter.updateValue(0.4f, ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity(),Color.RED,255);
+		try{
+			meter.updateValue(0.4f, ma.getGameState().gameSensitivity*ma.getPlayer().getSensitivity(),Color.RED,255);
+		}catch(Exception e){}
 	}
 	public void turnOnListener(){
 		if(listenerOn)return;

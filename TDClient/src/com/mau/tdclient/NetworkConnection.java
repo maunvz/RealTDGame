@@ -96,7 +96,7 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 		try {
 			pw.println(event.toJSON().toString());
 		} catch (JSONException e) {
-			e.printStackTrace();
+//			e.printStackTrace();
 		}
 	}
 	protected void onPostExecute(Void result){

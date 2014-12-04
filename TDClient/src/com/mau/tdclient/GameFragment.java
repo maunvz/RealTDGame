@@ -140,6 +140,7 @@ public class GameFragment extends Fragment implements ResultHandler{
 		}
 		final Animation myFadeOutAnimation = AnimationUtils.loadAnimation(this.getActivity(), R.anim.fade_in);
 		final ImageView v = (ImageView) ma.findViewById(R.id.fader);
+		if(v==null)return;
 		v.setBackgroundColor(Color.BLACK);
 		v.startAnimation(myFadeOutAnimation);
 		myFadeOutAnimation.setAnimationListener(new AnimationListener(){

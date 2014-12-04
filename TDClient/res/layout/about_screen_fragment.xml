@@ -1,12 +1,75 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-	 <TextView 
-	     android:layout_width="match_parent"
-	     android:layout_height="match_parent"
-	     android:text="@string/about_text"
-	     android:gravity="center"
-	     />
-</LinearLayout>
+    android:orientation="vertical"
+    android:background = "#000000" >
+    <com.mau.tdclient.SetupScreenBackgroundView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        ></com.mau.tdclient.SetupScreenBackgroundView>
+    <ImageView 
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:layout_alignParentTop = "true"
+        android:src="@drawable/scoreboard_red"
+        android:scaleType="fitStart"
+        ></ImageView>
+    <ImageView 
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:layout_alignParentBottom = "true"
+        android:src="@drawable/scoreboard_blue_flipped"
+        android:scaleType="fitEnd"
+        ></ImageView>
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation = "vertical"
+	    android:weightSum="1.0"
+	    >
+		<View 
+		    android:layout_width = "match_parent"
+		    android:layout_height = "0dp"
+		    android:layout_weight = "0.05"/>
+	    <com.mau.tdclient.AutoResizeTextView
+	        android:layout_width="match_parent"
+	        android:layout_height="50dp"
+	        android:layout_weight="0.2"
+	        android:gravity = "center"
+	        android:text="Credits"
+	        android:textColor="#ffffff" 
+	        android:paddingLeft = "15dp"
+	        android:paddingRight = "15dp"
+	        android:maxLines="1"
+	        android:textSize="100sp"
+	        android:id="@+id/title"
+	        />
+	    <ScrollView
+	        android:layout_width = "match_parent"
+	        android:layout_height = "0dp"
+	        android:layout_weight = "0.7"
+	        android:layout_marginTop="15dp"
+	        >
+	        <TextView
+	            android:id = "@+id/credits"
+	            android:layout_width = "match_parent"
+	            android:layout_height = "wrap_content"
+	            android:textColor = "@color/white"
+	            android:gravity = "center"
+	            android:textAppearance="@android:style/TextAppearance.Large"
+	            android:text = "Team:\n\nEli Wu\nMauricio Narvaez\nHanna Chang\nDivya Konda\n\nA Stanford d.School project."
+	            ></TextView>
+	    </ScrollView>
+	    <Button
+	        android:id = "@+id/back_button"
+	        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:layout_gravity="center"
+		        android:textColor = "@color/white"
+		        android:textAppearance="@android:style/TextAppearance.Large"
+		        android:text="Back"
+		        android:background = "@drawable/button_homescreen" ></Button>
+	</LinearLayout>
+</RelativeLayout>
+

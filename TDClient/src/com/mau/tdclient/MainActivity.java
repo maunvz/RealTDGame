@@ -320,11 +320,8 @@ public class MainActivity extends ActionBarActivity {
 				QRId = id;
 				String playerNumber = id;
 				TextView qrid = ((TextView)findViewById(R.id.qr_id_textview));
-				if(qrid!=null)qrid.setText("QR Scanned. You may connect. Your ID is "+id);
-				if(!playerNumber.contains("player")){
-					if(qrid!=null)qrid.setText("That isn't a valid player id. Rescan.");
-				}
-				else{
+				if(qrid!=null&&playerNumber.contains("player")){
+					qrid.setText("QR Scanned. You are player "+id.charAt(id.length()-1));
 					playerNumber = playerNumber.replace("player_","");
 					RadioButton team1button = (RadioButton)findViewById(R.id.team1_button);
 					RadioButton team2button = (RadioButton)findViewById(R.id.team2_button);
@@ -337,6 +334,10 @@ public class MainActivity extends ActionBarActivity {
 						team1button.setChecked(true);
 						team2button.setChecked(false);
 					}
+				}
+				else if(!playerNumber.contains("player")){
+
+						if(qrid!=null)qrid.setText("That isn't a valid player id. Rescan.");
 				}
 			}
 		});
@@ -394,6 +395,9 @@ public class MainActivity extends ActionBarActivity {
 	public void onCreateClicked(View view){
 		transitionFragments(createGameFrag);
 	}
+	public void onAboutClicked(View view){
+		transitionFragments(aboutScreenFrag);
+	}
 	//when the join screen's join button is pressed
 	public void joinGame(int port){
 		transitionFragments(joinGameFrag);
@@ -434,9 +438,12 @@ public class MainActivity extends ActionBarActivity {
 			mSensorManager.registerListener(listener, mSensor, SensorManager.SENSOR_DELAY_GAME);
 	}
 	public void onDestroy(){
-		super.onDestroy();nc.closeConnection(); nc=null;
-		if(gameStarted)mplayer.release();
-		destroyed=true;
+		super.onDestroy();
+		try{
+			nc.closeConnection(); nc=null;
+			if(gameStarted)mplayer.release();
+			destroyed=true;
+		}catch(Exception e){}
 	}
 	public void prepareAudio(){
 	    try {
@@ -511,6 +518,7 @@ public class MainActivity extends ActionBarActivity {
 		}
 	}
 	public void endGame(){
+		((TextView)findViewById(R.id.status_message_textview)).setVisibility(View.GONE);
 		transitionFragments(gameEndedFrag);
 		gameEndedFrag.update();
 		screenNo = GAME_OVER_SCREEN;
@@ -528,7 +536,24 @@ public class MainActivity extends ActionBarActivity {
 	@Override
 	public void onBackPressed() {
 		if(screenNo==GAME_SCREEN)return;
-        if (!getFragmentManager().popBackStackImmediate()) {
+		else if(screenNo==HOME_SCREEN){
+			new AlertDialog.Builder(this)
+		    .setTitle("Exit")
+		    .setMessage("Are you sure you want to exit the game?")
+		    .setPositiveButton(android.R.string.yes, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		            finish();
+		        }
+		     })
+		    .setNegativeButton(android.R.string.no, new DialogInterface.OnClickListener() {
+		        public void onClick(DialogInterface dialog, int which) { 
+		            // do nothing
+		        }
+		     })
+		    .setIcon(android.R.drawable.ic_dialog_alert)
+		     .show();
+		}
+		else if (!getFragmentManager().popBackStackImmediate()) {
 	        super.onBackPressed();
 	    }
         System.out.println(screenNo);

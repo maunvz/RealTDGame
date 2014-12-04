@@ -59,7 +59,9 @@ public class GameEndedFragment extends Fragment{
         whoWonTextView = (TextView) view.findViewById(R.id.who_won_textview);
         team1TextView = (TextView) view.findViewById(R.id.red_team_scores_textview);
         team2TextView = (TextView) view.findViewById(R.id.blue_team_scores_textview);
-        update();
+        try{
+        	update();
+        }catch(Exception e){}
         return view;
 	}
 }

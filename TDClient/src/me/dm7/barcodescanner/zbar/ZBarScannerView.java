@@ -57,12 +57,16 @@ public class ZBarScannerView extends BarcodeScannerView {
 	    	lst.start();
     	}
     	if(MainActivity.screenNo == MainActivity.JOIN_SCREEN){
-    		camera.setPreviewCallbackWithBuffer(this);
-    		camera.setOneShotPreviewCallback(this);
+    		try{
+	    		camera.setPreviewCallbackWithBuffer(this);
+	    		camera.setOneShotPreviewCallback(this);
+    		}catch(Exception e){}
     	}
     	if(MainActivity.screenNo == MainActivity.GAME_SCREEN){
-    		camera.setPreviewCallbackWithBuffer(this);
-    		camera.setOneShotPreviewCallback(this);
+    		try{
+	    		camera.setPreviewCallbackWithBuffer(this);
+	    		camera.setOneShotPreviewCallback(this);
+    		}catch(Exception e){}
     	}
     	if(!GameFragment.QREnabled&&MainActivity.screenNo==MainActivity.GAME_SCREEN){
         	GameFragment.QREnabled=true;

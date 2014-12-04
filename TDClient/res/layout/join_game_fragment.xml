@@ -1,18 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    
+    android:orientation="vertical"
+    android:background = "#000000" >
+    <com.mau.tdclient.SetupScreenBackgroundView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        ></com.mau.tdclient.SetupScreenBackgroundView>
+    <ImageView 
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:layout_alignParentTop = "true"
+        android:src="@drawable/scoreboard_red"
+        android:scaleType="fitStart"
+        ></ImageView>
+    <ImageView 
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:layout_alignParentBottom = "true"
+        android:src="@drawable/scoreboard_blue_flipped"
+        android:scaleType="fitEnd"
+        ></ImageView>
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation = "vertical"
+	    android:weightSum="1.0"
+	    > 
+	    <View 
+		    android:layout_width = "match_parent"
+		    android:layout_height = "0dp"
+		    android:layout_weight = "0.05"/>
+	    <com.mau.tdclient.AutoResizeTextView
+	        android:layout_width="match_parent"
+	        android:layout_height="50dp"
+	        android:layout_weight="0.1"
+	        android:gravity = "center"
+	        android:text="Player Setup"
+	        android:textColor="#ffffff" 
+	        android:maxLines="2"
+	        android:textSize="100sp"
+	        
+	        android:id="@+id/title"
+	        />
+	    <LinearLayout
+	        android:layout_width = "match_parent"
+	        android:layout_height = "wrap_content"
+	        android:orientation = "horizontal"
+	        >
 	<EditText 
 	    android:id="@+id/username_edit_text"
-	    android:layout_width="match_parent"
+	    android:layout_width="0dp"
+	    android:layout_weight = "0.6"
 	    android:layout_height="wrap_content"
 		android:inputType="text"
+		android:textColor = "@color/white"
+		android:background = "@drawable/back"
+		android:textAppearance="@android:style/TextAppearance.Medium"
+		android:padding = "10dp"
+		android:layout_marginLeft="20dp"
+	        android:layout_marginRight="10dp"
 	    android:hint="@string/username_hint"/>
+	<Button
+	        android:id = "@+id/buttonToRescan"
+	        android:layout_width = "0dp"
+	        android:layout_weight = "0.4"
+	        android:layout_height = "wrap_content"
+	        android:text = "Scan QR"
+	        android:textColor = "@color/white"
+	        android:layout_marginRight="20dp"
+	        android:background = "@drawable/button_homescreen"
+	        ></Button>
+	</LinearLayout>
 	<RadioGroup 
 	    android:id="@+id/team_radio_group"
 	    android:layout_width="match_parent"
+	    android:visibility = "gone"
 	    android:layout_height="wrap_content"
 	    android:orientation="horizontal"
 	    android:checkedButton="@+id/team1_button">
@@ -27,23 +91,41 @@
 	        android:layout_height="wrap_content"
 	        android:text="@string/team2"/>
 	</RadioGroup>
+
 	<TextView
 	    android:id="@+id/qr_id_textview"
-	    android:layout_width="wrap_content"
+	    android:layout_width="match_parent"
+	    android:gravity = "center"
+	    android:layout_marginBottom="10dp"
 	    android:layout_height="wrap_content"
-		android:text="@string/qr_id_text"
-	    />
-	<me.dm7.barcodescanner.zbar.ZBarScannerView
-    	android:id = "@+id/zbarscan"
-    	android:layout_width = "match_parent"
+	    android:text="@string/qr_id_text"
+	    android:textColor="@color/white" />
+
+	<RelativeLayout 
+	    android:id = "@+id/camerabuttonswitcher"
+	    android:layout_width = "match_parent"
+    	android:layout_marginLeft = "30dp"
+    	android:layout_marginRight = "30dp"
     	android:layout_height = "0dp"
-    	android:layout_weight = "0.6">
-    </me.dm7.barcodescanner.zbar.ZBarScannerView>
-	
+    	android:layout_weight = "0.7"
+    	android:layout_gravity = "center">
+		<me.dm7.barcodescanner.zbar.ZBarScannerView
+	    	android:id = "@+id/zbarscan"
+	    	android:layout_width = "match_parent"
+	    	android:layout_height = "match_parent"
+	    	android:layout_centerInParent="true"
+	    	>
+	    </me.dm7.barcodescanner.zbar.ZBarScannerView>
+	    
+	</RelativeLayout>
 	<Button 
 	    android:id="@+id/connect_button"
 	    android:layout_height="wrap_content"
 	    android:layout_width="match_parent"
 	    android:text="@string/connect_button"
-	    android:onClick="onConnectClicked"/>
+	    android:textColor = "@color/white"
+	    android:layout_marginTop="10dp"
+	    android:onClick="onConnectClicked"
+	    android:background = "@drawable/button_homescreen"/>
 </LinearLayout>
+</RelativeLayout>

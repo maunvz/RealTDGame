@@ -21,6 +21,7 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.mau.tdgame.models.Constants;
 import com.mau.tdgame.models.GameState;
@@ -44,18 +45,41 @@ public class CreateGameFragment extends Fragment{
 		super.onResume();
 		MainActivity.screenNo=MainActivity.CREATE_GAME_SCREEN;
 	}
+	public static boolean isInteger(String s) {
+	    return isInteger(s,10);
+	}
+
+	public static boolean isInteger(String s, int radix) {
+	    if(s.isEmpty()) return false;
+	    for(int i = 0; i < s.length(); i++) {
+	        if(i == 0 && s.charAt(i) == '-') {
+	            if(s.length() == 1) return false;
+	            else continue;
+	        }
+	        if(Character.digit(s.charAt(i),radix) < 0) return false;
+	    }
+	    return true;
+	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.create_game_fragment, container, false);
 		((TextView)(view.findViewById(R.id.title))).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
 		((EditText)view.findViewById(R.id.max_score_edittext)).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
 		((Button)view.findViewById(R.id.create_game_send_button)).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
 		((EditText)view.findViewById(R.id.game_name_edittext)).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
-		((EditText)view.findViewById(R.id.max_score_edittext)).setText(""+GameState.DEFAULT_MAX_SCORE);
+//		((EditText)view.findViewById(R.id.max_score_edittext)).setText(""+GameState.DEFAULT_MAX_SCORE);
         ((Button)view.findViewById(R.id.create_game_send_button)).setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {
-				new CreateGameTask().execute(name.getText().toString(), maxScore.getText().toString());
-				MainActivity.destroyed = false;
+				if(name.getText().toString().length()==0|| maxScore.getText().toString().length()==0){
+					Toast.makeText(ma, "You must have a game name and max score!", Toast.LENGTH_LONG).show();
+				}
+				else if(!isInteger(maxScore.getText().toString())){
+					Toast.makeText(ma, "That's not a valid max score.", Toast.LENGTH_LONG).show();
+				}
+				else{
+					new CreateGameTask().execute(name.getText().toString(), maxScore.getText().toString());
+					MainActivity.destroyed = false;
+				}
 			}        
         });
         maxScore = ((EditText)view.findViewById(R.id.max_score_edittext));
@@ -86,7 +110,9 @@ public class CreateGameFragment extends Fragment{
 			return null;
 		}
 		protected void onPostExecute(String result){
-			if(result==null)return;
+			if(result==null){
+				return;
+			}
 			try {
 				JSONObject session = new JSONObject(result);
 				int port = session.getInt("port");
