@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/black" >
+    android:background="@color/grey" >
 
     <TextView
         android:id="@+id/who_won_textview"
@@ -11,6 +11,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.2"
         android:gravity="center"
+        android:textColor="@color/white"
 		/>
     <TextView
         android:id="@+id/red_team_scores_textview"
@@ -18,6 +19,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.4"
         android:background="@color/red"
+        android:textColor="@color/white"
 		/>
 	<TextView
         android:id="@+id/blue_team_scores_textview"
@@ -25,6 +27,7 @@
         android:layout_height="0dp"
         android:layout_weight="0.4"
         android:background="@color/blue"
+        android:textColor="@color/white"
 		/>
     <Button
 		android:layout_width="match_parent"

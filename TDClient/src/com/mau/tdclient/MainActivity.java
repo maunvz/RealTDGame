@@ -508,6 +508,7 @@ public class MainActivity extends ActionBarActivity {
 	}
 	public void endGame(){
 		getFragmentManager().beginTransaction().replace(R.id.fragment_holder, gameEndedFrag).commit();
+		gameEndedFrag.update();
 		screenNo = GAME_OVER_SCREEN;
 	}
 	public void onDoneClicked(View view){

@@ -254,6 +254,9 @@ public class GameState {
 	public void clearMessage(){
 		message="";
 	}
+	public ArrayList<Player> getPlayers(){
+		return players;
+	}
 	public int[] getTeamScores(){
 		int t1 = 0;
 		int t2 = 0;
