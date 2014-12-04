@@ -1089,14 +1089,15 @@ containing a value of this type.
         public static final int home_button_pressed=0x7f02005e;
         public static final int home_button_unpressed=0x7f02005f;
         public static final int ic_launcher=0x7f020060;
-        public static final int red_flag=0x7f020061;
-        public static final int red_flag_flipped=0x7f020062;
-        public static final int red_team=0x7f020063;
-        public static final int scoreboard_blue=0x7f020064;
-        public static final int scoreboard_blue_flipped=0x7f020065;
-        public static final int scoreboard_red=0x7f020066;
-        public static final int scoreboardactual=0x7f020067;
-        public static final int spydroid_icon=0x7f020068;
+        public static final int iconbetterbig=0x7f020061;
+        public static final int red_flag=0x7f020062;
+        public static final int red_flag_flipped=0x7f020063;
+        public static final int red_team=0x7f020064;
+        public static final int scoreboard_blue=0x7f020065;
+        public static final int scoreboard_blue_flipped=0x7f020066;
+        public static final int scoreboard_red=0x7f020067;
+        public static final int scoreboardactual=0x7f020068;
+        public static final int spydroid_icon=0x7f020069;
     }
     public static final class id {
         public static final int about_button=0x7f05005a;
