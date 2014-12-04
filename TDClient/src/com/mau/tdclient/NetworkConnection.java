@@ -84,6 +84,14 @@ public class NetworkConnection extends AsyncTask<Void, GameState, Void>{
 		else
 			ma.updateGameState(null);
 	}
+	public void closeConnection(){
+		try {
+			socket.close();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+	}
 	public void sendEvent(Event event){
 		try {
 			pw.println(event.toJSON().toString());
