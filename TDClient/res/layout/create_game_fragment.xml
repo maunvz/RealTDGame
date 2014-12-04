@@ -1,25 +1,91 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:orientation="vertical" >
-    <EditText
-        android:id="@+id/game_name_edittext"
-        android:hint="@string/game_name_hint"
+    android:orientation="vertical"
+    android:background = "#000000" >
+    <com.mau.tdclient.SetupScreenBackgroundView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content" 
-        />
-    <EditText 
+        android:layout_height="match_parent"
+        ></com.mau.tdclient.SetupScreenBackgroundView>
+    <ImageView 
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:layout_alignParentTop = "true"
+        android:src="@drawable/scoreboard_red"
+        android:scaleType="fitStart"
+        ></ImageView>
+    <ImageView 
+        android:layout_width = "match_parent"
+        android:layout_height = "match_parent"
+        android:layout_alignParentBottom = "true"
+        android:src="@drawable/scoreboard_blue_flipped"
+        android:scaleType="fitEnd"
+        ></ImageView>
+	<LinearLayout
+	    android:layout_width="match_parent"
+	    android:layout_height="match_parent"
+	    android:orientation = "vertical"
+	    android:weightSum="1.0"
+	    >
+		<View 
+		    android:layout_width = "match_parent"
+		    android:layout_height = "0dp"
+		    android:layout_weight = "0.2"/>
+	    <com.mau.tdclient.AutoResizeTextView
+	        android:layout_width="match_parent"
+	        android:layout_height="50dp"
+	        android:layout_weight="0.2"
+	        android:gravity = "center"
+	        android:text="Create\nGame"
+	        android:textColor="#ffffff" 
+	        android:maxLines="2"
+	        android:textSize="100sp"
+	        android:paddingRight = "15dp"
+	        android:paddingLeft = "15dp"
+	        android:id="@+id/title"
+	        />
+	    <LinearLayout
+	        android:layout_width = "match_parent"
+	        android:layout_height = "0dp"
+	        android:layout_weight = "0.4"
+	        android:layout_gravity = "center"
+	        android:orientation = "vertical"
+	        android:layout_marginLeft="20dp"
+	        android:layout_marginRight="20dp"
+	        >
+		    
+			<EditText
+	        android:id="@+id/game_name_edittext"
+	        android:hint="@string/game_name_hint"
+	        android:layout_width="match_parent"
+	        android:layout_height="wrap_content" 
+	        android:textColor = "@color/white"
+	        android:background = "@drawable/back"
+	        android:textAppearance="@android:style/TextAppearance.Large"
+	        android:layout_marginBottom="15dp"
+	        android:padding = "5dp"
+	        />
+		    <EditText 
         android:id="@+id/max_score_edittext"
         android:hint="@string/max_score_hint"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="wrap_content"	        android:background = "@drawable/back"
+        	        android:padding = "5dp"
+        
+        android:textColor = "@color/white"
+	        android:textAppearance="@android:style/TextAppearance.Large"
         />
-    <Button 
-        android:id="@+id/create_game_send_button"
-        android:text="@string/create_game_button_text"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        />
+	    </LinearLayout>
+	    <Button
+		        android:id="@+id/create_game_send_button"
+       			android:text="Go!"
+		        android:layout_height="wrap_content"
+		        android:layout_width="wrap_content"
+		        android:layout_gravity="center"
+		        android:textColor = "@color/white"
+		        android:textAppearance="@android:style/TextAppearance.Large"
+		        android:background = "@drawable/button_homescreen" />
+	</LinearLayout>
+</RelativeLayout>
 
-</LinearLayout>

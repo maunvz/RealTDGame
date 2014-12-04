@@ -11,6 +11,7 @@ import org.json.JSONException;
 import org.json.JSONObject;
 
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -19,6 +20,7 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.mau.tdgame.models.Constants;
 import com.mau.tdgame.models.GameState;
@@ -44,7 +46,11 @@ public class CreateGameFragment extends Fragment{
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.create_game_fragment, container, false);
-        ((EditText)view.findViewById(R.id.max_score_edittext)).setText(""+GameState.DEFAULT_MAX_SCORE);
+		((TextView)(view.findViewById(R.id.title))).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
+		((EditText)view.findViewById(R.id.max_score_edittext)).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
+		((Button)view.findViewById(R.id.create_game_send_button)).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
+		((EditText)view.findViewById(R.id.game_name_edittext)).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
+		((EditText)view.findViewById(R.id.max_score_edittext)).setText(""+GameState.DEFAULT_MAX_SCORE);
         ((Button)view.findViewById(R.id.create_game_send_button)).setOnClickListener(new OnClickListener(){
 			@Override
 			public void onClick(View v) {

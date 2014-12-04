@@ -12,6 +12,7 @@ import org.json.JSONArray;
 import org.json.JSONException;
 
 import android.app.Fragment;
+import android.graphics.Typeface;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -21,6 +22,7 @@ import android.widget.AdapterView;
 import android.widget.AdapterView.OnItemClickListener;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+import android.widget.TextView;
 
 import com.mau.tdgame.models.Constants;
 
@@ -45,6 +47,7 @@ public class GameListFragment extends Fragment{
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.game_list_fragment, container, false);
         list = (ListView) view.findViewById(R.id.game_list_listview);
+		((TextView)(view.findViewById(R.id.title))).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
         list.setOnItemClickListener(new OnItemClickListener(){
 			@Override
 			public void onItemClick(AdapterView<?> parent, View view,
@@ -83,7 +86,7 @@ public class GameListFragment extends Fragment{
 				for(int i=0; i<sessionJSONs.length(); i++){
 					sessions.add(sessionJSONs.getJSONObject(i).getString("name")+"/"+sessionJSONs.getJSONObject(i).getInt("port"));
 				}
-				ArrayAdapter<String> adapter = new ArrayAdapter<String>(ma, android.R.layout.simple_list_item_1, sessions);
+				GameListAdapter adapter = new GameListAdapter(ma, sessions);
 				list.setAdapter(adapter);
 			} catch (JSONException e) {
 				e.printStackTrace();
