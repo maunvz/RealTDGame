@@ -47,7 +47,6 @@ public class JoinGameFragment extends Fragment implements ResultHandler{
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
 		v = inflater.inflate(R.layout.join_game_fragment, container, false);
-		((TextView)(v.findViewById(R.id.title))).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
 		((EditText)(v.findViewById(R.id.username_edit_text))).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
 		((TextView)(v.findViewById(R.id.qr_id_textview))).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
 

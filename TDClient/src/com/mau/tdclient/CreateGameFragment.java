@@ -62,7 +62,7 @@ public class CreateGameFragment extends Fragment{
 	}
 	public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState){
         View view = inflater.inflate(R.layout.create_game_fragment, container, false);
-		((TextView)(view.findViewById(R.id.title))).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
+//		((TextView)(view.findViewById(R.id.title))).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
 		((EditText)view.findViewById(R.id.max_score_edittext)).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
 		((Button)view.findViewById(R.id.create_game_send_button)).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
 		((EditText)view.findViewById(R.id.game_name_edittext)).setTypeface(Typeface.createFromAsset(ma.getAssets(), "fonts/LCD Display Grid.ttf"));
